@@ -469,14 +469,14 @@ Public Class Enums
 
 #Region "Enumerations"
 
-    Public Enum DefaultType As Integer
-        All = 0
-        MovieFilters = 1
-        ShowFilters = 2
-        EpFilters = 3
-        ValidExts = 4
-        ShowRegex = 5
-    End Enum
+	Public Enum DefaultType As Integer
+		All = 0
+		MovieFilters = 1
+		ShowFilters = 2
+		EpFilters = 3
+		ValidExts = 4
+		ShowRegex = 5
+	End Enum
 
     Public Enum DelType As Integer
         Movies = 0
@@ -735,7 +735,6 @@ Public Class Functions
             .bLanguageV = Not Master.eSettings.LockLanguageV
             .bLanguageA = Not Master.eSettings.LockLanguageA
             .buseMPAAForFSK = Not Master.eSettings.UseMPAAForFSK
-            .bSubtitle = Not Master.eSettings.LockSubtitle
 
             .bRelease = True
             .bRuntime = True
@@ -1240,7 +1239,6 @@ Public Class Structures
         Dim bRating As Boolean
         Dim bLanguageV As Boolean
         Dim bLanguageA As Boolean
-        Dim bSubtitle As Boolean
         Dim buseMPAAForFSK As Boolean
         Dim bRelease As Boolean
         Dim bRuntime As Boolean
