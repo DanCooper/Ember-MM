@@ -169,7 +169,6 @@ Public Class EmberTMDBScraperModule
 		If String.IsNullOrEmpty(_MySettings.FANARTTVApiKey) Then
 			_MySettings.FANARTTVApiKey = Master.eLang.GetString(123, "Get your API Key from fanart.tv")
 		End If
-		_setup.txtFANARTTVApiKey.Text = _MySettings.FANARTTVApiKey
 
 		SPanel.Name = String.Concat(Me._Name, "Scraper")
 		SPanel.Text = Master.eLang.GetString(104, "Ember TMDB Movie Scrapers")
@@ -299,12 +298,7 @@ Public Class EmberTMDBScraperModule
 		Else
 			_MySettings.TMDBAPIKey = Master.eLang.GetString(122, "Get your API Key from www.themoviedb.org")
 		End If
-		If Not String.IsNullOrEmpty(_setup.txtFANARTTVApiKey.Text) Then
-			_MySettings.FANARTTVApiKey = _setup.txtFANARTTVApiKey.Text
-		Else
-			_MySettings.FANARTTVApiKey = Master.eLang.GetString(123, "Get your API Key from fanart.tv")
-		End If
-		_MySettings.TMDBLanguage = _setup.cbTMDBPrefLanguage.Text
+        _MySettings.TMDBLanguage = _setup.cbTMDBPrefLanguage.Text
 		_MySettings.FallBackEng = _setup.chkFallBackEng.Checked
 		ConfigOptions.bTitle = _setup.chkTitle.Checked
 		ConfigOptions.bYear = _setup.chkYear.Checked

@@ -6507,7 +6507,7 @@ doCancel:
         Else
             Dim PosterAllowed As Boolean = ModulesManager.Instance.QueryPostScraperCapabilities(Enums.PostScraperCapabilities.Poster)
             Dim FanartAllowed As Boolean = ModulesManager.Instance.QueryPostScraperCapabilities(Enums.PostScraperCapabilities.Fanart)
-            Dim TrailerAllowed As Boolean = ModulesManager.Instance.QueryPostScraperCapabilities(Enums.PostScraperCapabilities.Trailer)
+            Dim TrailerAllowed As Boolean = ModulesManager.Instance.QueryTrailerScraperCapabilities(Enums.PostScraperCapabilities.Trailer)
 
             'create list of movies acording to scrapetype
             For Each drvRow As DataRow In Me.dtMedia.Rows

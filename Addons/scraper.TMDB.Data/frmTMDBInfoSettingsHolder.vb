@@ -133,9 +133,9 @@ Public Class frmTMDBInfoSettingsHolder
 		RaiseEvent ModuleSettingsChanged()
 	End Sub
 
-	Private Sub txtFANARTTVApiKey_TextChanged(sender As System.Object, e As System.EventArgs) Handles txtFANARTTVApiKey.TextChanged
-		RaiseEvent ModuleSettingsChanged()
-	End Sub
+    Private Sub txtFANARTTVApiKey_TextChanged(sender As System.Object, e As System.EventArgs)
+        RaiseEvent ModuleSettingsChanged()
+    End Sub
 
 	Private Sub txtTMDBApiKey_TextEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTMDBApiKey.Enter
 		Api1 = txtTMDBApiKey.Text
@@ -203,16 +203,16 @@ Public Class frmTMDBInfoSettingsHolder
 
 	End Sub
 
-	Private Sub pbFANARTTV_Click(sender As System.Object, e As System.EventArgs) Handles pbFANARTTV.Click
-		If Master.isWindows Then
-			Process.Start("http://fanart.tv/get-an-api-key/")
-		Else
-			Using Explorer As New Process
-				Explorer.StartInfo.FileName = "xdg-open"
-				Explorer.StartInfo.Arguments = "http://fanart.tv/get-an-api-key/"
-				Explorer.Start()
-			End Using
-		End If
+    Private Sub pbFANARTTV_Click(sender As System.Object, e As System.EventArgs)
+        If Master.isWindows Then
+            Process.Start("http://fanart.tv/get-an-api-key/")
+        Else
+            Using Explorer As New Process
+                Explorer.StartInfo.FileName = "xdg-open"
+                Explorer.StartInfo.Arguments = "http://fanart.tv/get-an-api-key/"
+                Explorer.Start()
+            End Using
+        End If
 
-	End Sub
+    End Sub
 End Class

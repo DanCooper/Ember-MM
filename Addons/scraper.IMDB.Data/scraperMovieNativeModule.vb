@@ -27,7 +27,7 @@ Imports EmberAPI
 ''' </summary>
 ''' <remarks></remarks>
 Public Class EmberNativeScraperModule
-    Implements Interfaces.EmberMovieScraperModule
+    Implements Interfaces.EmberMovieScraperModule_Data
 
 
 #Region "Fields"
@@ -35,8 +35,6 @@ Public Class EmberNativeScraperModule
     Public Shared ConfigOptions As New Structures.ScrapeOptions
     Public Shared ConfigScrapeModifier As New Structures.ScrapeModifier
     Public Shared _AssemblyName As String
-
-    Private dFImgSelect As dlgImgSelect = Nothing
 
     ''' <summary>
     ''' Scraping Here
@@ -48,61 +46,37 @@ Public Class EmberNativeScraperModule
     Private _PostScraperEnabled As Boolean = False
     Private _ScraperEnabled As Boolean = False
     Private _setup As frmInfoSettingsHolder
-    Private _setupPost As frmMediaSettingsHolder
 
 #End Region 'Fields
 
 #Region "Events"
 
-    Public Event ModuleSettingsChanged() Implements Interfaces.EmberMovieScraperModule.ModuleSettingsChanged
+    Public Event ModuleSettingsChanged() Implements Interfaces.EmberMovieScraperModule_Data.ModuleSettingsChanged
 
-    'Public Event ScraperUpdateMediaList(ByVal col As Integer, ByVal v As Boolean) Implements Interfaces.EmberMovieScraperModule.MovieScraperEvent
-    Public Event MovieScraperEvent(ByVal eType As Enums.MovieScraperEventType, ByVal Parameter As Object) Implements Interfaces.EmberMovieScraperModule.MovieScraperEvent
+    'Public Event ScraperUpdateMediaList(ByVal col As Integer, ByVal v As Boolean) Implements Interfaces.EmberMovieScraperModule_Data.MovieScraperEvent
+    Public Event MovieScraperEvent(ByVal eType As Enums.MovieScraperEventType, ByVal Parameter As Object) Implements Interfaces.EmberMovieScraperModule_Data.MovieScraperEvent
 
-    Public Event SetupPostScraperChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer) Implements Interfaces.EmberMovieScraperModule.PostScraperSetupChanged
+    Public Event SetupScraperChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer) Implements Interfaces.EmberMovieScraperModule_Data.ScraperSetupChanged
 
-	Public Event SetupScraperChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer) Implements Interfaces.EmberMovieScraperModule.ScraperSetupChanged
-
-	Public Event SetupNeedsRestart() Implements Interfaces.EmberMovieScraperModule.SetupNeedsRestart
+    Public Event SetupNeedsRestart() Implements Interfaces.EmberMovieScraperModule_Data.SetupNeedsRestart
 
 #End Region 'Events
 
 #Region "Properties"
 
-    ReadOnly Property IsPostScraper() As Boolean Implements Interfaces.EmberMovieScraperModule.IsPostScraper
-        Get
-            Return True
-        End Get
-    End Property
-
-    ReadOnly Property IsScraper() As Boolean Implements Interfaces.EmberMovieScraperModule.IsScraper
-        Get
-            Return True
-        End Get
-    End Property
-
-    ReadOnly Property ModuleName() As String Implements Interfaces.EmberMovieScraperModule.ModuleName
+    ReadOnly Property ModuleName() As String Implements Interfaces.EmberMovieScraperModule_Data.ModuleName
         Get
             Return _Name
         End Get
     End Property
 
-    ReadOnly Property ModuleVersion() As String Implements Interfaces.EmberMovieScraperModule.ModuleVersion
+    ReadOnly Property ModuleVersion() As String Implements Interfaces.EmberMovieScraperModule_Data.ModuleVersion
         Get
             Return FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
         End Get
     End Property
 
-    Property PostScraperEnabled() As Boolean Implements Interfaces.EmberMovieScraperModule.PostScraperEnabled
-        Get
-            Return _PostScraperEnabled
-        End Get
-        Set(ByVal value As Boolean)
-            _PostScraperEnabled = value
-        End Set
-    End Property
-
-    Property ScraperEnabled() As Boolean Implements Interfaces.EmberMovieScraperModule.ScraperEnabled
+    Property ScraperEnabled() As Boolean Implements Interfaces.EmberMovieScraperModule_Data.ScraperEnabled
         Get
             Return _ScraperEnabled
         End Get
@@ -114,27 +88,8 @@ Public Class EmberNativeScraperModule
 #End Region 'Properties
 
 #Region "Methods"
-    Function QueryPostScraperCapabilities(ByVal cap As Enums.PostScraperCapabilities) As Boolean Implements Interfaces.EmberMovieScraperModule.QueryPostScraperCapabilities
-        Select Case cap
-            Case Enums.PostScraperCapabilities.Fanart
-                If MySettings.UseTMDB Then Return True
-            Case Enums.PostScraperCapabilities.Poster
-                If MySettings.UseIMPA OrElse MySettings.UseMPDB OrElse MySettings.UseTMDB Then Return True
-            Case Enums.PostScraperCapabilities.Trailer
-                If MySettings.DownloadTrailers Then Return True
-        End Select
-        Return False
-    End Function
 
-    Function DownloadTrailer(ByRef DBMovie As Structures.DBMovie, ByRef sURL As String) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule.DownloadTrailer
-        Using dTrailer As New dlgTrailer
-            dTrailer.IMDBURL = MySettings.IMDBURL
-            sURL = dTrailer.ShowDialog(DBMovie.Movie.IMDBID, DBMovie.Filename)
-        End Using
-        Return New Interfaces.ModuleResult With {.breakChain = False}
-    End Function
-
-    Function GetMovieStudio(ByRef DBMovie As Structures.DBMovie, ByRef studio As List(Of String)) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule.GetMovieStudio
+    Function GetMovieStudio(ByRef DBMovie As Structures.DBMovie, ByRef studio As List(Of String)) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule_Data.GetMovieStudio
         Dim IMDB As New IMDB.Scraper
         IMDB.UseOFDBTitle = MySettings.UseOFDBTitle
         IMDB.UseOFDBOutline = MySettings.UseOFDBOutline
@@ -153,55 +108,17 @@ Public Class EmberNativeScraperModule
         RaiseEvent ModuleSettingsChanged()
     End Sub
 
-    Private Sub Handle_SetupPostScraperChanged(ByVal state As Boolean, ByVal difforder As Integer)
-        PostScraperEnabled = state
-        RaiseEvent SetupPostScraperChanged(String.Concat(Me._Name, "PostScraper"), state, difforder)
-    End Sub
-
     Private Sub Handle_SetupScraperChanged(ByVal state As Boolean, ByVal difforder As Integer)
         ScraperEnabled = state
         RaiseEvent SetupScraperChanged(String.Concat(Me._Name, "Scraper"), state, difforder)
     End Sub
 
-    Sub Init(ByVal sAssemblyName As String) Implements Interfaces.EmberMovieScraperModule.Init
+    Sub Init(ByVal sAssemblyName As String) Implements Interfaces.EmberMovieScraperModule_Data.Init
         _AssemblyName = sAssemblyName
         LoadSettings()
     End Sub
 
-    Function InjectSetupPostScraper() As Containers.SettingsPanel Implements Interfaces.EmberMovieScraperModule.InjectSetupPostScraper
-        Dim Spanel As New Containers.SettingsPanel
-        _setupPost = New frmMediaSettingsHolder
-        LoadSettings()
-        _setupPost.cbEnabled.Checked = _PostScraperEnabled
-        _setupPost.chkTrailerIMDB.Checked = MySettings.UseIMDBTrailer
-        _setupPost.chkTrailerTMDB.Checked = MySettings.UseTMDBTrailer
-        _setupPost.cbTrailerTMDBPref.Text = MySettings.UseTMDBTrailerPref
-        _setupPost.chkTrailerTMDBXBMC.Checked = MySettings.UseTMDBTrailerXBMC
-        _setupPost.chkScrapePoster.Checked = ConfigScrapeModifier.Poster
-        _setupPost.chkScrapeFanart.Checked = ConfigScrapeModifier.Fanart
-        _setupPost.chkUseTMDB.Checked = MySettings.UseTMDB
-        _setupPost.chkUseIMPA.Checked = MySettings.UseIMPA
-        _setupPost.chkUseMPDB.Checked = MySettings.UseMPDB
-        _setupPost.cbManualETSize.Text = MySettings.ManualETSize
-        _setupPost.cbActorThumbsSize.Text = MySettings.ActorThumbsSize
-        _setupPost.txtTimeout.Text = MySettings.TrailerTimeout.ToString
-        _setupPost.chkDownloadTrailer.Checked = MySettings.DownloadTrailers
-        _setupPost.CheckTrailer()
-        _setupPost.orderChanged()
-        Spanel.Name = String.Concat(Me._Name, "PostScraper")
-        Spanel.Text = Master.eLang.GetString(104, "Ember Native Movie Scrapers")
-        Spanel.Prefix = "NativeMovieMedia_"
-        Spanel.Order = 110
-        Spanel.Parent = "pnlMovieMedia"
-        Spanel.Type = Master.eLang.GetString(36, "Movies", True)
-        Spanel.ImageIndex = If(Me._PostScraperEnabled, 9, 10)
-        Spanel.Panel = Me._setupPost.pnlSettings
-
-        AddHandler _setupPost.SetupPostScraperChanged, AddressOf Handle_SetupPostScraperChanged
-        AddHandler _setupPost.ModuleSettingsChanged, AddressOf Handle_PostModuleSettingsChanged
-        Return Spanel
-    End Function
-    Function InjectSetupScraper() As Containers.SettingsPanel Implements Interfaces.EmberMovieScraperModule.InjectSetupScraper
+    Function InjectSetupScraper() As Containers.SettingsPanel Implements Interfaces.EmberMovieScraperModule_Data.InjectSetupScraper
         Dim SPanel As New Containers.SettingsPanel
         _setup = New frmInfoSettingsHolder
         LoadSettings()
@@ -309,124 +226,6 @@ Public Class EmberNativeScraperModule
         ConfigScrapeModifier.Trailer = AdvancedSettings.GetBooleanSetting("DoTrailer", True)
     End Sub
 
-    Function PostScraper(ByRef DBMovie As Structures.DBMovie, ByVal ScrapeType As Enums.ScrapeType) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule.PostScraper
-        'LoadSettings()
-        Dim Poster As New Images
-        Dim Fanart As New Images
-        Dim pResults As Containers.ImgResult
-        Dim fResults As Containers.ImgResult
-        Dim tURL As String = String.Empty
-        Dim Trailer As New Trailers
-        LoadSettings()
-        Dim saveModifier As Structures.ScrapeModifier = Master.GlobalScrapeMod
-        Master.GlobalScrapeMod = Functions.ScrapeModifierAndAlso(Master.GlobalScrapeMod, ConfigScrapeModifier)
-
-        Trailer.IMDBURL = MySettings.IMDBURL
-        Dim doSave As Boolean = False
-        If Master.GlobalScrapeMod.Poster AndAlso (MySettings.UseIMPA OrElse MySettings.UseMPDB OrElse MySettings.UseTMDB) Then
-            Poster.Clear()
-            If Poster.IsAllowedToDownload(DBMovie, Enums.ImageType.Posters) Then
-                pResults = New Containers.ImgResult
-                If ScrapeImages.GetPreferredImage(Poster, DBMovie.Movie.IMDBID, Enums.ImageType.Posters, pResults, DBMovie.Filename, False, If(ScrapeType = Enums.ScrapeType.FullAsk OrElse ScrapeType = Enums.ScrapeType.NewAsk OrElse ScrapeType = Enums.ScrapeType.MarkAsk OrElse ScrapeType = Enums.ScrapeType.UpdateAsk, True, False)) Then
-                    If Not IsNothing(Poster.Image) Then
-                        pResults.ImagePath = Poster.SaveAsPoster(DBMovie)
-                        If Not String.IsNullOrEmpty(pResults.ImagePath) Then
-                            DBMovie.PosterPath = pResults.ImagePath
-                            RaiseEvent MovieScraperEvent(Enums.MovieScraperEventType.PosterItem, True) '4, True)
-                            If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
-                                DBMovie.Movie.Thumb = pResults.Posters
-                            End If
-                        End If
-                    ElseIf ScrapeType = Enums.ScrapeType.FullAsk OrElse ScrapeType = Enums.ScrapeType.NewAsk OrElse ScrapeType = Enums.ScrapeType.MarkAsk OrElse ScrapeType = Enums.ScrapeType.UpdateAsk Then
-                        MsgBox(Master.eLang.GetString(76, "A poster of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(77, "No Preferred Size"))
-                        Using dImgSelect As New dlgImgSelect
-                            dImgSelect.IMDBURL = MySettings.IMDBURL
-                            pResults = dImgSelect.ShowDialog(DBMovie, Enums.ImageType.Posters)
-                            If Not String.IsNullOrEmpty(pResults.ImagePath) Then
-                                DBMovie.PosterPath = pResults.ImagePath
-                                RaiseEvent MovieScraperEvent(Enums.MovieScraperEventType.PosterItem, True) '4, True)
-                                If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
-                                    DBMovie.Movie.Thumb = pResults.Posters
-                                End If
-                            End If
-                        End Using
-                    End If
-                End If
-            End If
-        End If
-        Dim didEts As Boolean
-        If Master.GlobalScrapeMod.Fanart AndAlso MySettings.UseTMDB Then
-            Fanart.Clear()
-            If Fanart.IsAllowedToDownload(DBMovie, Enums.ImageType.Fanart) Then
-                fResults = New Containers.ImgResult
-                didEts = True
-                If ScrapeImages.GetPreferredImage(Fanart, DBMovie.Movie.IMDBID, Enums.ImageType.Fanart, fResults, DBMovie.Filename, Master.GlobalScrapeMod.Extra, If(ScrapeType = Enums.ScrapeType.FullAsk OrElse ScrapeType = Enums.ScrapeType.NewAsk OrElse ScrapeType = Enums.ScrapeType.MarkAsk OrElse ScrapeType = Enums.ScrapeType.UpdateAsk, True, False)) Then
-                    If Not IsNothing(Fanart.Image) Then
-                        fResults.ImagePath = Fanart.SaveAsFanart(DBMovie)
-                        If Not String.IsNullOrEmpty(fResults.ImagePath) Then
-                            DBMovie.FanartPath = fResults.ImagePath
-                            RaiseEvent MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True) '
-                            If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
-                                DBMovie.Movie.Fanart = fResults.Fanart
-                            End If
-                        End If
-                    ElseIf ScrapeType = Enums.ScrapeType.FullAsk OrElse ScrapeType = Enums.ScrapeType.NewAsk OrElse ScrapeType = Enums.ScrapeType.MarkAsk OrElse ScrapeType = Enums.ScrapeType.UpdateAsk Then
-                        MsgBox(Master.eLang.GetString(78, "Fanart of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(77, "No Preferred Size:"))
-
-                        Using dImgSelect As New dlgImgSelect
-                            dImgSelect.IMDBURL = MySettings.IMDBURL
-                            fResults = dImgSelect.ShowDialog(DBMovie, Enums.ImageType.Fanart)
-                            If Not String.IsNullOrEmpty(fResults.ImagePath) Then
-                                DBMovie.FanartPath = fResults.ImagePath
-                                RaiseEvent MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True)
-                                If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
-                                    DBMovie.Movie.Fanart = fResults.Fanart
-                                End If
-                            End If
-                        End Using
-                    End If
-                End If
-            End If
-        End If
-        If Master.GlobalScrapeMod.Trailer AndAlso MySettings.DownloadTrailers Then
-            tURL = Trailer.DownloadSingleTrailer(DBMovie.Filename, DBMovie.Movie.IMDBID, DBMovie.isSingle, DBMovie.Movie.Trailer)
-            If Not String.IsNullOrEmpty(tURL) Then
-                If tURL.Substring(0, 22) = "http://www.youtube.com" Then
-                    If AdvancedSettings.GetBooleanSetting("UseTMDBTrailerXBMC", False) Then
-                        DBMovie.Movie.Trailer = Replace(tURL, "http://www.youtube.com/watch?v=", "plugin://plugin.video.youtube/?action=play_video&videoid=")
-                    Else
-                        DBMovie.Movie.Trailer = tURL
-                    End If
-                ElseIf tURL.Substring(0, 7) = "http://" Then
-                    DBMovie.Movie.Trailer = tURL
-                Else
-                    DBMovie.TrailerPath = tURL
-                    RaiseEvent MovieScraperEvent(Enums.MovieScraperEventType.TrailerItem, True)
-                End If
-            End If
-        End If
-        If Master.GlobalScrapeMod.Extra Then
-            If Master.eSettings.AutoET AndAlso DBMovie.isSingle Then
-                Try
-                    ScrapeImages.GetPreferredFAasET(DBMovie.Movie.IMDBID, DBMovie.Filename)
-                    RaiseEvent MovieScraperEvent(Enums.MovieScraperEventType.ThumbsItem, True)
-                Catch ex As Exception
-                End Try
-            End If
-        End If
-        If Master.GlobalScrapeMod.Actors AndAlso Master.eSettings.ScraperActorThumbs Then
-            For Each act As MediaContainers.Person In DBMovie.Movie.Actors
-                Dim img As New Images
-                img.FromWeb(act.Thumb)
-                If Not IsNothing(img.Image) Then
-                    img.SaveAsActorThumb(act, Directory.GetParent(DBMovie.Filename).FullName, DBMovie)
-                End If
-            Next
-        End If
-        Master.GlobalScrapeMod = saveModifier
-        Return New Interfaces.ModuleResult With {.breakChain = False, .BoolProperty = didEts}
-    End Function
-
     Sub SaveSettings()
         AdvancedSettings.SetBooleanSetting("DoFullCast", ConfigOptions.bFullCast)
         AdvancedSettings.SetBooleanSetting("DoFullCrews", ConfigOptions.bFullCrew)
@@ -479,30 +278,7 @@ Public Class EmberNativeScraperModule
         'AdvancedSettings.SetBooleanSetting("DoTrailer", ConfigScrapeModifier.Trailer)
     End Sub
 
-    Sub SaveSetupPostScraper(ByVal DoDispose As Boolean) Implements Interfaces.EmberMovieScraperModule.SaveSetupPostScraper
-        MySettings.DownloadTrailers = _setupPost.chkDownloadTrailer.Checked
-        MySettings.UseIMDBTrailer = _setupPost.chkTrailerIMDB.Checked
-        MySettings.UseTMDBTrailer = _setupPost.chkTrailerTMDB.Checked
-        MySettings.UseTMDBTrailerXBMC = _setupPost.chkTrailerTMDBXBMC.Checked
-        MySettings.TrailerTimeout = Convert.ToInt32(_setupPost.txtTimeout.Text)
-        MySettings.UseTMDB = _setupPost.chkUseTMDB.Checked
-        MySettings.UseIMPA = _setupPost.chkUseIMPA.Checked
-        MySettings.UseMPDB = _setupPost.chkUseMPDB.Checked
-        MySettings.ManualETSize = _setupPost.cbManualETSize.Text
-        MySettings.ActorThumbsSize = _setupPost.cbActorThumbsSize.Text
-        MySettings.UseTMDBTrailerPref = _setupPost.cbTrailerTMDBPref.Text
-        ConfigScrapeModifier.Poster = _setupPost.chkScrapePoster.Checked
-        ConfigScrapeModifier.Fanart = _setupPost.chkScrapeFanart.Checked
-        SaveSettings()
-        'ModulesManager.Instance.SaveSettings()
-        If DoDispose Then
-            RemoveHandler _setupPost.SetupPostScraperChanged, AddressOf Handle_SetupPostScraperChanged
-            RemoveHandler _setupPost.ModuleSettingsChanged, AddressOf Handle_PostModuleSettingsChanged
-            _setupPost.Dispose()
-        End If
-    End Sub
-
-    Sub SaveSetupScraper(ByVal DoDispose As Boolean) Implements Interfaces.EmberMovieScraperModule.SaveSetupScraper
+    Sub SaveSetupScraper(ByVal DoDispose As Boolean) Implements Interfaces.EmberMovieScraperModule_Data.SaveSetupScraper
         If Not String.IsNullOrEmpty(_setup.txtIMDBURL.Text) Then
             MySettings.IMDBURL = Strings.Replace(_setup.txtIMDBURL.Text, "http://", String.Empty)
         Else
@@ -545,7 +321,7 @@ Public Class EmberNativeScraperModule
         End If
     End Sub
 
-    Function Scraper(ByRef DBMovie As Structures.DBMovie, ByRef ScrapeType As Enums.ScrapeType, ByRef Options As Structures.ScrapeOptions) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule.Scraper
+    Function Scraper(ByRef DBMovie As Structures.DBMovie, ByRef ScrapeType As Enums.ScrapeType, ByRef Options As Structures.ScrapeOptions) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule_Data.Scraper
         'LoadSettings()
         IMDB.IMDBURL = MySettings.IMDBURL
         IMDB.UseOFDBTitle = MySettings.UseOFDBTitle
@@ -565,7 +341,7 @@ Public Class EmberNativeScraperModule
         End If
 
         If ScrapeType = Enums.ScrapeType.SingleScrape AndAlso Master.GlobalScrapeMod.DoSearch _
-            AndAlso ModulesManager.Instance.externalScrapersModules.OrderBy(Function(y) y.ScraperOrder).FirstOrDefault(Function(e) e.ProcessorModule.IsScraper AndAlso e.ProcessorModule.ScraperEnabled).AssemblyName = _AssemblyName Then
+            AndAlso ModulesManager.Instance.externalDataScrapersModules.OrderBy(Function(y) y.ScraperOrder).FirstOrDefault(Function(e) e.ProcessorModule.ScraperEnabled).AssemblyName = _AssemblyName Then
             DBMovie.Movie.IMDBID = String.Empty
             DBMovie.ClearExtras = True
             DBMovie.PosterPath = String.Empty
@@ -645,28 +421,8 @@ Public Class EmberNativeScraperModule
         Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function
 
-    Function SelectImageOfType(ByRef mMovie As Structures.DBMovie, ByVal _DLType As Enums.ImageType, ByRef pResults As Containers.ImgResult, Optional ByVal _isEdit As Boolean = False, Optional ByVal preload As Boolean = False) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule.SelectImageOfType
-        If preload AndAlso _DLType = Enums.ImageType.Fanart AndAlso Not IsNothing(dFImgSelect) Then
-            pResults = dFImgSelect.ShowDialog()
-            dFImgSelect = Nothing
-        Else
-            Using dImgSelect As New dlgImgSelect
-                If preload Then
-                    dFImgSelect = New dlgImgSelect
-                    dFImgSelect.PreLoad(mMovie, Enums.ImageType.Fanart, _isEdit)
-                End If
-                dImgSelect.IMDBURL = MySettings.IMDBURL
-                pResults = dImgSelect.ShowDialog(mMovie, _DLType, _isEdit)
-            End Using
-        End If
-        Return New Interfaces.ModuleResult With {.breakChain = False}
-    End Function
-    Public Sub PostScraperOrderChanged() Implements EmberAPI.Interfaces.EmberMovieScraperModule.PostScraperOrderChanged
+    Public Sub ScraperOrderChanged() Implements EmberAPI.Interfaces.EmberMovieScraperModule_Data.ScraperOrderChanged
         _setup.orderChanged()
-    End Sub
-
-    Public Sub ScraperOrderChanged() Implements EmberAPI.Interfaces.EmberMovieScraperModule.ScraperOrderChanged
-        _setupPost.orderChanged()
     End Sub
 
 #End Region 'Methods

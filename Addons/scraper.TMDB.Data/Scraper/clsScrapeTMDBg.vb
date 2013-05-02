@@ -57,8 +57,6 @@ Namespace TMDBg
 
 #Region "Fields"
 
-		'Public IMDBURL As String
-		'Private _TMDBId As String
 		Private _TMDBConf As V3.TmdbConfiguration
 		Private _TMDBConfE As V3.TmdbConfiguration
 		Private _TMDBApi As V3.Tmdb
@@ -67,7 +65,7 @@ Namespace TMDBg
 
 		Friend WithEvents bwTMDBg As New System.ComponentModel.BackgroundWorker
 
-		Private _sPoster As String
+        Private _sPoster As String
 
 #End Region	'Fields
 
@@ -153,7 +151,8 @@ Namespace TMDBg
 				Else
 					Movie = _TMDBApi.GetMovieInfo(CInt(strID), _MySettings.TMDBLanguage)
 					MovieE = _TMDBApiE.GetMovieInfo(CInt(strID))
-				End If
+                End If
+
 				If IsNothing(Movie) AndAlso Not _MySettings.FallBackEng Then
 					Return False
 				End If

@@ -433,10 +433,11 @@ Public Class ModulesManager
 		Dim ret As Interfaces.ModuleResult
 		For Each _externalScraperModule As _externalScraperModuleClass_Data In externalDataScrapersModules.Where(Function(e) e.ProcessorModule.ScraperEnabled).OrderBy(Function(e) e.ScraperOrder)
 			AddHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
-			Try
-				ret = _externalScraperModule.ProcessorModule.Scraper(DBMovie, ScrapeType, Options)
-			Catch ex As Exception
-			End Try
+            Try
+                Debug.Print("MovieScrapeOnly" & vbTab & DBMovie.ID & vbTab & ScrapeType)
+                ret = _externalScraperModule.ProcessorModule.Scraper(DBMovie, ScrapeType, Options)
+            Catch ex As Exception
+            End Try
 			RemoveHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
 			If ret.breakChain Then Exit For
 		Next
@@ -447,10 +448,11 @@ Public Class ModulesManager
 		Dim ret As Interfaces.ModuleResult
 		Try
 			For Each _externalGenericModule As _externalGenericModuleClass In externalProcessorModules.Where(Function(e) e.ProcessorModule.ModuleType.Contains(mType) AndAlso e.ProcessorModule.Enabled)
-				Try
-					ret = _externalGenericModule.ProcessorModule.RunGeneric(mType, _params, _refparam)
-				Catch ex As Exception
-				End Try
+                Try
+                    Debug.Print("RunGeneric" & vbTab & mType & vbTab & _externalGenericModule.AssemblyName)
+                    ret = _externalGenericModule.ProcessorModule.RunGeneric(mType, _params, _refparam)
+                Catch ex As Exception
+                End Try
 				If ret.breakChain OrElse RunOnlyOne Then Exit For
 			Next
 		Catch ex As Exception
@@ -709,7 +711,20 @@ Public Class ModulesManager
 			If ret Then Exit For
 		Next
 		Return ret
-	End Function
+    End Function
+
+    Function QueryTrailerScraperCapabilities(ByVal cap As Enums.PostScraperCapabilities) As Boolean
+        Dim ret As Boolean = False
+        Dim sStudio As New List(Of String)
+        For Each _externalScraperModule As _externalScraperModuleClass_Trailer In externalTrailerScrapersModules.Where(Function(e) e.ProcessorModule.ScraperEnabled).OrderBy(Function(e) e.ScraperOrder)
+            Try
+                ret = True 'if a trailer scraper is enabled we can exit.
+                Exit For
+            Catch ex As Exception
+            End Try
+        Next
+        Return ret
+    End Function
 
 	Function GetMovieStudio(ByRef DBMovie As Structures.DBMovie) As List(Of String)
 		Dim ret As Interfaces.ModuleResult

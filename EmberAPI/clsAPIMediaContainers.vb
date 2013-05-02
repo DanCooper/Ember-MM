@@ -25,7 +25,7 @@ Namespace MediaContainers
     <XmlRoot("episodedetails")> _
     Public Class EpisodeDetails
 
-        #Region "Fields"
+#Region "Fields"
 
         Private _title As String
         Private _aired As String
@@ -44,17 +44,17 @@ Namespace MediaContainers
         Private _playcount As String
         Private _fanart As Images
 
-        #End Region 'Fields
+#End Region 'Fields
 
-        #Region "Constructors"
+#Region "Constructors"
 
         Public Sub New()
             Me.Clear()
         End Sub
 
-        #End Region 'Constructors
+#End Region 'Constructors
 
-        #Region "Properties"
+#Region "Properties"
 
         <XmlElement("title")> _
         Public Property Title() As String
@@ -229,7 +229,7 @@ Namespace MediaContainers
             End Set
         End Property
 
-        <XmlIgnore> _
+        <XmlIgnore()> _
         Public ReadOnly Property ActorsSpecified() As Boolean
             Get
                 Return Me._actors.Count > 0
@@ -246,7 +246,7 @@ Namespace MediaContainers
             End Set
         End Property
 
-        <XmlIgnore> _
+        <XmlIgnore()> _
         Public ReadOnly Property FileInfoSpecified() As Boolean
             Get
                 If Me._fileInfo.StreamDetails.Video.Count > 0 OrElse _
@@ -301,9 +301,9 @@ Namespace MediaContainers
 
 
 
-        #End Region 'Properties
+#End Region 'Properties
 
-        #Region "Methods"
+#Region "Methods"
 
         Public Sub Clear()
             Me._title = String.Empty
@@ -323,28 +323,28 @@ Namespace MediaContainers
             Me._fanart = New Images
         End Sub
 
-        #End Region 'Methods
+#End Region 'Methods
 
     End Class
 
     Public Class Fanart
 
-        #Region "Fields"
+#Region "Fields"
 
         Private _thumb As New List(Of Thumb)
         Private _url As String
 
-        #End Region 'Fields
+#End Region 'Fields
 
-        #Region "Constructors"
+#Region "Constructors"
 
         Public Sub New()
             Me.Clear()
         End Sub
 
-        #End Region 'Constructors
+#End Region 'Constructors
 
-        #Region "Properties"
+#Region "Properties"
 
         <XmlElement("thumb")> _
         Public Property Thumb() As List(Of Thumb)
@@ -366,16 +366,16 @@ Namespace MediaContainers
             End Set
         End Property
 
-        #End Region 'Properties
+#End Region 'Properties
 
-        #Region "Methods"
+#Region "Methods"
 
         Public Sub Clear()
             Me._thumb.Clear()
             Me._url = String.Empty
         End Sub
 
-        #End Region 'Methods
+#End Region 'Methods
 
     End Class
 
@@ -383,7 +383,7 @@ Namespace MediaContainers
     Public Class Movie
         Implements IComparable(Of Movie)
 
-        #Region "Fields"
+#Region "Fields"
 
         Private _title As String
         Private _originaltitle As String
@@ -414,8 +414,7 @@ Namespace MediaContainers
         Private _ysets As New SetContainer
         Private _fileInfo As New MediaInfo.Fileinfo
         Private _lev As Integer
-		Private _videosource As String
-		Private _TMDBID As String
+        Private _videosource As String
 #End Region 'Fields
 
 #Region "Constructors"
@@ -497,7 +496,7 @@ Namespace MediaContainers
             Set(ByVal value As String)
                 Me.MovieID.ID = value
             End Set
-		End Property
+        End Property
 
         <XmlIgnore()> _
         Public Property IDMovieDB() As String
@@ -509,15 +508,15 @@ Namespace MediaContainers
             End Set
         End Property
 
-		<XmlIgnore()> _
-		Public Property TMDBID() As String
-			Get
-				Return Me._TMDBID
-			End Get
-			Set(ByVal value As String)
-				Me._TMDBID = value
-			End Set
-		End Property
+        <XmlIgnore()> _
+        Public Property TMDBID() As String
+            Get
+                Return Me.MovieID.IDTMDB
+            End Get
+            Set(ByVal value As String)
+                Me.MovieID.IDTMDB = value
+            End Set
+        End Property
 
         <XmlIgnore()> _
         Public Property IMDBID() As String
@@ -1095,13 +1094,18 @@ Namespace MediaContainers
         Class _MovieID
             Private _imdbid As String
             Private _moviedb As String
+            Private _TMDBID As String
+
             Sub New()
                 Me.Clear()
             End Sub
+
             Public Sub Clear()
                 _imdbid = String.Empty
                 _moviedb = String.Empty
+                _TMDBID = String.Empty
             End Sub
+
             <XmlText()> _
             Public Property ID() As String
                 Get
@@ -1111,12 +1115,14 @@ Namespace MediaContainers
                     _imdbid = If(Strings.Left(value, 2) = "tt", value.Trim, String.Concat("tt", value))
                 End Set
             End Property
+
             <XmlIgnore()> _
             Public ReadOnly Property IDSpecified() As Boolean
                 Get
                     Return Not String.IsNullOrEmpty(_imdbid) AndAlso Not _imdbid = "tt"
                 End Get
             End Property
+
             <XmlAttribute("moviedb")> _
             Public Property IDMovieDB() As String
                 Get
@@ -1126,8 +1132,19 @@ Namespace MediaContainers
                     Me._moviedb = value
                 End Set
             End Property
+
+            <XmlAttribute("TMDB")> _
+            Public Property IDTMDB() As String
+                Get
+                    Return _TMDBID
+                End Get
+                Set(ByVal value As String)
+                    Me._TMDBID = value
+                End Set
+            End Property
+
             <XmlIgnore()> _
-            Public ReadOnly Property IDMovieDBSpecified() As Boolean
+Public ReadOnly Property IDMovieDBSpecified() As Boolean
                 Get
                     Return Not String.IsNullOrEmpty(Me._moviedb)
                 End Get
@@ -1750,9 +1767,9 @@ Namespace MediaContainers
 #End Region 'Constructors
 
 #Region "Properties"
-        Public Property Width As String        
-        Public Property Height As String            
-        Public Property Description As String            
+        Public Property Width As String
+        Public Property Height As String
+        Public Property Description As String
         Public Property isChecked As Boolean
         Public Property URL As String
         Public Property WebImage As Images
@@ -1762,10 +1779,10 @@ Namespace MediaContainers
 #Region "Methods"
 
         Public Sub Clear()
-            Me._url = String.Empty
-            Me._description = String.Empty
-            Me._webimage = New Images
-            Me._ischecked = False
+            Me._URL = String.Empty
+            Me._Description = String.Empty
+            Me._WebImage = New Images
+            Me._isChecked = False
         End Sub
 
 #End Region 'Methods
