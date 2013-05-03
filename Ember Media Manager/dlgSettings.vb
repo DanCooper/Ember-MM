@@ -48,7 +48,7 @@ Public Class dlgSettings
 #Region "Methods"
 
 	Public Overloads Function ShowDialog() As Structures.SettingsResult
-		MyBase.ShowDialog()
+        MyBase.ShowDialog()
 		Return Me.sResult
 	End Function
 
@@ -4209,7 +4209,7 @@ Public Class dlgSettings
 
 		Me.cboEpRetrieve.Items.Clear()
 		Me.cboEpRetrieve.Items.AddRange(New String() {Master.eLang.GetString(13, "Folder Name"), Master.eLang.GetString(15, "File Name"), Master.eLang.GetString(16, "Season Result")})
-        Me.GroupBox30.Text = Master.eLang.GetString(106, "IMDB")
+        Me.GroupBox30.Text = Master.eLang.GetString(885, "IMDB")
 
 		Me.LoadTrailerQualities()
 	End Sub

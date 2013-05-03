@@ -194,6 +194,9 @@ Partial Class dlgSettings
         Me.txtProxyURI = New System.Windows.Forms.TextBox()
         Me.chkEnableProxy = New System.Windows.Forms.CheckBox()
         Me.pnlMovies = New System.Windows.Forms.Panel()
+        Me.GroupBox30 = New System.Windows.Forms.GroupBox()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.txtIMDBURL = New System.Windows.Forms.TextBox()
         Me.gbGenreFilter = New System.Windows.Forms.GroupBox()
         Me.gbFilters = New System.Windows.Forms.GroupBox()
         Me.btnResetMovieFilters = New System.Windows.Forms.Button()
@@ -611,9 +614,6 @@ Partial Class dlgSettings
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.lblHelp = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.GroupBox30 = New System.Windows.Forms.GroupBox()
-        Me.Label18 = New System.Windows.Forms.Label()
-        Me.txtIMDBURL = New System.Windows.Forms.TextBox()
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox29.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -642,6 +642,7 @@ Partial Class dlgSettings
         Me.gbProxy.SuspendLayout()
         Me.gbCreds.SuspendLayout()
         Me.pnlMovies.SuspendLayout()
+        Me.GroupBox30.SuspendLayout()
         Me.gbGenreFilter.SuspendLayout()
         Me.gbFilters.SuspendLayout()
         Me.GroupBox27.SuspendLayout()
@@ -721,7 +722,6 @@ Partial Class dlgSettings
         Me.gbHelp.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
-        Me.GroupBox30.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox4
@@ -2575,11 +2575,41 @@ Partial Class dlgSettings
         Me.pnlMovies.Controls.Add(Me.GroupBox27)
         Me.pnlMovies.Controls.Add(Me.GroupBox12)
         Me.pnlMovies.Controls.Add(Me.GroupBox2)
-        Me.pnlMovies.Location = New System.Drawing.Point(953, 647)
+        Me.pnlMovies.Location = New System.Drawing.Point(934, 639)
         Me.pnlMovies.Name = "pnlMovies"
         Me.pnlMovies.Size = New System.Drawing.Size(617, 400)
         Me.pnlMovies.TabIndex = 15
         Me.pnlMovies.Visible = False
+        '
+        'GroupBox30
+        '
+        Me.GroupBox30.Controls.Add(Me.Label18)
+        Me.GroupBox30.Controls.Add(Me.txtIMDBURL)
+        Me.GroupBox30.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.GroupBox30.Location = New System.Drawing.Point(235, 338)
+        Me.GroupBox30.Name = "GroupBox30"
+        Me.GroupBox30.Size = New System.Drawing.Size(376, 47)
+        Me.GroupBox30.TabIndex = 8
+        Me.GroupBox30.TabStop = False
+        Me.GroupBox30.Text = "IMDB"
+        '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.Location = New System.Drawing.Point(6, 18)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(73, 13)
+        Me.Label18.TabIndex = 0
+        Me.Label18.Text = "IMDB Mirror:"
+        '
+        'txtIMDBURL
+        '
+        Me.txtIMDBURL.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtIMDBURL.Location = New System.Drawing.Point(79, 15)
+        Me.txtIMDBURL.Name = "txtIMDBURL"
+        Me.txtIMDBURL.Size = New System.Drawing.Size(291, 22)
+        Me.txtIMDBURL.TabIndex = 1
         '
         'gbGenreFilter
         '
@@ -2974,7 +3004,7 @@ Partial Class dlgSettings
         Me.pnlSources.Controls.Add(Me.btnMovieAddFolder)
         Me.pnlSources.Controls.Add(Me.GroupBox8)
         Me.pnlSources.Controls.Add(Me.GroupBox16)
-        Me.pnlSources.Location = New System.Drawing.Point(1235, 451)
+        Me.pnlSources.Location = New System.Drawing.Point(1216, 457)
         Me.pnlSources.Name = "pnlSources"
         Me.pnlSources.Size = New System.Drawing.Size(617, 402)
         Me.pnlSources.TabIndex = 13
@@ -3394,7 +3424,7 @@ Partial Class dlgSettings
         '
         Me.pnlTVSources.BackColor = System.Drawing.Color.White
         Me.pnlTVSources.Controls.Add(Me.TabControl2)
-        Me.pnlTVSources.Location = New System.Drawing.Point(1110, 535)
+        Me.pnlTVSources.Location = New System.Drawing.Point(1087, 543)
         Me.pnlTVSources.Name = "pnlTVSources"
         Me.pnlTVSources.Size = New System.Drawing.Size(617, 400)
         Me.pnlTVSources.TabIndex = 11
@@ -7183,7 +7213,7 @@ Partial Class dlgSettings
         Me.pnlScraper.Controls.Add(Me.gbOptions)
         Me.pnlScraper.Controls.Add(Me.GroupBox1)
         Me.pnlScraper.Controls.Add(Me.GroupBox26)
-        Me.pnlScraper.Location = New System.Drawing.Point(1010, 619)
+        Me.pnlScraper.Location = New System.Drawing.Point(1003, 606)
         Me.pnlScraper.Name = "pnlScraper"
         Me.pnlScraper.Size = New System.Drawing.Size(617, 400)
         Me.pnlScraper.TabIndex = 14
@@ -7252,36 +7282,6 @@ Partial Class dlgSettings
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(636, 69)
         Me.Panel2.TabIndex = 8
-        '
-        'GroupBox30
-        '
-        Me.GroupBox30.Controls.Add(Me.Label18)
-        Me.GroupBox30.Controls.Add(Me.txtIMDBURL)
-        Me.GroupBox30.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.GroupBox30.Location = New System.Drawing.Point(235, 338)
-        Me.GroupBox30.Name = "GroupBox30"
-        Me.GroupBox30.Size = New System.Drawing.Size(376, 47)
-        Me.GroupBox30.TabIndex = 8
-        Me.GroupBox30.TabStop = False
-        Me.GroupBox30.Text = "IMDB"
-        '
-        'Label18
-        '
-        Me.Label18.AutoSize = True
-        Me.Label18.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label18.Location = New System.Drawing.Point(6, 18)
-        Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(73, 13)
-        Me.Label18.TabIndex = 0
-        Me.Label18.Text = "IMDB Mirror:"
-        '
-        'txtIMDBURL
-        '
-        Me.txtIMDBURL.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtIMDBURL.Location = New System.Drawing.Point(79, 15)
-        Me.txtIMDBURL.Name = "txtIMDBURL"
-        Me.txtIMDBURL.Size = New System.Drawing.Size(291, 22)
-        Me.txtIMDBURL.TabIndex = 1
         '
         'dlgSettings
         '
@@ -7366,6 +7366,8 @@ Partial Class dlgSettings
         Me.gbCreds.ResumeLayout(False)
         Me.gbCreds.PerformLayout()
         Me.pnlMovies.ResumeLayout(False)
+        Me.GroupBox30.ResumeLayout(False)
+        Me.GroupBox30.PerformLayout()
         Me.gbGenreFilter.ResumeLayout(False)
         Me.gbFilters.ResumeLayout(False)
         Me.gbFilters.PerformLayout()
@@ -7488,8 +7490,6 @@ Partial Class dlgSettings
         Me.gbHelp.ResumeLayout(False)
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
-        Me.GroupBox30.ResumeLayout(False)
-        Me.GroupBox30.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
