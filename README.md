@@ -3,18 +3,19 @@
 
 We decided its time to give Ember a new home. We've taken it upon ourselves to not only pick up the code where it was left off and attempt to continue development of it.
 
-Goals
- To continue development of EmberMM, because its a great product, that in my opinion is the most stable and useful media manager available, I've tried all others, but yet still come back to Ember.
+If you found our work useful feel free to [donate](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=VWVJCUV3KAUX2&lc=CH&item_name=Ember%2dTeam%3a%20DanCooper%2c%20m%2esavazzi%20%26%20Cocotus&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted) us a beer!
 
-Links
- Main discussion : http://forum.xbmc.org/showthread.php?tid=116941
- GitHub : https://github.com/bodrick/Ember-MM
- GitHub - DanCooper is mainaining the most aligned version: https://github.com/DanCooper/Ember-MM
- 
-[![Donate](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=VWVJCUV3KAUX2&lc=CH&item_name=Ember%2dTeam%3a%20DanCooper%2c%20m%2esavazzi%20%26%20Cocotus&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)]
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=VWVJCUV3KAUX2&lc=CH&item_name=Ember%2dTeam%3a%20DanCooper%2c%20m%2esavazzi%20%26%20Cocotus&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)]
+
+## Goals
+To continue development of EmberMM, because its a great product, that in my opinion is the most stable and useful media manager available, I've tried all others, but yet still come back to Ember.
+
+## Links
+Main discussion : http://forum.xbmc.org/showthread.php?tid=116941
+GitHub : https://github.com/DanCooper/Ember-MM
+(DanCooper is mainaining the most aligned version)
 
 ## Helping the development
-
 Any help is more than welcome. We do suggest everyone to participate in the forum to be aligned and updated.
 
 As the codebase is managed by several people we tried to make it easier to maintain and review. We ask everyone to try to adhere to some simple guidelines as much as you can.
@@ -37,5 +38,4 @@ We made a major effort in reviewing the core of Ember Media Manager, the scrapin
 
 
 ## Contact
-
-Please use the forum as main contact point
+Please use the forum as main contact point.
