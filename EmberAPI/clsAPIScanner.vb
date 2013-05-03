@@ -1220,7 +1220,11 @@ Public Class Scanner
                                 Dim parLastScan As SQLite.SQLiteParameter = SQLUpdatecommand.Parameters.Add("parLastScan", DbType.String, 0, "LastScan")
                                 Dim parID As SQLite.SQLiteParameter = SQLUpdatecommand.Parameters.Add("parID", DbType.Int32, 0, "ID")
                                 While SQLreader.Read
-                                    SourceLastScan = If(DBNull.Value.Equals(SQLreader("LastScan")), Now, Convert.ToDateTime(SQLreader("LastScan").ToString))
+                                    Try
+                                        SourceLastScan = If(DBNull.Value.Equals(SQLreader("LastScan")), Now, Convert.ToDateTime(SQLreader("LastScan").ToString))
+                                    Catch ex As Exception
+                                        SourceLastScan = Now
+                                    End Try
                                     If Convert.ToBoolean(SQLreader("Recursive")) OrElse (Master.eSettings.IgnoreLastScan OrElse Directory.GetLastWriteTime(SQLreader("Path").ToString) > SourceLastScan) Then
                                         'save the scan time back to the db
                                         parLastScan.Value = Now
@@ -1294,7 +1298,11 @@ Public Class Scanner
                                 Dim parLastScan As SQLite.SQLiteParameter = SQLUpdatecommand.Parameters.Add("parLastScan", DbType.String, 0, "LastScan")
                                 Dim parID As SQLite.SQLiteParameter = SQLUpdatecommand.Parameters.Add("parID", DbType.Int32, 0, "ID")
                                 While SQLreader.Read
-                                    SourceLastScan = Convert.ToDateTime(SQLreader("LastScan").ToString)
+                                    Try
+                                        SourceLastScan = If(DBNull.Value.Equals(SQLreader("LastScan")), Now, Convert.ToDateTime(SQLreader("LastScan").ToString))
+                                    Catch ex As Exception
+                                        SourceLastScan = Now
+                                    End Try
                                     'save the scan time back to the db
                                     parLastScan.Value = Now
                                     parID.Value = SQLreader("ID")
