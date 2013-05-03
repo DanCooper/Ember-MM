@@ -195,7 +195,6 @@ Public Class frmInfoSettingsHolder
         Me.chkOFDBPlot.Text = Master.eLang.GetString(2, "Use OFDB Plot")
         Me.chkOFDBOutline.Text = Master.eLang.GetString(3, "Use OFDB Outline")
         Me.chkOFDBTitle.Text = Master.eLang.GetString(4, "Use OFDB Title")
-        Me.Label18.Text = Master.eLang.GetString(5, "IMDB Mirror:")
         Me.gbOptions.Text = Master.eLang.GetString(6, "Scraper Fields - Scraper specific")
         Me.chkCrew.Text = Master.eLang.GetString(391, "Other Crew", True)
         Me.chkMusicBy.Text = Master.eLang.GetString(392, "Music By", True)
@@ -224,11 +223,10 @@ Public Class frmInfoSettingsHolder
 		Me.chkFullCast.Text = Master.eLang.GetString(512, "Scrape Full Cast", True)
 		Me.chkFullCrew.Text = Master.eLang.GetString(513, "Scrape Full Crew", True)
 		Me.chkTop250.Text = Master.eLang.GetString(868, "Top250", True)
-		Me.GroupBox30.Text = Master.eLang.GetString(106, "IMDB")
-		Me.GroupBox15.Text = Master.eLang.GetString(107, "OFDB (German)")
+        Me.GroupBox15.Text = Master.eLang.GetString(107, "OFDB (German)")
     End Sub
 
-    Private Sub txtIMDBURL_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtIMDBURL.TextChanged
+    Private Sub txtIMDBURL_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         RaiseEvent ModuleSettingsChanged()
     End Sub
 

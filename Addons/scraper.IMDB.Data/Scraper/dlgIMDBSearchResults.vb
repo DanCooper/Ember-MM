@@ -26,9 +26,7 @@ Public Class dlgIMDBSearchResults
 
     #Region "Fields"
 
-    Public IMDBURL As String
-
-    Friend  WithEvents bwDownloadPic As New System.ComponentModel.BackgroundWorker
+    Friend WithEvents bwDownloadPic As New System.ComponentModel.BackgroundWorker
     Friend  WithEvents tmrLoad As New System.Windows.Forms.Timer
     Friend  WithEvents tmrWait As New System.Windows.Forms.Timer
 
@@ -60,7 +58,6 @@ Public Class dlgIMDBSearchResults
         Me.Text = String.Concat(Master.eLang.GetString(10, "Search Results"), " - ", sMovieTitle)
 		Me.txtSearch.Text = sMovieTitle
         chkManual.Enabled = False
-        IMDB.IMDBURL = IMDBURL
         IMDB.SearchMovieAsync(sMovieTitle, _filterOptions)
 
         Return MyBase.ShowDialog()
@@ -90,14 +87,12 @@ Public Class dlgIMDBSearchResults
             Me.pnlLoading.Visible = True
             chkManual.Enabled = False
             IMDB.CancelAsync()
-            IMDB.IMDBURL = IMDBURL
             IMDB.SearchMovieAsync(Me.txtSearch.Text, _filterOptions)
         End If
     End Sub
 
     Private Sub btnVerify_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnVerify.Click
         If Regex.IsMatch(Me.txtIMDBID.Text.Replace("tt", String.Empty), "\d\d\d\d\d\d\d") Then
-            IMDB.IMDBURL = IMDBURL
             IMDB.GetSearchMovieInfoAsync(Me.txtIMDBID.Text.Replace("tt", String.Empty), Master.tmpMovie, Master.DefaultOptions)
         Else
             MsgBox(Master.eLang.GetString(12, "The ID you entered is not a valid IMDB ID."), MsgBoxStyle.Exclamation, Master.eLang.GetString(292, "Invalid Entry", True))
@@ -202,11 +197,6 @@ Public Class dlgIMDBSearchResults
     Private Sub dlgIMDBSearchResults_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Me.SetUp()
         pnlPicStatus.Visible = False
-        IMDB.IMDBURL = IMDBURL
-        IMDB.UseOFDBTitle = UseOFDBTitle
-        IMDB.UseOFDBOutline = UseOFDBOutline
-        IMDB.UseOFDBPlot = UseOFDBPlot
-        IMDB.UseOFDBGenre = UseOFDBGenre
         AddHandler IMDB.SearchMovieInfoDownloaded, AddressOf SearchMovieInfoDownloaded
         AddHandler IMDB.SearchResultsDownloaded, AddressOf SearchResultsDownloaded
 
@@ -404,7 +394,6 @@ Public Class dlgIMDBSearchResults
         Me.pnlLoading.Visible = True
         Me.Label3.Text = Master.eLang.GetString(26, "Downloading details...")
 
-        IMDB.IMDBURL = IMDBURL
         IMDB.GetSearchMovieInfoAsync(Me.tvResults.SelectedNode.Tag.ToString, Master.tmpMovie, Master.DefaultOptions)
     End Sub
 

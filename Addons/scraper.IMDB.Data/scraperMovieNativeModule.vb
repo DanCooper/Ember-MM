@@ -91,11 +91,6 @@ Public Class EmberNativeScraperModule
 
     Function GetMovieStudio(ByRef DBMovie As Structures.DBMovie, ByRef studio As List(Of String)) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule_Data.GetMovieStudio
         Dim IMDB As New IMDB.Scraper
-        IMDB.UseOFDBTitle = MySettings.UseOFDBTitle
-        IMDB.UseOFDBOutline = MySettings.UseOFDBOutline
-        IMDB.UseOFDBPlot = MySettings.UseOFDBPlot
-        IMDB.UseOFDBGenre = MySettings.UseOFDBGenre
-        IMDB.IMDBURL = MySettings.IMDBURL
         studio = IMDB.GetMovieStudios(DBMovie.Movie.IMDBID)
         Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function
@@ -155,7 +150,7 @@ Public Class EmberNativeScraperModule
         If String.IsNullOrEmpty(MySettings.IMDBURL) Then
             MySettings.IMDBURL = "akas.imdb.com"
         End If
-        _setup.txtIMDBURL.Text = MySettings.IMDBURL
+
         _setup.orderChanged()
         SPanel.Name = String.Concat(Me._Name, "Scraper")
         SPanel.Text = Master.eLang.GetString(104, "Ember Native Movie Scrapers")
@@ -279,11 +274,6 @@ Public Class EmberNativeScraperModule
     End Sub
 
     Sub SaveSetupScraper(ByVal DoDispose As Boolean) Implements Interfaces.EmberMovieScraperModule_Data.SaveSetupScraper
-        If Not String.IsNullOrEmpty(_setup.txtIMDBURL.Text) Then
-            MySettings.IMDBURL = Strings.Replace(_setup.txtIMDBURL.Text, "http://", String.Empty)
-        Else
-            MySettings.IMDBURL = "akas.imdb.com"
-        End If
         MySettings.UseOFDBTitle = _setup.chkOFDBTitle.Checked
         MySettings.UseOFDBOutline = _setup.chkOFDBOutline.Checked
         MySettings.UseOFDBPlot = _setup.chkOFDBPlot.Checked
@@ -323,11 +313,6 @@ Public Class EmberNativeScraperModule
 
     Function Scraper(ByRef DBMovie As Structures.DBMovie, ByRef ScrapeType As Enums.ScrapeType, ByRef Options As Structures.ScrapeOptions) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule_Data.Scraper
         'LoadSettings()
-        IMDB.IMDBURL = MySettings.IMDBURL
-        IMDB.UseOFDBTitle = MySettings.UseOFDBTitle
-        IMDB.UseOFDBOutline = MySettings.UseOFDBOutline
-        IMDB.UseOFDBPlot = MySettings.UseOFDBPlot
-        IMDB.UseOFDBGenre = MySettings.UseOFDBGenre
         Dim tTitle As String = String.Empty
         Dim OldTitle As String = DBMovie.Movie.Title
 
@@ -359,7 +344,6 @@ Public Class EmberNativeScraperModule
             End Select
             If ScrapeType = Enums.ScrapeType.SingleScrape Then
                 Using dSearch As New dlgIMDBSearchResults
-                    dSearch.IMDBURL = MySettings.IMDBURL
                     Dim tmpTitle As String = DBMovie.Movie.Title
                     If String.IsNullOrEmpty(tmpTitle) Then
                         If FileUtils.Common.isVideoTS(DBMovie.Filename) Then

@@ -352,6 +352,7 @@ Public Class Settings
     Private _yamjsetscompatible As Boolean
     Private _username As String
     Private _password As String
+    Private _IMDBURL As String
     '  cocotus 2013/02 Trakt.tv syncing
     'Adding Settings
     Private _traktuser As String
@@ -510,6 +511,15 @@ Public Class Settings
         End Get
         Set(ByVal value As Boolean)
             Me._autothumbnospoilers = value
+        End Set
+    End Property
+
+    Public Property IMDBURL() As String
+        Get
+            Return Me._IMDBURL
+        End Get
+        Set(ByVal value As String)
+            Me._IMDBURL = value
         End Set
     End Property
 
@@ -3661,6 +3671,7 @@ Public Class Settings
         Me._onlyvalueforcert = False
         Me._username = String.Empty
         Me._password = String.Empty
+        Me._IMDBURL = "akas.imdb.com"
     End Sub
 
     Public Function EpisodeFanartEnabled() As Boolean

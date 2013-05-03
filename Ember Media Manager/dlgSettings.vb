@@ -2615,7 +2615,8 @@ Public Class dlgSettings
 			Me.chkMarkNewEpisodes.Checked = Master.eSettings.MarkNewEpisodes
 			Me.cbOrdering.SelectedIndex = Master.eSettings.OrderDefault
 			Me.chkOnlyValueForCert.Checked = Master.eSettings.OnlyValueForCert
-			Me.chkScraperActorThumbs.Checked = Master.eSettings.ScraperActorThumbs
+            Me.chkScraperActorThumbs.Checked = Master.eSettings.ScraperActorThumbs
+            Me.txtIMDBURL.Text = Master.eSettings.IMDBURL
 			Me.RefreshSources()
 			Me.RefreshTVSources()
 			Me.RefreshShowFilters()
@@ -3495,6 +3496,11 @@ Public Class dlgSettings
 			Master.eSettings.ResizeSeasonPoster = Me.chkSeaResizePoster.Checked
 			Master.eSettings.SeasonPosterHeight = If(Not String.IsNullOrEmpty(Me.txtSeaPosterHeight.Text), Convert.ToInt32(Me.txtSeaPosterHeight.Text), 0)
 			Master.eSettings.SeasonPosterWidth = If(Not String.IsNullOrEmpty(Me.txtSeaPosterWidth.Text), Convert.ToInt32(Me.txtSeaPosterWidth.Text), 0)
+            If Not String.IsNullOrEmpty(Me.txtIMDBURL.Text) Then
+                Master.eSettings.IMDBURL = Strings.Replace(Me.txtIMDBURL.Text, "http://", String.Empty)
+            Else
+                Master.eSettings.IMDBURL = "akas.imdb.com"
+            End If
 
 			If Not String.IsNullOrEmpty(txtAutoThumbs.Text) AndAlso Convert.ToInt32(txtAutoThumbs.Text) > 0 Then
 				Master.eSettings.AutoThumbs = Convert.ToInt32(txtAutoThumbs.Text)
@@ -3804,7 +3810,8 @@ Public Class dlgSettings
 	End Sub
 
 	Private Sub SetUp()
-		Me.cbForce.Items.AddRange(Strings.Split(AdvancedSettings.GetSetting("ForceTitle", ""), "|"))
+        Me.Label18.Text = Master.eLang.GetString(5, "IMDB Mirror:")
+        Me.cbForce.Items.AddRange(Strings.Split(AdvancedSettings.GetSetting("ForceTitle", ""), "|"))
 		Me.btnAddShowRegex.Tag = String.Empty
 		Me.Text = Master.eLang.GetString(420, "Settings")
 		Me.GroupBox4.Text = Master.eLang.GetString(429, "Miscellaneous")
@@ -4206,6 +4213,7 @@ Public Class dlgSettings
 
 		Me.cboEpRetrieve.Items.Clear()
 		Me.cboEpRetrieve.Items.AddRange(New String() {Master.eLang.GetString(13, "Folder Name"), Master.eLang.GetString(15, "File Name"), Master.eLang.GetString(16, "Season Result")})
+        Me.GroupBox30.Text = Master.eLang.GetString(106, "IMDB")
 
 		Me.LoadTrailerQualities()
 	End Sub

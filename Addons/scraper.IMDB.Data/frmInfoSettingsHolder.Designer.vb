@@ -24,9 +24,6 @@ Partial Class frmInfoSettingsHolder
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmInfoSettingsHolder))
         Me.lblVersion = New System.Windows.Forms.Label()
-        Me.GroupBox30 = New System.Windows.Forms.GroupBox()
-        Me.Label18 = New System.Windows.Forms.Label()
-        Me.txtIMDBURL = New System.Windows.Forms.TextBox()
         Me.GroupBox15 = New System.Windows.Forms.GroupBox()
         Me.chkOFDBGenre = New System.Windows.Forms.CheckBox()
         Me.chkOFDBPlot = New System.Windows.Forms.CheckBox()
@@ -65,7 +62,6 @@ Partial Class frmInfoSettingsHolder
         Me.chkMPAA = New System.Windows.Forms.CheckBox()
         Me.chkYear = New System.Windows.Forms.CheckBox()
         Me.chkTitle = New System.Windows.Forms.CheckBox()
-        Me.GroupBox30.SuspendLayout()
         Me.GroupBox15.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.pnlSettings.SuspendLayout()
@@ -80,36 +76,6 @@ Partial Class frmInfoSettingsHolder
         Me.lblVersion.Size = New System.Drawing.Size(90, 16)
         Me.lblVersion.TabIndex = 74
         Me.lblVersion.Text = "Version:"
-        '
-        'GroupBox30
-        '
-        Me.GroupBox30.Controls.Add(Me.Label18)
-        Me.GroupBox30.Controls.Add(Me.txtIMDBURL)
-        Me.GroupBox30.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.GroupBox30.Location = New System.Drawing.Point(8, 40)
-        Me.GroupBox30.Name = "GroupBox30"
-        Me.GroupBox30.Size = New System.Drawing.Size(213, 69)
-        Me.GroupBox30.TabIndex = 1
-        Me.GroupBox30.TabStop = False
-        Me.GroupBox30.Text = "IMDB"
-        '
-        'Label18
-        '
-        Me.Label18.AutoSize = True
-        Me.Label18.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label18.Location = New System.Drawing.Point(6, 18)
-        Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(73, 13)
-        Me.Label18.TabIndex = 0
-        Me.Label18.Text = "IMDB Mirror:"
-        '
-        'txtIMDBURL
-        '
-        Me.txtIMDBURL.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtIMDBURL.Location = New System.Drawing.Point(8, 32)
-        Me.txtIMDBURL.Name = "txtIMDBURL"
-        Me.txtIMDBURL.Size = New System.Drawing.Size(192, 22)
-        Me.txtIMDBURL.TabIndex = 1
         '
         'GroupBox15
         '
@@ -225,7 +191,6 @@ Partial Class frmInfoSettingsHolder
         Me.pnlSettings.Controls.Add(Me.Label1)
         Me.pnlSettings.Controls.Add(Me.PictureBox1)
         Me.pnlSettings.Controls.Add(Me.Panel1)
-        Me.pnlSettings.Controls.Add(Me.GroupBox30)
         Me.pnlSettings.Controls.Add(Me.GroupBox15)
         Me.pnlSettings.Controls.Add(Me.gbOptions)
         Me.pnlSettings.Location = New System.Drawing.Point(12, 1)
@@ -574,8 +539,6 @@ Partial Class frmInfoSettingsHolder
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Scraper Setup"
-        Me.GroupBox30.ResumeLayout(False)
-        Me.GroupBox30.PerformLayout()
         Me.GroupBox15.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
@@ -587,9 +550,6 @@ Partial Class frmInfoSettingsHolder
 
     End Sub
     Friend WithEvents lblVersion As System.Windows.Forms.Label
-    Friend WithEvents GroupBox30 As System.Windows.Forms.GroupBox
-    Friend WithEvents Label18 As System.Windows.Forms.Label
-    Friend WithEvents txtIMDBURL As System.Windows.Forms.TextBox
     Friend WithEvents GroupBox15 As System.Windows.Forms.GroupBox
     Friend WithEvents chkOFDBGenre As System.Windows.Forms.CheckBox
     Friend WithEvents chkOFDBPlot As System.Windows.Forms.CheckBox

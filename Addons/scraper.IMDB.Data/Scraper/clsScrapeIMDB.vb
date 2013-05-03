@@ -74,12 +74,6 @@ Namespace IMDB
 
 #Region "Fields"
 
-        Public IMDBURL As String
-        Public UseOFDBGenre As Boolean
-        Public UseOFDBOutline As Boolean
-        Public UseOFDBPlot As Boolean
-        Public UseOFDBTitle As Boolean
-
         Friend WithEvents bwIMDB As New System.ComponentModel.BackgroundWorker
 
         Private Const LINK_PATTERN As String = "<a[\s]+[^>]*?href[\s]?=[\s\""\']*(?<url>.*?)[\""\']*.*?>(?<name>[^<]+|.*?)?<\/a>"
@@ -140,13 +134,13 @@ Namespace IMDB
                 If bwIMDB.CancellationPending Then Return Nothing
 
                 Dim sHTTP As New HTTP
-                Dim HTML As String = sHTTP.DownloadData(String.Concat("http://", IMDBURL, "/title/tt", strID, "/combined"))
+                Dim HTML As String = sHTTP.DownloadData(String.Concat("http://", Master.eSettings.IMDBURL, "/title/tt", strID, "/combined"))
                 sHTTP = Nothing
 
                 If bwIMDB.CancellationPending Then Return Nothing
 
                 Dim sPlot As New HTTP
-                Dim PlotHtml As String = sPlot.DownloadData(String.Concat("http://", IMDBURL, "/title/tt", strID, "/plotsummary"))
+                Dim PlotHtml As String = sPlot.DownloadData(String.Concat("http://", Master.eSettings.IMDBURL, "/title/tt", strID, "/plotsummary"))
                 sPlot = Nothing
 
                 IMDBMovie.IMDBID = strID
@@ -532,20 +526,16 @@ Namespace IMDB
 mPlot:
                 'Get the full Plot
                 If Options.bPlot AndAlso (String.IsNullOrEmpty(IMDBMovie.Plot) OrElse Not Master.eSettings.LockPlot) Then
-                    If Not String.IsNullOrEmpty(ofdbPlot) Then
-                        IMDBMovie.Plot = ofdbPlot
-                    Else
-                        Dim FullPlotP As String = Regex.Match(PlotHtml, "<p class=.plotpar.>(.*?)</p>", RegexOptions.Singleline Or RegexOptions.IgnoreCase Or RegexOptions.Multiline).Groups(1).Value.ToString.Trim
-                        Dim FullPlotI As String = Regex.Match(PlotHtml, "<p class=.plotpar.>(.*?)<i>", RegexOptions.Singleline Or RegexOptions.IgnoreCase Or RegexOptions.Multiline).Groups(1).Value.ToString.Trim
-                        Dim FullPlot As String = If(FullPlotI.Length < FullPlotP.Length, FullPlotI, FullPlotP)
-                        If Not String.IsNullOrEmpty(FullPlot) Then
-                            For Each rMatch As Match In Regex.Matches(FullPlot, HREF_PATTERN_4)
-                                FullPlot = FullPlot.Replace(rMatch.Value, rMatch.Groups("text").Value.Trim)
-                            Next
-                            IMDBMovie.Plot = Web.HttpUtility.HtmlDecode(FullPlot.Replace("|", String.Empty)).Trim
-                        End If
-
+                    Dim FullPlotP As String = Regex.Match(PlotHtml, "<p class=.plotpar.>(.*?)</p>", RegexOptions.Singleline Or RegexOptions.IgnoreCase Or RegexOptions.Multiline).Groups(1).Value.ToString.Trim
+                    Dim FullPlotI As String = Regex.Match(PlotHtml, "<p class=.plotpar.>(.*?)<i>", RegexOptions.Singleline Or RegexOptions.IgnoreCase Or RegexOptions.Multiline).Groups(1).Value.ToString.Trim
+                    Dim FullPlot As String = If(FullPlotI.Length < FullPlotP.Length, FullPlotI, FullPlotP)
+                    If Not String.IsNullOrEmpty(FullPlot) Then
+                        For Each rMatch As Match In Regex.Matches(FullPlot, HREF_PATTERN_4)
+                            FullPlot = FullPlot.Replace(rMatch.Value, rMatch.Groups("text").Value.Trim)
+                        Next
+                        IMDBMovie.Plot = Web.HttpUtility.HtmlDecode(FullPlot.Replace("|", String.Empty)).Trim
                     End If
+
 
                     If Master.eSettings.OutlineForPlot AndAlso String.IsNullOrEmpty(IMDBMovie.Plot) AndAlso Not String.IsNullOrEmpty(IMDBMovie.Outline) Then
                         IMDBMovie.Plot = IMDBMovie.Outline
@@ -555,7 +545,7 @@ mPlot:
                 If bwIMDB.CancellationPending Then Return Nothing
 
                 'Get the movie duration
-                If Options.bRuntime Then IMDBMovie.Runtime = Web.HttpUtility.HtmlDecode(Regex.Match(HTML, "<h5>Runtime:</h5>[^0-9]*([^<]*)").Groups(1).Value.Trim)
+                If Options.bRuntime AndAlso (String.IsNullOrEmpty(IMDBMovie.Runtime)) Then IMDBMovie.Runtime = Web.HttpUtility.HtmlDecode(Regex.Match(HTML, "<h5>Runtime:</h5>[^0-9]*([^<]*)").Groups(1).Value.Trim)
 
                 'Get Production Studio
                 If Options.bStudio AndAlso (String.IsNullOrEmpty(IMDBMovie.Studio) OrElse Not Master.eSettings.LockStudio) Then
@@ -582,7 +572,7 @@ mPlot:
                 If bwIMDB.CancellationPending Then Return Nothing
 
                 'Get Writers
-                If Options.bWriters Then
+                If Options.bWriters AndAlso (String.IsNullOrEmpty(IMDBMovie.OldCredits)) Then
                     D = 0 : W = 0
                     D = HTML.IndexOf("<h5>Writer")
                     If D > 0 Then W = HTML.IndexOf("</div>", D)
@@ -618,7 +608,7 @@ mPlot:
                             'Producers
                             If Options.bProducers AndAlso M.ToString.Contains("Produced by</a></h5>") Then
                                 Dim Pr = From Po In Regex.Matches(M.ToString, "<td\svalign=""top"">(.*?)</td>") _
-                                Where Not Po.ToString.Contains(String.Concat("http://", IMDBURL, "/Glossary/")) _
+                                Where Not Po.ToString.Contains(String.Concat("http://", Master.eSettings.IMDBURL, "/Glossary/")) _
                                 Let P1 = Regex.Match(Po.ToString, HREF_PATTERN_2) _
                                 Where Not String.IsNullOrEmpty(P1.Groups("name").ToString) _
                                 Select Producer = Web.HttpUtility.HtmlDecode(String.Concat(P1.Groups("name").ToString, " (producer)"))
@@ -670,7 +660,7 @@ mPlot:
         Public Function GetMovieStudios(ByVal strID As String) As List(Of String)
             Dim alStudio As New List(Of String)
             Dim sHTTP As New HTTP
-            Dim HTML As String = sHTTP.DownloadData(String.Concat("http://", IMDBURL, "/title/tt", strID, "/combined"))
+            Dim HTML As String = sHTTP.DownloadData(String.Concat("http://", Master.eSettings.IMDBURL, "/title/tt", strID, "/combined"))
             sHTTP = Nothing
 
             Dim D, W As Integer
@@ -709,7 +699,6 @@ mPlot:
                         Else
                             Master.tmpMovie.Clear()
                             Using dIMDB As New dlgIMDBSearchResults
-                                dIMDB.IMDBURL = IMDBURL
                                 If dIMDB.ShowDialog(r, sMovieName) = Windows.Forms.DialogResult.OK Then
                                     If String.IsNullOrEmpty(Master.tmpMovie.IMDBID) Then
                                         b = False
@@ -866,7 +855,7 @@ mPlot:
             Try
                 If bwIMDB.CancellationPending Then Return Nothing
                 Dim sHTTP As New HTTP
-                Dim HTML As String = sHTTP.DownloadData(String.Concat("http://", IMDBURL, "/title/tt", strID, "/releaseinfo#akas"))
+                Dim HTML As String = sHTTP.DownloadData(String.Concat("http://", Master.eSettings.IMDBURL, "/title/tt", strID, "/releaseinfo#akas"))
                 sHTTP = Nothing
 
                 Dim D, W As Integer
@@ -906,10 +895,10 @@ mPlot:
                 Dim R As New MovieSearchResults
 
                 Dim sHTTP As New HTTP
-                Dim HTML As String = sHTTP.DownloadData(String.Concat("http://", IMDBURL, "/find?q=", Web.HttpUtility.UrlEncode(sMovie), "&s=tt&ttype=ft"))
-                Dim HTMLp As String = sHTTP.DownloadData(String.Concat("http://", IMDBURL, "/find?q=", Web.HttpUtility.UrlEncode(sMovie), "&s=tt&ttype=ft&ref_=fn_tt_pop"))
-                Dim HTMLm As String = sHTTP.DownloadData(String.Concat("http://", IMDBURL, "/find?q=", Web.HttpUtility.UrlEncode(sMovie), "&s=tt&ttype=ft&ref_=fn_ft"))
-                Dim HTMLe As String = sHTTP.DownloadData(String.Concat("http://", IMDBURL, "/find?q=", Web.HttpUtility.UrlEncode(sMovie), "&s=tt&ttype=ft&exact=true&ref_=fn_tt_ex"))
+                Dim HTML As String = sHTTP.DownloadData(String.Concat("http://", Master.eSettings.IMDBURL, "/find?q=", Web.HttpUtility.UrlEncode(sMovie), "&s=tt&ttype=ft"))
+                Dim HTMLp As String = sHTTP.DownloadData(String.Concat("http://", Master.eSettings.IMDBURL, "/find?q=", Web.HttpUtility.UrlEncode(sMovie), "&s=tt&ttype=ft&ref_=fn_tt_pop"))
+                Dim HTMLm As String = sHTTP.DownloadData(String.Concat("http://", Master.eSettings.IMDBURL, "/find?q=", Web.HttpUtility.UrlEncode(sMovie), "&s=tt&ttype=ft&ref_=fn_ft"))
+                Dim HTMLe As String = sHTTP.DownloadData(String.Concat("http://", Master.eSettings.IMDBURL, "/find?q=", Web.HttpUtility.UrlEncode(sMovie), "&s=tt&ttype=ft&exact=true&ref_=fn_tt_ex"))
                 Dim rUri As String = sHTTP.ResponseUri
                 sHTTP = Nothing
 
@@ -1003,7 +992,7 @@ mResult:
             Dim WebPage As New HTTP
             Dim _ImdbTrailerPage As String = String.Empty
 
-            _ImdbTrailerPage = WebPage.DownloadData(String.Concat("http://", IMDBURL, "/title/tt", imdbID, "/videogallery/content_type-Trailer"))
+            _ImdbTrailerPage = WebPage.DownloadData(String.Concat("http://", Master.eSettings.IMDBURL, "/title/tt", imdbID, "/videogallery/content_type-Trailer"))
             If _ImdbTrailerPage.ToLower.Contains("page not found") Then
                 _ImdbTrailerPage = String.Empty
             End If
@@ -1019,7 +1008,7 @@ mResult:
 
                         For i As Integer = 1 To currPage
                             If Not i = 1 Then
-                                _ImdbTrailerPage = WebPage.DownloadData(String.Concat("http://", IMDBURL, "/title/tt", imdbID, "/videogallery/content_type-Trailer?page=", i))
+                                _ImdbTrailerPage = WebPage.DownloadData(String.Concat("http://", Master.eSettings.IMDBURL, "/title/tt", imdbID, "/videogallery/content_type-Trailer?page=", i))
                             End If
 
                             Links = Regex.Matches(_ImdbTrailerPage, "screenplay/(vi[0-9]+)/")
@@ -1030,7 +1019,7 @@ mResult:
 
                             For Each value As String In linksCollection
                                 If value.Contains("screenplay") Then
-                                    trailerPage = WebPage.DownloadData(String.Concat("http://", IMDBURL, "/video/", value, "player"))
+                                    trailerPage = WebPage.DownloadData(String.Concat("http://", Master.eSettings.IMDBURL, "/video/", value, "player"))
                                     trailerUrl = Web.HttpUtility.UrlDecode(Regex.Match(trailerPage, "http.+mp4").Value)
                                     If Not String.IsNullOrEmpty(trailerUrl) AndAlso WebPage.IsValidURL(trailerUrl) Then
                                         TrailerList.Add(trailerUrl)
