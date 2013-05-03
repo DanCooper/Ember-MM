@@ -34,20 +34,20 @@ Public Class frmInfoSettingsHolder
 #Region "Methods"
 
     Private Sub btnDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDown.Click
-        Dim order As Integer = ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberNativeScraperModule._AssemblyName).ScraperOrder
+        Dim order As Integer = ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = IMDB_Data._AssemblyName).ScraperOrder
         If order < ModulesManager.Instance.externalDataScrapersModules.Count - 1 Then
             ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order + 1).ScraperOrder = order
-            ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberNativeScraperModule._AssemblyName).ScraperOrder = order + 1
+            ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = IMDB_Data._AssemblyName).ScraperOrder = order + 1
             RaiseEvent SetupScraperChanged(cbEnabled.Checked, 1)
             orderChanged()
         End If
     End Sub
 
     Private Sub btnUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnUp.Click
-        Dim order As Integer = ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberNativeScraperModule._AssemblyName).ScraperOrder
+        Dim order As Integer = ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = IMDB_Data._AssemblyName).ScraperOrder
         If order > 0 Then
             ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order - 1).ScraperOrder = order
-            ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberNativeScraperModule._AssemblyName).ScraperOrder = order - 1
+            ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = IMDB_Data._AssemblyName).ScraperOrder = order - 1
             RaiseEvent SetupScraperChanged(cbEnabled.Checked, -1)
             orderChanged()
         End If
@@ -100,22 +100,6 @@ Public Class frmInfoSettingsHolder
     End Sub
 
     Private Sub chkMusicBy_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkMusicBy.CheckedChanged
-        RaiseEvent ModuleSettingsChanged()
-    End Sub
-
-    Private Sub chkOFDBGenre_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkOFDBGenre.CheckedChanged
-        RaiseEvent ModuleSettingsChanged()
-    End Sub
-
-    Private Sub chkOFDBOutline_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkOFDBOutline.CheckedChanged
-        RaiseEvent ModuleSettingsChanged()
-    End Sub
-
-    Private Sub chkOFDBPlot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkOFDBPlot.CheckedChanged
-        RaiseEvent ModuleSettingsChanged()
-    End Sub
-
-    Private Sub chkOFDBTitle_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkOFDBTitle.CheckedChanged
         RaiseEvent ModuleSettingsChanged()
     End Sub
 
@@ -185,16 +169,12 @@ Public Class frmInfoSettingsHolder
     End Sub
 
     Sub orderChanged()
-        Dim order As Integer = ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberNativeScraperModule._AssemblyName).ScraperOrder
+        Dim order As Integer = ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = IMDB_Data._AssemblyName).ScraperOrder
         btnDown.Enabled = (order < ModulesManager.Instance.externalDataScrapersModules.Count - 1)
         btnUp.Enabled = (order > 1)
     End Sub
 
     Private Sub SetUp()
-        Me.chkOFDBGenre.Text = Master.eLang.GetString(1, "Use OFDB Genre")
-        Me.chkOFDBPlot.Text = Master.eLang.GetString(2, "Use OFDB Plot")
-        Me.chkOFDBOutline.Text = Master.eLang.GetString(3, "Use OFDB Outline")
-        Me.chkOFDBTitle.Text = Master.eLang.GetString(4, "Use OFDB Title")
         Me.gbOptions.Text = Master.eLang.GetString(6, "Scraper Fields - Scraper specific")
         Me.chkCrew.Text = Master.eLang.GetString(391, "Other Crew", True)
         Me.chkMusicBy.Text = Master.eLang.GetString(392, "Music By", True)
@@ -223,11 +203,6 @@ Public Class frmInfoSettingsHolder
 		Me.chkFullCast.Text = Master.eLang.GetString(512, "Scrape Full Cast", True)
 		Me.chkFullCrew.Text = Master.eLang.GetString(513, "Scrape Full Crew", True)
 		Me.chkTop250.Text = Master.eLang.GetString(868, "Top250", True)
-        Me.GroupBox15.Text = Master.eLang.GetString(107, "OFDB (German)")
-    End Sub
-
-    Private Sub txtIMDBURL_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        RaiseEvent ModuleSettingsChanged()
     End Sub
 
 #End Region 'Methods

@@ -24,11 +24,6 @@ Partial Class frmInfoSettingsHolder
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmInfoSettingsHolder))
         Me.lblVersion = New System.Windows.Forms.Label()
-        Me.GroupBox15 = New System.Windows.Forms.GroupBox()
-        Me.chkOFDBGenre = New System.Windows.Forms.CheckBox()
-        Me.chkOFDBPlot = New System.Windows.Forms.CheckBox()
-        Me.chkOFDBOutline = New System.Windows.Forms.CheckBox()
-        Me.chkOFDBTitle = New System.Windows.Forms.CheckBox()
         Me.cbEnabled = New System.Windows.Forms.CheckBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -62,7 +57,6 @@ Partial Class frmInfoSettingsHolder
         Me.chkMPAA = New System.Windows.Forms.CheckBox()
         Me.chkYear = New System.Windows.Forms.CheckBox()
         Me.chkTitle = New System.Windows.Forms.CheckBox()
-        Me.GroupBox15.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.pnlSettings.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -76,60 +70,6 @@ Partial Class frmInfoSettingsHolder
         Me.lblVersion.Size = New System.Drawing.Size(90, 16)
         Me.lblVersion.TabIndex = 74
         Me.lblVersion.Text = "Version:"
-        '
-        'GroupBox15
-        '
-        Me.GroupBox15.Controls.Add(Me.chkOFDBGenre)
-        Me.GroupBox15.Controls.Add(Me.chkOFDBPlot)
-        Me.GroupBox15.Controls.Add(Me.chkOFDBOutline)
-        Me.GroupBox15.Controls.Add(Me.chkOFDBTitle)
-        Me.GroupBox15.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.GroupBox15.Location = New System.Drawing.Point(8, 114)
-        Me.GroupBox15.Name = "GroupBox15"
-        Me.GroupBox15.Size = New System.Drawing.Size(213, 87)
-        Me.GroupBox15.TabIndex = 2
-        Me.GroupBox15.TabStop = False
-        Me.GroupBox15.Text = "OFDB (German)"
-        '
-        'chkOFDBGenre
-        '
-        Me.chkOFDBGenre.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkOFDBGenre.Location = New System.Drawing.Point(6, 65)
-        Me.chkOFDBGenre.Name = "chkOFDBGenre"
-        Me.chkOFDBGenre.Size = New System.Drawing.Size(194, 17)
-        Me.chkOFDBGenre.TabIndex = 3
-        Me.chkOFDBGenre.Text = "Use OFDB Genre"
-        Me.chkOFDBGenre.UseVisualStyleBackColor = True
-        '
-        'chkOFDBPlot
-        '
-        Me.chkOFDBPlot.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkOFDBPlot.Location = New System.Drawing.Point(6, 49)
-        Me.chkOFDBPlot.Name = "chkOFDBPlot"
-        Me.chkOFDBPlot.Size = New System.Drawing.Size(194, 17)
-        Me.chkOFDBPlot.TabIndex = 2
-        Me.chkOFDBPlot.Text = "Use OFDB Plot"
-        Me.chkOFDBPlot.UseVisualStyleBackColor = True
-        '
-        'chkOFDBOutline
-        '
-        Me.chkOFDBOutline.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkOFDBOutline.Location = New System.Drawing.Point(6, 33)
-        Me.chkOFDBOutline.Name = "chkOFDBOutline"
-        Me.chkOFDBOutline.Size = New System.Drawing.Size(194, 17)
-        Me.chkOFDBOutline.TabIndex = 1
-        Me.chkOFDBOutline.Text = "Use OFDB Outline"
-        Me.chkOFDBOutline.UseVisualStyleBackColor = True
-        '
-        'chkOFDBTitle
-        '
-        Me.chkOFDBTitle.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkOFDBTitle.Location = New System.Drawing.Point(6, 17)
-        Me.chkOFDBTitle.Name = "chkOFDBTitle"
-        Me.chkOFDBTitle.Size = New System.Drawing.Size(194, 17)
-        Me.chkOFDBTitle.TabIndex = 0
-        Me.chkOFDBTitle.Text = "Use OFDB Title"
-        Me.chkOFDBTitle.UseVisualStyleBackColor = True
         '
         'cbEnabled
         '
@@ -191,7 +131,6 @@ Partial Class frmInfoSettingsHolder
         Me.pnlSettings.Controls.Add(Me.Label1)
         Me.pnlSettings.Controls.Add(Me.PictureBox1)
         Me.pnlSettings.Controls.Add(Me.Panel1)
-        Me.pnlSettings.Controls.Add(Me.GroupBox15)
         Me.pnlSettings.Controls.Add(Me.gbOptions)
         Me.pnlSettings.Location = New System.Drawing.Point(12, 1)
         Me.pnlSettings.Name = "pnlSettings"
@@ -249,7 +188,7 @@ Partial Class frmInfoSettingsHolder
         Me.gbOptions.Controls.Add(Me.chkYear)
         Me.gbOptions.Controls.Add(Me.chkTitle)
         Me.gbOptions.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gbOptions.Location = New System.Drawing.Point(227, 40)
+        Me.gbOptions.Location = New System.Drawing.Point(10, 31)
         Me.gbOptions.Name = "gbOptions"
         Me.gbOptions.Size = New System.Drawing.Size(387, 161)
         Me.gbOptions.TabIndex = 3
@@ -539,7 +478,6 @@ Partial Class frmInfoSettingsHolder
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Scraper Setup"
-        Me.GroupBox15.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.pnlSettings.ResumeLayout(False)
@@ -550,11 +488,6 @@ Partial Class frmInfoSettingsHolder
 
     End Sub
     Friend WithEvents lblVersion As System.Windows.Forms.Label
-    Friend WithEvents GroupBox15 As System.Windows.Forms.GroupBox
-    Friend WithEvents chkOFDBGenre As System.Windows.Forms.CheckBox
-    Friend WithEvents chkOFDBPlot As System.Windows.Forms.CheckBox
-    Friend WithEvents chkOFDBOutline As System.Windows.Forms.CheckBox
-    Friend WithEvents chkOFDBTitle As System.Windows.Forms.CheckBox
     Friend WithEvents cbEnabled As System.Windows.Forms.CheckBox
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents pnlSettings As System.Windows.Forms.Panel

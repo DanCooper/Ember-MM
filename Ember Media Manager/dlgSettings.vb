@@ -339,7 +339,6 @@ Public Class dlgSettings
 		Me.sResult.NeedsRestart = True
 	End Sub
 
-
 	Private Sub btnAddEpFilter_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddEpFilter.Click
 		If Not String.IsNullOrEmpty(Me.txtEpFilter.Text) Then
 			Me.lstEpFilters.Items.Add(Me.txtEpFilter.Text)
@@ -1026,8 +1025,7 @@ Public Class dlgSettings
 	Private Sub chkClickScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkClickScrape.CheckedChanged
 		chkAskCheckboxScrape.Enabled = chkClickScrape.Checked
 		Me.SetApplyButton(True)
-
-	End Sub
+    End Sub
 	Private Sub chkAskCheckboxScrape_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkAskCheckboxScrape.CheckedChanged
 		Me.SetApplyButton(True)
 	End Sub
@@ -1036,8 +1034,7 @@ Public Class dlgSettings
 		Me.SetApplyButton(True)
 		Me.txtBDPath.Enabled = chkAutoBD.Checked
 		Me.btnBrowse.Enabled = chkAutoBD.Checked
-
-	End Sub
+    End Sub
 
 	Private Sub chkAutoDetectVTS_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkAutoDetectVTS.CheckedChanged
 		Me.SetApplyButton(True)
@@ -3539,17 +3536,16 @@ Public Class dlgSettings
 			Master.eSettings.OverwriteTrailer = Me.chkOverwriteTrailer.Checked
 			Master.eSettings.DeleteAllTrailers = Me.chkDeleteAllTrailers.Checked
 
-
-			If Me.lbGenre.CheckedItems.Count > 0 Then
-				If Me.lbGenre.CheckedItems.Contains(String.Format("{0}", Master.eLang.GetString(569, Master.eLang.All))) Then
-					Master.eSettings.GenreFilter = String.Format("{0}", Master.eLang.GetString(569, Master.eLang.All))
-				Else
-					Dim strGenre As String = String.Empty
-					Dim iChecked = From iCheck In Me.lbGenre.CheckedItems
-					strGenre = Strings.Join(iChecked.ToArray, ",")
-					Master.eSettings.GenreFilter = strGenre.Trim
-				End If
-			End If
+            If Me.lbGenre.CheckedItems.Count > 0 Then
+                If Me.lbGenre.CheckedItems.Contains(String.Format("{0}", Master.eLang.GetString(569, Master.eLang.All))) Then
+                    Master.eSettings.GenreFilter = String.Format("{0}", Master.eLang.GetString(569, Master.eLang.All))
+                Else
+                    Dim strGenre As String = String.Empty
+                    Dim iChecked = From iCheck In Me.lbGenre.CheckedItems
+                    strGenre = Strings.Join(iChecked.ToArray, ",")
+                    Master.eSettings.GenreFilter = strGenre.Trim
+                End If
+            End If
 
 			Master.eSettings.ShowDims = Me.chkShowDims.Checked
 			Master.eSettings.NoDisplayFanart = Me.chkNoDisplayFanart.Checked
@@ -3810,7 +3806,7 @@ Public Class dlgSettings
 	End Sub
 
 	Private Sub SetUp()
-        Me.Label18.Text = Master.eLang.GetString(5, "IMDB Mirror:")
+        Me.Label18.Text = Master.eLang.GetString(884, "IMDB Mirror:")
         Me.cbForce.Items.AddRange(Strings.Split(AdvancedSettings.GetSetting("ForceTitle", ""), "|"))
 		Me.btnAddShowRegex.Tag = String.Empty
 		Me.Text = Master.eLang.GetString(420, "Settings")

@@ -108,7 +108,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="scraperMovieTMDBModule.vb" />
+    <Compile Include="TMDB_Data.vb" />
     <Compile Include="Scraper\clsScrapeTMDBg.vb" />
     <Compile Include="Scraper\dlgTMDBSearchResults.Designer.vb">
       <DependentUpon>dlgTMDBSearchResults.vb</DependentUpon>

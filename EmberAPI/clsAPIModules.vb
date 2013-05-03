@@ -148,7 +148,8 @@ Public Class ModulesManager
 								ProcessorModule = CType(Activator.CreateInstance(fileType), Interfaces.EmberExternalModule)
 								'Add the activated module to the arraylist
 								Dim _externalProcessorModule As New _externalGenericModuleClass
-								Dim filename As String = file
+                                Dim filename As String = file
+                                Debug.Print("Module loaded :" & filename)
 								If String.IsNullOrEmpty(AssemblyList.FirstOrDefault(Function(x) x.AssemblyName = Path.GetFileNameWithoutExtension(filename)).AssemblyName) Then
 									AssemblyList.Add(New AssemblyListItem With {.AssemblyName = Path.GetFileNameWithoutExtension(filename), .Assembly = assembly})
 								End If
@@ -202,13 +203,15 @@ Public Class ModulesManager
 			For Each file As String In System.IO.Directory.GetFiles(moduleLocation, modulefile)
 				Try
 					assembly = System.Reflection.Assembly.LoadFile(file)
-					'Loop through each of the assemeblies type
+                    Debug.Print("check :" & file)
+                    'Loop through each of the assemeblies type
 					For Each fileType As Type In assembly.GetTypes
 
 						'Activate the located module
 						Dim t1 As Type = fileType.GetInterface("EmberMovieScraperModule_Data")
 						If Not t1 Is Nothing Then
-							Dim ProcessorModule As Interfaces.EmberMovieScraperModule_Data
+                            Debug.Print("Loading :" & file)
+                            Dim ProcessorModule As Interfaces.EmberMovieScraperModule_Data
 							ProcessorModule = CType(Activator.CreateInstance(fileType), Interfaces.EmberMovieScraperModule_Data)
 							'Add the activated module to the arraylist
 							Dim _externalScraperModule As New _externalScraperModuleClass_Data

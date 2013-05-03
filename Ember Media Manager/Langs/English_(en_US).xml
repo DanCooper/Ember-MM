@@ -882,4 +882,5 @@
   <string id="881">Lock MPAA/Certification</string>
   <string id="882">Use MPAA as Fallback for FSK Rating</string>
   <string id="883">Fill only if empty</string>
+  <string id="884">IMDB Mirror:</string>
 </strings>

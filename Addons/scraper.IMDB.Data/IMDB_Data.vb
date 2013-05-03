@@ -26,7 +26,7 @@ Imports EmberAPI
 ''' Native Scraper
 ''' </summary>
 ''' <remarks></remarks>
-Public Class EmberNativeScraperModule
+Public Class IMDB_Data
     Implements Interfaces.EmberMovieScraperModule_Data
 
 
@@ -41,8 +41,7 @@ Public Class EmberNativeScraperModule
     ''' </summary>
     ''' <remarks></remarks>
     Private IMDB As New IMDB.Scraper
-    Private MySettings As New _MySettings
-    Private _Name As String = "Ember Native Movie Scrapers"
+    Private _Name As String = "IMDB"
     Private _PostScraperEnabled As Boolean = False
     Private _ScraperEnabled As Boolean = False
     Private _setup As frmInfoSettingsHolder
@@ -140,16 +139,8 @@ Public Class EmberNativeScraperModule
         _setup.chkCountry.Checked = ConfigOptions.bCountry
         _setup.chkTop250.Checked = ConfigOptions.bTop250
         _setup.chkCertification.Checked = ConfigOptions.bCert
-        _setup.chkOFDBTitle.Checked = MySettings.UseOFDBTitle
-        _setup.chkOFDBOutline.Checked = MySettings.UseOFDBOutline
-        _setup.chkOFDBPlot.Checked = MySettings.UseOFDBPlot
-        _setup.chkOFDBGenre.Checked = MySettings.UseOFDBGenre
         _setup.chkFullCast.Checked = ConfigOptions.bFullCast
         _setup.chkFullCrew.Checked = ConfigOptions.bFullCrew
-
-        If String.IsNullOrEmpty(MySettings.IMDBURL) Then
-            MySettings.IMDBURL = "akas.imdb.com"
-        End If
 
         _setup.orderChanged()
         SPanel.Name = String.Concat(Me._Name, "Scraper")
@@ -192,24 +183,6 @@ Public Class EmberNativeScraperModule
         ConfigOptions.bFullCast = AdvancedSettings.GetBooleanSetting("FullCast", True)
         ConfigOptions.bFullCrew = AdvancedSettings.GetBooleanSetting("FullCrew", True)
 
-        MySettings.IMDBURL = AdvancedSettings.GetSetting("IMDBURL", "akas.imdb.com")
-        MySettings.UseOFDBTitle = AdvancedSettings.GetBooleanSetting("UseOFDBTitle", False)
-        MySettings.UseOFDBOutline = AdvancedSettings.GetBooleanSetting("UseOFDBOutline", False)
-        MySettings.UseOFDBPlot = AdvancedSettings.GetBooleanSetting("UseOFDBPlot", False)
-        MySettings.UseOFDBGenre = AdvancedSettings.GetBooleanSetting("UseOFDBGenre", False)
-        MySettings.DownloadTrailers = AdvancedSettings.GetBooleanSetting("DownloadTraliers", False)
-
-        MySettings.TrailerTimeout = Convert.ToInt32(AdvancedSettings.GetSetting("TrailerTimeout", "10"))
-        MySettings.UseIMPA = AdvancedSettings.GetBooleanSetting("UseIMPA", False)
-        MySettings.UseMPDB = AdvancedSettings.GetBooleanSetting("UseMPDB", False)
-        MySettings.UseTMDB = AdvancedSettings.GetBooleanSetting("UseTMDB", True)
-        MySettings.UseIMDBTrailer = AdvancedSettings.GetBooleanSetting("UseIMDBTrailer", True)
-        MySettings.UseTMDBTrailer = AdvancedSettings.GetBooleanSetting("UseTMDBTrailer", True)
-        MySettings.UseTMDBTrailerXBMC = AdvancedSettings.GetBooleanSetting("UseTMDBTrailerXBMC", False)
-        MySettings.ManualETSize = Convert.ToString(AdvancedSettings.GetSetting("ManualETSize", "thumb"))
-        MySettings.ActorThumbsSize = Convert.ToString(AdvancedSettings.GetSetting("ActorThumbsSize", "SY275_SX400"))
-        MySettings.UseTMDBTrailerPref = Convert.ToString(AdvancedSettings.GetSetting("UseTMDBTrailerPref", "en"))
-
         ConfigScrapeModifier.DoSearch = True
         ConfigScrapeModifier.Meta = True
         ConfigScrapeModifier.NFO = True
@@ -246,38 +219,12 @@ Public Class EmberNativeScraperModule
         AdvancedSettings.SetBooleanSetting("DoCountry", ConfigOptions.bCountry)
         AdvancedSettings.SetBooleanSetting("DoTop250", ConfigOptions.bTop250)
         AdvancedSettings.SetBooleanSetting("DoCert", ConfigOptions.bCert)
-        AdvancedSettings.SetSetting("IMDBURL", MySettings.IMDBURL)
 
         AdvancedSettings.SetBooleanSetting("FullCast", ConfigOptions.bFullCast)
         AdvancedSettings.SetBooleanSetting("FullCrew", ConfigOptions.bFullCrew)
-        AdvancedSettings.SetBooleanSetting("UseOFDBTitle", MySettings.UseOFDBTitle)
-        AdvancedSettings.SetBooleanSetting("UseOFDBOutline", MySettings.UseOFDBOutline)
-        AdvancedSettings.SetBooleanSetting("UseOFDBPlot", MySettings.UseOFDBPlot)
-        AdvancedSettings.SetBooleanSetting("UseOFDBGenre", MySettings.UseOFDBGenre)
-        AdvancedSettings.SetBooleanSetting("DownloadTraliers", MySettings.DownloadTrailers)
-
-        AdvancedSettings.SetSetting("TrailerTimeout", MySettings.TrailerTimeout.ToString)
-        AdvancedSettings.SetBooleanSetting("UseIMPA", MySettings.UseIMPA)
-        AdvancedSettings.SetBooleanSetting("UseMPDB", MySettings.UseMPDB)
-        AdvancedSettings.SetBooleanSetting("UseTMDB", MySettings.UseTMDB)
-        AdvancedSettings.SetBooleanSetting("UseIMDBTrailer", MySettings.UseIMDBTrailer)
-        AdvancedSettings.SetBooleanSetting("UseTMDBTrailer", MySettings.UseTMDBTrailer)
-        AdvancedSettings.SetBooleanSetting("UseTMDBTrailerXBMC", MySettings.UseTMDBTrailerXBMC)
-
-        AdvancedSettings.SetSetting("ManualETSize", MySettings.ManualETSize.ToString)
-        AdvancedSettings.SetSetting("ActorThumbsSize", MySettings.ActorThumbsSize.ToString)
-        AdvancedSettings.SetSetting("UseTMDBTrailerPref", MySettings.UseTMDBTrailerPref.ToString)
-
-        AdvancedSettings.SetBooleanSetting("DoPoster", ConfigScrapeModifier.Poster)
-        AdvancedSettings.SetBooleanSetting("DoFanart", ConfigScrapeModifier.Fanart)
-        'AdvancedSettings.SetBooleanSetting("DoTrailer", ConfigScrapeModifier.Trailer)
     End Sub
 
     Sub SaveSetupScraper(ByVal DoDispose As Boolean) Implements Interfaces.EmberMovieScraperModule_Data.SaveSetupScraper
-        MySettings.UseOFDBTitle = _setup.chkOFDBTitle.Checked
-        MySettings.UseOFDBOutline = _setup.chkOFDBOutline.Checked
-        MySettings.UseOFDBPlot = _setup.chkOFDBPlot.Checked
-        MySettings.UseOFDBGenre = _setup.chkOFDBGenre.Checked
         ConfigOptions.bTitle = _setup.chkTitle.Checked
         ConfigOptions.bYear = _setup.chkYear.Checked
         ConfigOptions.bMPAA = _setup.chkMPAA.Checked
@@ -411,32 +358,5 @@ Public Class EmberNativeScraperModule
 
 #End Region 'Methods
 
-#Region "Nested Types"
-
-    Structure _MySettings
-
-#Region "Fields"
-
-        Dim DownloadTrailers As Boolean
-        Dim IMDBURL As String
-        Dim UseOFDBGenre As Boolean
-        Dim UseOFDBOutline As Boolean
-        Dim UseOFDBPlot As Boolean
-        Dim UseOFDBTitle As Boolean
-        Dim TrailerTimeout As Integer
-        Dim UseTMDB As Boolean
-        Dim UseIMPA As Boolean
-        Dim UseMPDB As Boolean
-        Dim UseTMDBTrailer As Boolean
-        Dim UseIMDBTrailer As Boolean
-        Dim UseTMDBTrailerXBMC As Boolean
-        Dim ManualETSize As String
-        Dim ActorThumbsSize As String
-        Dim UseTMDBTrailerPref As String
-#End Region 'Fields
-
-    End Structure
-
-#End Region 'Nested Types
 
 End Class

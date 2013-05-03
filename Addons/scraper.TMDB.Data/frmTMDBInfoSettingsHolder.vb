@@ -53,13 +53,13 @@ Public Class frmTMDBInfoSettingsHolder
 
 	Private Sub btnUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnUp.Click
 		Dim order As Integer = ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberTMDBScraperModule._AssemblyName).ScraperOrder
-		'If order > 0 Then
-		'	ModulesManager.Instance.externalScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order - 1).ScraperOrder = order
-		'	ModulesManager.Instance.externalScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberTMDBScraperModule._AssemblyName).ScraperOrder = order - 1
-		'	RaiseEvent SetupScraperChanged(cbEnabled.Checked, -1)
-		'	orderChanged()
-		'End If
-	End Sub
+        If order > 0 Then
+            ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order - 1).ScraperOrder = order
+            ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberTMDBScraperModule._AssemblyName).ScraperOrder = order - 1
+            RaiseEvent SetupScraperChanged(cbEnabled.Checked, -1)
+            orderChanged()
+        End If
+    End Sub
 
 	Private Sub cbEnabled_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbEnabled.CheckedChanged
 		RaiseEvent SetupScraperChanged(cbEnabled.Checked, 0)
@@ -133,13 +133,9 @@ Public Class frmTMDBInfoSettingsHolder
 		RaiseEvent ModuleSettingsChanged()
 	End Sub
 
-    Private Sub txtFANARTTVApiKey_TextChanged(sender As System.Object, e As System.EventArgs)
-        RaiseEvent ModuleSettingsChanged()
+    Private Sub txtTMDBApiKey_TextEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTMDBApiKey.Enter
+        Api1 = txtTMDBApiKey.Text
     End Sub
-
-	Private Sub txtTMDBApiKey_TextEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTMDBApiKey.Enter
-		Api1 = txtTMDBApiKey.Text
-	End Sub
 
 	Private Sub txtTMDBApiKey_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTMDBApiKey.TextChanged
 		RaiseEvent ModuleSettingsChanged()
@@ -200,19 +196,5 @@ Public Class frmTMDBInfoSettingsHolder
 				Explorer.Start()
 			End Using
 		End If
-
-	End Sub
-
-    Private Sub pbFANARTTV_Click(sender As System.Object, e As System.EventArgs)
-        If Master.isWindows Then
-            Process.Start("http://fanart.tv/get-an-api-key/")
-        Else
-            Using Explorer As New Process
-                Explorer.StartInfo.FileName = "xdg-open"
-                Explorer.StartInfo.Arguments = "http://fanart.tv/get-an-api-key/"
-                Explorer.Start()
-            End Using
-        End If
-
     End Sub
 End Class
