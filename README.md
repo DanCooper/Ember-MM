@@ -1,4 +1,4 @@
-[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=bodrick&url=https://github.com/bodrick/Ember-MM&title=EmberMM&language=en_GB&tags=github&category=software) 
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=bodrick&url=https://github.com/bodrick/Ember-MM&title=Ember%2dTeam%3a%20DanCooper%2c%20m%2esavazzi%20%26%20Cocotus&language=en_GB&tags=github&category=software) 
 # Ember Media Manager
 
 We decided its time to give Ember a new home. We've taken it upon ourselves to not only pick up the code where it was left off and attempt to continue development of it.
