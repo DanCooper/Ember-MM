@@ -253,7 +253,6 @@ Public Class EmberTMDBScraperModule
 
 		AdvancedSettings.SetBooleanSetting("DoPoster", ConfigScrapeModifier.Poster)
 		AdvancedSettings.SetBooleanSetting("DoFanart", ConfigScrapeModifier.Fanart)
-		AdvancedSettings.SetBooleanSetting("DoTrailer", ConfigScrapeModifier.Trailer)
 
 		AdvancedSettings.SetSetting("TMDBAPIKey", _MySettings.TMDBAPIKey)
         AdvancedSettings.SetBooleanSetting("FallBackEn", _MySettings.FallBackEng)
@@ -292,9 +291,7 @@ Public Class EmberTMDBScraperModule
 		ConfigOptions.bFullCrew = _setup.chkCrew.Checked
 		ConfigOptions.bFullCast = _setup.chkCast.Checked
 		ConfigOptions.bCert = ConfigOptions.bMPAA
-		_MySettings.FallBackEng = _setup.chkFallBackEng.Checked
-		_MySettings.TMDBLanguage = _setup.cbTMDBPrefLanguage.Text
-		SaveSettings()
+        SaveSettings()
 		'ModulesManager.Instance.SaveSettings()
 		If DoDispose Then
 			RemoveHandler _setup.SetupScraperChanged, AddressOf Handle_SetupScraperChanged

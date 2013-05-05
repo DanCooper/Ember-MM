@@ -70,24 +70,24 @@ Public Class Images
 
 #Region "Methods"
 
-	Public Sub UpdateMSfromImg(nImage As Bitmap)
+    Public Sub UpdateMSfromImg(nImage As Image)
 
-		Try
-			Dim ICI As ImageCodecInfo = GetEncoderInfo(ImageFormat.Jpeg)
-			Dim EncPars As EncoderParameters = New EncoderParameters(2)
+        Try
+            Dim ICI As ImageCodecInfo = GetEncoderInfo(ImageFormat.Jpeg)
+            Dim EncPars As EncoderParameters = New EncoderParameters(2)
 
-			EncPars.Param(0) = New EncoderParameter(Encoder.RenderMethod, EncoderValue.RenderNonProgressive)
+            EncPars.Param(0) = New EncoderParameter(Encoder.RenderMethod, EncoderValue.RenderNonProgressive)
 
-			EncPars.Param(1) = New EncoderParameter(Encoder.Quality, 100)
-			_ms.Dispose()
-			_ms = New MemoryStream()
-			nImage.Save(_ms, ICI, EncPars)
-			_ms.Flush()
-			_image = New Bitmap(_ms)
-		Catch ex As Exception
-			Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-		End Try
-	End Sub
+            EncPars.Param(1) = New EncoderParameter(Encoder.Quality, 100)
+            _ms.Dispose()
+            _ms = New MemoryStream()
+            nImage.Save(_ms, ICI, EncPars)
+            _ms.Flush()
+            _image = New Bitmap(_ms)
+        Catch ex As Exception
+            Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
+        End Try
+    End Sub
 
 	Public Shared Function GetFanartDims(ByVal imgImage As Image) As Enums.FanartSize
 		'//
@@ -448,22 +448,7 @@ Public Class Images
 				retSave = sHTTP.ms.ToArray
 				Me._ms.Write(retSave, 0, retSave.Length)
 
-				'Dim kkk As String = Path.Combine(Master.TempPath, sHTTP.ms.Length.ToString)
-				'Using fs As New FileStream(kkk & "a.jpg", FileMode.Create, FileAccess.Write)
-				'	fs.Write(retSave, 0, retSave.Length)
-				'	fs.Flush()
-				'	fs.Close()
-				'End Using
-
-				'retSave = _ms.ToArray()
-				'Using fs As New FileStream(kkk & "a2.jpg", FileMode.Create, FileAccess.Write)
-				'	fs.Write(retSave, 0, retSave.Length)
-				'	fs.Flush()
-				'	fs.Close()
-				'End Using
-				'Me.Save(kkk & "b.jpg", , , False)
-
-				'I do not copy from the _ms as it could not be a JPG
+                'I do not copy from the _ms as it could not be a JPG
 				_image = New Bitmap(sHTTP.Image)
 
 				' if is not a JPG we have to conver the memory stream to JPG format
@@ -532,7 +517,8 @@ Public Class Images
 					End Using
 				End If
 				Return
-			End If
+            End If
+
 			If IsNothing(_image) Then Exit Sub
 
 			Dim doesExist As Boolean = File.Exists(sPath)
@@ -580,7 +566,9 @@ Public Class Images
 							End Using
 						End If
 						msSave.Flush()
-					End Using
+                    End Using
+                    'once is saved as teh quality is defined from the user we need to reload the new image to align _ms and _image
+                    Me.FromFile(sPath)
 				End If
 
 				If doesExist And fAttWritable Then File.SetAttributes(sPath, fAtt)
@@ -907,7 +895,9 @@ Public Class Images
 			End Try
 
 			If doResize Then
-				ImageUtils.ResizeImage(_image, Master.eSettings.PosterWidth, Master.eSettings.PosterHeight)
+                ImageUtils.ResizeImage(_image, Master.eSettings.PosterWidth, Master.eSettings.PosterHeight)
+                'need to align _immage and _ms
+                UpdateMSfromImg(_image)
 			End If
 
             If (Master.eSettings.VideoTSParent OrElse Master.eSettings.VideoTSParentXBMC) AndAlso FileUtils.Common.isVideoTS(mMovie.Filename) Then
@@ -1467,6 +1457,9 @@ Public Class Images
         Return Nothing
     End Function
 
+    Public Shared Function GetPreferredPoster(ByRef ImageList As List(Of MediaContainers.Image), ByRef imgResult As Images, ByVal sPath As String, ByVal doETs As Boolean, Optional ByVal doAsk As Boolean = False) As Boolean
+
+    End Function
 
 #End Region 'Methods
 

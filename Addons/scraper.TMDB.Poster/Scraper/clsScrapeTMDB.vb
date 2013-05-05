@@ -38,8 +38,7 @@ Namespace TMDB
 		Private backdrop_names(3) As v3Size
 		Private poster_names(5) As v3Size
 
-
-		Friend WithEvents bwTMDB As New System.ComponentModel.BackgroundWorker
+        'Friend WithEvents bwTMDB As New System.ComponentModel.BackgroundWorker
 
 #End Region	'Fields
 
@@ -92,161 +91,123 @@ Namespace TMDB
 			backdrop_names(3).width = 0
 		End Sub
 
-		Public Sub Cancel()
-			If bwTMDB.IsBusy Then bwTMDB.CancelAsync()
+        'Public Sub Cancel()
+        '	If bwTMDB.IsBusy Then bwTMDB.CancelAsync()
 
-			While bwTMDB.IsBusy
-				Application.DoEvents()
-				Threading.Thread.Sleep(50)
-			End While
-		End Sub
+        '	While bwTMDB.IsBusy
+        '		Application.DoEvents()
+        '		Threading.Thread.Sleep(50)
+        '	End While
+        'End Sub
 
-		Public Sub GetImagesAsync(ByVal imdbID As String, ByVal sType As String)
-			Try
-				If Not bwTMDB.IsBusy Then
-					bwTMDB.WorkerSupportsCancellation = True
-					bwTMDB.WorkerReportsProgress = True
-					bwTMDB.RunWorkerAsync(New Arguments With {.Parameter = imdbID, .sType = sType})
-				End If
-			Catch ex As Exception
-				Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-			End Try
-		End Sub
+        'Public Sub GetImagesAsync(ByVal imdbID As String, ByVal Type As Enums.PostScraperCapabilities)
+        '    Try
+        '        If Not bwTMDB.IsBusy Then
+        '            bwTMDB.WorkerSupportsCancellation = True
+        '            bwTMDB.WorkerReportsProgress = True
+        '            bwTMDB.RunWorkerAsync(New Arguments With {.Parameter = imdbID, .Type = Type})
+        '        End If
+        '    Catch ex As Exception
+        '        Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
+        '    End Try
+        'End Sub
 
-		Public Function GetTMDBImages(ByVal imdbID As String, ByVal sType As String) As List(Of MediaContainers.Image)
-			Dim alPosters As New List(Of MediaContainers.Image)
-			Dim images As V3.TmdbMovieImages
-			Dim aW, aH As Integer
+        Public Function GetTMDBImages(ByVal TMDBID As String, ByVal Type As Enums.PostScraperCapabilities) As List(Of MediaContainers.Image)
+            Dim alPosters As New List(Of MediaContainers.Image)
+            Dim images As V3.TmdbMovieImages
+            Dim aW, aH As Integer
 
-			If bwTMDB.CancellationPending Then Return Nothing
-			Try
-				images = _TMDBApi.GetMovieImages(CInt(imdbID), _MySettings.TMDBLanguage)
-				If sType = "poster" Then
-					If IsNothing(images.posters) OrElse images.posters.Count = 0 Then
-						images = _TMDBApiE.GetMovieImages(CInt(imdbID))
-						If IsNothing(images.posters) OrElse images.posters.Count = 0 Then
-							Return alPosters
-						End If
-					End If
-				Else
-					If IsNothing(images.backdrops) OrElse images.backdrops.Count = 0 Then
-						images = _TMDBApiE.GetMovieImages(CInt(imdbID))
-						If IsNothing(images.backdrops) OrElse images.backdrops.Count = 0 Then
-							Return alPosters
-						End If
-					End If
-				End If
-				If bwTMDB.WorkerReportsProgress Then
-					bwTMDB.ReportProgress(1)
-				End If
+            ';If bwTMDB.CancellationPending Then Return Nothing
+            Try
+                images = _TMDBApi.GetMovieImages(CInt(TMDBID), _MySettings.TMDBLanguage)
+                If Type = Enums.PostScraperCapabilities.Poster Then
+                    If IsNothing(images.posters) OrElse images.posters.Count = 0 Then
+                        images = _TMDBApiE.GetMovieImages(CInt(TMDBID))
+                        If IsNothing(images.posters) OrElse images.posters.Count = 0 Then
+                            Return alPosters
+                        End If
+                    End If
+                Else
+                    If IsNothing(images.backdrops) OrElse images.backdrops.Count = 0 Then
+                        images = _TMDBApiE.GetMovieImages(CInt(TMDBID))
+                        If IsNothing(images.backdrops) OrElse images.backdrops.Count = 0 Then
+                            Return alPosters
+                        End If
+                    End If
+                End If
 
-				If bwTMDB.CancellationPending Then Return Nothing
+                'If bwTMDB.WorkerReportsProgress Then
+                '    bwTMDB.ReportProgress(1)
+                'End If
 
-				If sType = "poster" Then
-					For Each tmdbI As V3.Poster In images.posters
-						If bwTMDB.CancellationPending Then Return Nothing
-						For Each aSize In poster_names
-							Select Case aSize.size
-								Case "original"
-									aW = tmdbI.width
-									aH = tmdbI.width
-								Case Else
-									aW = aSize.width
-									aH = CInt(aW / tmdbI.aspect_ratio)
-							End Select
-							Dim tmpPoster As New MediaContainers.Image With {.URL = _TMDBConf.images.base_url & aSize.size & tmdbI.file_path, .Description = aSize.description, .Width = CStr(aW), .Height = CStr(aH), .ParentID = tmdbI.file_path}
-							alPosters.Add(tmpPoster)
-						Next
-					Next
-				ElseIf sType = "backdrop" Then
-					For Each tmdbI As V3.Backdrop In images.backdrops
-						If bwTMDB.CancellationPending Then Return Nothing
-						For Each aSize In backdrop_names
-							Select Case aSize.size
-								Case "original"
-									aW = tmdbI.width
-									aH = tmdbI.width
-								Case Else
-									aW = aSize.width
-									aH = CInt(aW / tmdbI.aspect_ratio)
-							End Select
-							Dim tmpPoster As New MediaContainers.Image With {.URL = _TMDBConf.images.base_url & aSize.size & tmdbI.file_path, .Description = aSize.description, .Width = CStr(aW), .Height = CStr(aH), .ParentID = tmdbI.file_path}
-							alPosters.Add(tmpPoster)
-						Next
-					Next
-				End If
+                'If bwTMDB.CancellationPending Then Return Nothing
 
-				If bwTMDB.WorkerReportsProgress Then
-					bwTMDB.ReportProgress(3)
-				End If
-			Catch ex As Exception
-				Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-			End Try
+                If Type = Enums.PostScraperCapabilities.Poster Then
+                    For Each tmdbI As V3.Poster In images.posters
+                        'If bwTMDB.CancellationPending Then Return Nothing
+                        For Each aSize In poster_names
+                            Select Case aSize.size
+                                Case "original"
+                                    aW = tmdbI.width
+                                    aH = tmdbI.width
+                                Case Else
+                                    aW = aSize.width
+                                    aH = CInt(aW / tmdbI.aspect_ratio)
+                            End Select
+                            Dim tmpPoster As New MediaContainers.Image With {.URL = _TMDBConf.images.base_url & aSize.size & tmdbI.file_path, .Description = aSize.description, .Width = CStr(aW), .Height = CStr(aH), .ParentID = tmdbI.file_path}
+                            alPosters.Add(tmpPoster)
+                        Next
+                    Next
+                ElseIf Type = Enums.PostScraperCapabilities.Fanart Then
+                    For Each tmdbI As V3.Backdrop In images.backdrops
+                        'If bwTMDB.CancellationPending Then Return Nothing
+                        For Each aSize In backdrop_names
+                            Select Case aSize.size
+                                Case "original"
+                                    aW = tmdbI.width
+                                    aH = tmdbI.width
+                                Case Else
+                                    aW = aSize.width
+                                    aH = CInt(aW / tmdbI.aspect_ratio)
+                            End Select
+                            Dim tmpPoster As New MediaContainers.Image With {.URL = _TMDBConf.images.base_url & aSize.size & tmdbI.file_path, .Description = aSize.description, .Width = CStr(aW), .Height = CStr(aH), .ParentID = tmdbI.file_path}
+                            alPosters.Add(tmpPoster)
+                        Next
+                    Next
+                End If
 
-			Return alPosters
-		End Function
+                'If bwTMDB.WorkerReportsProgress Then
+                '    bwTMDB.ReportProgress(3)
+                'End If
 
-		Public Function GetTrailers(ByVal imdbID As String) As List(Of String)
-			Dim trailers As V3.TmdbMovieTrailers
-			Dim YT As New List(Of String)
+            Catch ex As Exception
+                Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
+            End Try
 
-			Try
-				If bwTMDB.CancellationPending Then Return Nothing
-				trailers = _TMDBApi.GetMovieTrailers(CInt(imdbID), _MySettings.TMDBLanguage)
-				If IsNothing(trailers.youtube) OrElse trailers.youtube.Count = 0 Then
-					trailers = _TMDBApiE.GetMovieTrailers(CInt(imdbID))
-					If IsNothing(trailers.youtube) OrElse trailers.youtube.Count = 0 Then
-						Return Nothing
-					End If
-				End If
+            Return alPosters
+        End Function
 
-				If bwTMDB.WorkerReportsProgress Then
-					bwTMDB.ReportProgress(1)
-				End If
-				If bwTMDB.CancellationPending Then Return Nothing
+        '      Private Sub bwTMDB_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bwTMDB.DoWork
+        '          Dim Args As Arguments = DirectCast(e.Argument, Arguments)
+        '          Try
+        '              e.Result = GetTMDBImages(Args.Parameter, Args.Type)
+        '          Catch ex As Exception
+        '              Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
+        '              e.Result = Nothing
+        '          End Try
+        '      End Sub
 
-				'If bwTMDB.WorkerReportsProgress Then
-				'	bwTMDB.ReportProgress(2)
-				'End If
+        'Private Sub bwTMDB_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles bwTMDB.ProgressChanged
+        '	If Not bwTMDB.CancellationPending Then
+        '		RaiseEvent ProgressUpdated(e.ProgressPercentage)
+        '	End If
+        'End Sub
 
-				If trailers.youtube.Count > 0 Then
-					For Each trailer In trailers.youtube
-						YT.Add(String.Format("http://www.youtube.com/watch?v={0}{1})", trailer.source, CStr(IIf(trailer.size = "HD", "&hd=1", ""))))
-					Next
-				End If
-
-				If bwTMDB.WorkerReportsProgress Then
-					bwTMDB.ReportProgress(3)
-				End If
-
-			Catch ex As Exception
-				Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-			End Try
-
-			Return YT
-		End Function
-
-		Private Sub bwTMDB_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bwTMDB.DoWork
-			Dim Args As Arguments = DirectCast(e.Argument, Arguments)
-			Try
-				e.Result = GetTMDBImages(Args.Parameter, Args.sType)
-			Catch ex As Exception
-				Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-				e.Result = Nothing
-			End Try
-		End Sub
-
-		Private Sub bwTMDB_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles bwTMDB.ProgressChanged
-			If Not bwTMDB.CancellationPending Then
-				RaiseEvent ProgressUpdated(e.ProgressPercentage)
-			End If
-		End Sub
-
-		Private Sub bwTMDB_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bwTMDB.RunWorkerCompleted
-			If Not IsNothing(e.Result) Then
-				RaiseEvent PostersDownloaded(DirectCast(e.Result, List(Of MediaContainers.Image)))
-			End If
-		End Sub
+        'Private Sub bwTMDB_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bwTMDB.RunWorkerCompleted
+        '	If Not IsNothing(e.Result) Then
+        '		RaiseEvent PostersDownloaded(DirectCast(e.Result, List(Of MediaContainers.Image)))
+        '	End If
+        'End Sub
 
 #End Region	'Methods
 
@@ -257,7 +218,7 @@ Namespace TMDB
 #Region "Fields"
 
 			Dim Parameter As String
-			Dim sType As String
+            Dim Type As Enums.PostScraperCapabilities
 
 #End Region	'Fields
 

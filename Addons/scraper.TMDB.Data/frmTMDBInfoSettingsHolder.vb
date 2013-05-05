@@ -28,7 +28,8 @@ Public Class frmTMDBInfoSettingsHolder
 
 	Public Event ModuleSettingsChanged()
 
-	Public Event SetupScraperChanged(ByVal state As Boolean, ByVal difforder As Integer)
+    Public Event SetupScraperChanged(ByVal state As Boolean, ByVal difforder As Integer)
+
 	Public Event SetupNeedsRestart()
 
 #End Region	'Events
@@ -37,7 +38,7 @@ Public Class frmTMDBInfoSettingsHolder
 
 	Private Api1 As String
 
-#End Region	'Events
+#End Region 'Fields
 
 #Region "Methods"
 

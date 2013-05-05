@@ -31,32 +31,6 @@ Public Class dlgImgSelect
 
 #Region "Fields"
 
-	Friend WithEvents bwIMPADownload As New System.ComponentModel.BackgroundWorker
-	Friend WithEvents bwMPDBDownload As New System.ComponentModel.BackgroundWorker
-	Friend WithEvents bwTMDBDownload As New System.ComponentModel.BackgroundWorker
-	Friend WithEvents bwIMDBDownload As New System.ComponentModel.BackgroundWorker
-	Friend WithEvents bwFANARTTVDownload As New System.ComponentModel.BackgroundWorker
-
-	Private _MySettings As New sMySettings
-	Private _TMDBConf As V3.TmdbConfiguration
-	Private _TMDBConfE As V3.TmdbConfiguration
-	Private _TMDBApi As V3.Tmdb
-	Private _TMDBApiE As V3.Tmdb
-
-	Private TMDB As TMDB.Scraper
-	Private TMDBPosters As New List(Of MediaContainers.Image)
-
-	Private MPDB As New MPDB.Scraper
-	Private MPDBPosters As New List(Of MediaContainers.Image)
-
-	Private IMPA As New IMPA.Scraper
-	Private IMPAPosters As New List(Of MediaContainers.Image)
-
-	Private IMDB As New IMDBimg.Scraper
-	Private IMDBPosters As New List(Of MediaContainers.Image)
-
-	Private FANARTTVs As FANARTTVs.Scraper
-	Private FANARTTVPosters As New List(Of MediaContainers.Image)
 
 	Private CachePath As String = String.Empty
 	Private chkImage() As CheckBox
@@ -74,18 +48,15 @@ Public Class dlgImgSelect
 	Private pbImage() As PictureBox
 	Private pnlImage() As Panel
 	Private PreDL As Boolean = False
-	Private Results As New Containers.ImgResult
+    Private Results As New Images
 	Private selIndex As Integer = -1
 
 	Private tMovie As New Structures.DBMovie
-	Private tmpImage As New MediaContainers.Image
-	Private _impaDone As Boolean = True
-	Private _imdbDone As Boolean = True
-	Private _fanarttvDone As Boolean = True
-	Private _mpdbDone As Boolean = True
-	Private _tmdbDone As Boolean = True
+    Private tmpImage As New MediaContainers.Image
 
-#End Region	'Fields
+    Private _ImageList As List(Of MediaContainers.Image)
+
+#End Region 'Fields
 
 #Region "Events"
 
@@ -102,19 +73,10 @@ Public Class dlgImgSelect
 
 #Region "Methods"
 
-	Public Sub New(ByRef tTMDBConf As V3.TmdbConfiguration, ByRef tTMDBConfE As V3.TmdbConfiguration, ByRef tTMDBApi As V3.Tmdb, ByRef tTMDBApiE As V3.Tmdb, ByRef tMySettings As EmberTMDBScraperModule.sMySettings)
-		' This call is required by the designer.
-		InitializeComponent()
-
-		' Add any initialization after the InitializeComponent() call.
-		_MySettings = tMySettings
-		_TMDBApi = tTMDBApi
-		_TMDBConf = tTMDBConf
-		_TMDBApiE = tTMDBApiE
-		_TMDBConfE = tTMDBConfE
-		TMDB = New TMDB.Scraper(_TMDBConf, _TMDBConfE, _TMDBApi, _TMDBApiE, _MySettings)
-		FANARTTVs = New FANARTTVs.Scraper(_MySettings)
-	End Sub
+    Public Sub New()
+        ' This call is required by the designer.
+        InitializeComponent()
+    End Sub
 
 	Public Sub PreLoad(ByVal mMovie As Structures.DBMovie, ByVal _DLType As Enums.ImageType, Optional ByVal _isEdit As Boolean = False)
 		Me.tMovie = mMovie
@@ -125,26 +87,27 @@ Public Class dlgImgSelect
 		Me.StartDownload()
 	End Sub
 
-	Public Overloads Function ShowDialog(ByVal mMovie As Structures.DBMovie, ByVal _DLType As Enums.ImageType, Optional ByVal _isEdit As Boolean = False) As Containers.ImgResult
-		'//
-		' Overload to pass data
-		'\\
+    Public Overloads Function ShowDialog(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.ImageType, ByRef ImageList As List(Of MediaContainers.Image), Optional ByVal _isEdit As Boolean = False) As Images
+        '//
+        ' Overload to pass data
+        '\\
 
-		Me.tMovie = mMovie
-		Me.DLType = _DLType
-		Me.isEdit = _isEdit
-		Me.isShown = True
+        Me.tMovie = DBMovie
+        Me._ImageList = ImageList
+        Me.DLType = Type
+        Me.isEdit = _isEdit
+        Me.isShown = True
 
-		MyBase.ShowDialog()
-		Return Results
-	End Function
+        MyBase.ShowDialog()
+        Return Results
+    End Function
 
-	Public Overloads Function ShowDialog() As Containers.ImgResult
-		Me.isShown = True
-		MyBase.ShowDialog()
+    Public Overloads Function ShowDialog() As Images
+        Me.isShown = True
+        MyBase.ShowDialog()
 
-		Return Results
-	End Function
+        Return Results
+    End Function
 
 	'Rewrite to simplify
 	Private Sub AddImage(ByVal sDescription As String, ByVal iIndex As Integer, ByVal isChecked As Boolean, poster As MediaContainers.Image)

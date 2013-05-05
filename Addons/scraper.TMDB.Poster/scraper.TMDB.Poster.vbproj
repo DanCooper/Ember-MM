@@ -108,39 +108,8 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Scraper\clsScrapeIMPA.vb" />
-    <Compile Include="Scraper\clsScrapeMPDB.vb" />
-    <Compile Include="Scraper\clsScrapeOFDB.vb" />
-    <Compile Include="Scraper\clsScrapeTMDB.vb" />
-    <Compile Include="Scraper\clsScrapeTrailers.vb" />
-    <Compile Include="Scraper\clsScrapeImages.vb" />
-    <Compile Include="Scraper\clsScrapeTMDBg.vb" />
-    <Compile Include="Scraper\clsScrapeYouTube.vb" />
-    <Compile Include="Scraper\clsScrapeIMDB.vb" />
-    <Compile Include="Scraper\clsScrapeFANARTTV.vb" />
-    <Compile Include="Scraper\dlgTMDBSearchResults.Designer.vb">
-      <DependentUpon>dlgTMDBSearchResults.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Scraper\dlgTMDBSearchResults.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scraper\dlgImgSelect.Designer.vb">
-      <DependentUpon>dlgImgSelect.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Scraper\dlgImgSelect.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scraper\dlgTrailer.Designer.vb">
-      <DependentUpon>dlgTrailer.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Scraper\dlgTrailer.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scraper\dlgTrailerFormat.Designer.vb">
-      <DependentUpon>dlgTrailerFormat.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Scraper\dlgTrailerFormat.vb">
-      <SubType>Form</SubType>
+    <Compile Include="..\scraper.TMDB.Data\Scraper\clsScrapeTMDBg.vb">
+      <Link>Scraper\clsScrapeTMDBg.vb</Link>
     </Compile>
     <Compile Include="frmTMDBMediaSettingsHolder.Designer.vb">
       <DependentUpon>frmTMDBMediaSettingsHolder.vb</DependentUpon>
@@ -163,37 +132,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="frmTMDBInfoSettingsHolder.Designer.vb">
-      <DependentUpon>frmTMDBInfoSettingsHolder.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmTMDBInfoSettingsHolder.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="scraperMovieTMDBModule.vb" />
+    <Compile Include="Scraper\clsScrapeTMDB.vb" />
+    <Compile Include="TMDB_Poster.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scraper\dlgTMDBSearchResults.resx">
-      <DependentUpon>dlgTMDBSearchResults.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scraper\dlgImgSelect.resx">
-      <DependentUpon>dlgImgSelect.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scraper\dlgTrailer.resx">
-      <DependentUpon>dlgTrailer.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scraper\dlgTrailerFormat.resx">
-      <DependentUpon>dlgTrailerFormat.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmTMDBMediaSettingsHolder.resx">
       <DependentUpon>frmTMDBMediaSettingsHolder.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmTMDBInfoSettingsHolder.resx">
-      <DependentUpon>frmTMDBInfoSettingsHolder.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">

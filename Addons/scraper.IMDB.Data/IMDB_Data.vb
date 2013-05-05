@@ -145,7 +145,7 @@ Public Class IMDB_Data
         _setup.orderChanged()
         SPanel.Name = String.Concat(Me._Name, "Scraper")
         SPanel.Text = Master.eLang.GetString(104, "Ember Native Movie Scrapers")
-        SPanel.Prefix = "NativeMovieInfo_"
+        SPanel.Prefix = "IMDBMovieInfo_"
         SPanel.Order = 110
         SPanel.Parent = "pnlMovieData"
         SPanel.Type = Master.eLang.GetString(36, "Movies", True)

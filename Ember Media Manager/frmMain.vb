@@ -1197,6 +1197,10 @@ Public Class frmMain
         Dim Args As Arguments = DirectCast(e.Argument, Arguments)
         Dim OldTitle As String = String.Empty
         Dim NewTitle As String = String.Empty
+        Dim Poster As New Images
+        Dim Fanart As New Images
+        Dim tURL As String = String.Empty
+        Dim aList As List(Of MediaContainers.Image)
 
         AddHandler ModulesManager.Instance.MovieScraperEvent, AddressOf MovieScraperEvent
 
@@ -1207,8 +1211,10 @@ Public Class frmMain
                 bwMovieScraper.ReportProgress(1, OldTitle)
 
                 dScrapeRow = dRow
+
                 Dim DBScrapeMovie As Structures.DBMovie = Master.DB.LoadMovieFromDB(Convert.ToInt64(dRow.Item(0)))
                 ModulesManager.Instance.RunGeneric(Enums.ModuleEventType.BeforeEditMovie, Nothing, DBScrapeMovie)
+
                 If Not ModulesManager.Instance.MovieScrapeOnly(DBScrapeMovie, Args.scrapeType, Args.Options) Then
                     If Master.eSettings.ScanMediaInfo AndAlso Master.GlobalScrapeMod.Meta Then
                         MediaInfo.UpdateMediaInfo(DBScrapeMovie)
@@ -1226,7 +1232,115 @@ Public Class frmMain
                         MovieScraperEvent(Enums.MovieScraperEventType.ListTitle, NewTitle)
                         MovieScraperEvent(Enums.MovieScraperEventType.SortTitle, DBScrapeMovie.Movie.SortTitle)
 
-                        Dim didEts As Interfaces.ModuleResult = ModulesManager.Instance.MoviePostScrapeOnly(DBScrapeMovie, Args.scrapeType)
+                        '-----
+
+                        If Master.GlobalScrapeMod.Poster Then
+                            Poster.Clear()
+                            If Poster.IsAllowedToDownload(DBScrapeMovie, Enums.ImageType.Posters) Then
+                                If Not ModulesManager.Instance.MovieScrapeImages(DBScrapeMovie, Enums.PostScraperCapabilities.Poster , aList) Then
+                                    If Images.GetPreferredPoster(aList, Poster, DBScrapeMovie.Filename, False, If(Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk, True, False)) Then
+                                        If Not IsNothing(Poster.Image) Then
+                                            tURL = Poster.SaveAsPoster(DBScrapeMovie)
+                                            If Not String.IsNullOrEmpty(tURL) Then
+                                                DBScrapeMovie.PosterPath = tURL
+                                                MovieScraperEvent(Enums.MovieScraperEventType.PosterItem, True)
+                                                'If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
+                                                '    DBScrapeMovie.Movie.Thumb = pResults.Posters
+                                                'End If
+                                            End If
+                                        ElseIf Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
+                                            MsgBox(Master.eLang.GetString(76, "A poster of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(77, "No Preferred Size"))
+                                            Using dImgSelect As New dlgImgSelect()
+                                                If dImgSelect.ShowDialog(DBScrapeMovie, Enums.ImageType.Poster, aList, Poster) Then
+                                                    tURL = Poster.SaveAsPoster(DBScrapeMovie)
+                                                    If Not String.IsNullOrEmpty(tURL) Then
+                                                        If Not String.IsNullOrEmpty(pResults.ImagePath) Then
+                                                            DBScrapeMovie.PosterPath = pResults.ImagePath
+                                                            MovieScraperEvent(Enums.MovieScraperEventType.PosterItem, True) '4, True)
+                                                            If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
+                                                                DBScrapeMovie.Movie.Thumb = pResults.Posters
+                                                            End If
+                                                        End If
+                                                    End If
+                                            End Using
+                                        End If
+
+                                    End If
+                                End If
+                            End If
+                        End If
+                        Dim didEts As Boolean
+                        If Master.GlobalScrapeMod.Fanart Then
+                            Fanart.Clear()
+                            If Fanart.IsAllowedToDownload(DBScrapeMovie, Enums.ImageType.Fanart) Then
+                                fResults = New Containers.ImgResult
+                                didEts = True
+                                If aScrapeImages.GetPreferredImage(Fanart, DBScrapeMovie.Movie.IMDBID, DBScrapeMovie.Movie.TMDBID, Enums.ImageType.Fanart, fResults, DBScrapeMovie.Filename, Master.GlobalScrapeMod.Extra, If(ScrapeType = Enums.ScrapeType.FullAsk OrElse ScrapeType = Enums.ScrapeType.NewAsk OrElse ScrapeType = Enums.ScrapeType.MarkAsk OrElse ScrapeType = Enums.ScrapeType.UpdateAsk, True, False)) Then
+                                    If Not IsNothing(Fanart.Image) Then
+                                        fResults.ImagePath = Fanart.SaveAsFanart(DBScrapeMovie)
+                                        If Not String.IsNullOrEmpty(fResults.ImagePath) Then
+                                            DBScrapeMovie.FanartPath = fResults.ImagePath
+                                            MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True) '
+                                            If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
+                                                DBScrapeMovie.Movie.Fanart = fResults.Fanart
+                                            End If
+                                        End If
+                                    ElseIf Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
+                                        MsgBox(Master.eLang.GetString(78, "Fanart of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(77, "No Preferred Size:"))
+
+                                        Using dImgSelect As New dlgImgSelect(_TMDBConf, _TMDBConfE, _TMDBApi, _TMDBApi, _MySettings)
+                                            fResults = dImgSelect.ShowDialog(DBScrapeMovie, Enums.ImageType.Fanart)
+                                            If Not String.IsNullOrEmpty(fResults.ImagePath) Then
+                                                DBScrapeMovie.FanartPath = fResults.ImagePath
+                                                RaiseEvent MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True)
+                                                If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
+                                                    DBScrapeMovie.Movie.Fanart = fResults.Fanart
+                                                End If
+                                            End If
+                                        End Using
+                                    End If
+                                End If
+                            End If
+                        End If
+                        'If Master.GlobalScrapeMod.Trailer AndAlso _MySettings.DownloadTrailers Then
+                        '    tURL = Trailer.DownloadSingleTrailer(DBScrapeMovie.Filename, DBScrapeMovie.Movie.TMDBID, DBScrapeMovie.isSingle, DBScrapeMovie.Movie.Trailer)
+                        '    If Not String.IsNullOrEmpty(tURL) Then
+                        '        If tURL.Substring(0, 22) = "http://www.youtube.com" Then
+                        '            If AdvancedSettings.GetBooleanSetting("UseTMDBTrailerXBMC", False) Then
+                        '                DBScrapeMovie.Movie.Trailer = Replace(tURL, "http://www.youtube.com/watch?v=", "plugin://plugin.video.youtube/?action=play_video&videoid=")
+                        '            Else
+                        '                DBScrapeMovie.Movie.Trailer = tURL
+                        '            End If
+                        '        ElseIf tURL.Substring(0, 7) = "http://" Then
+                        '            DBScrapeMovie.Movie.Trailer = tURL
+                        '        Else
+                        '            DBScrapeMovie.TrailerPath = tURL
+                        '            MovieScraperEvent(Enums.MovieScraperEventType.TrailerItem, True)
+                        '        End If
+                        '    End If
+                        'End If
+                        If Master.GlobalScrapeMod.Extra Then
+                            If Master.eSettings.AutoET AndAlso DBScrapeMovie.isSingle Then
+                                Try
+                                    aScrapeImages.GetPreferredFAasET(DBScrapeMovie.Movie.TMDBID, DBScrapeMovie.Filename)
+                                    MovieScraperEvent(Enums.MovieScraperEventType.ThumbsItem, True)
+                                Catch ex As Exception
+                                End Try
+                            End If
+                        End If
+                        If Master.GlobalScrapeMod.Actors AndAlso Master.eSettings.ScraperActorThumbs Then
+                            For Each act As MediaContainers.Person In DBScrapeMovie.Movie.Actors
+                                Dim img As New Images
+                                img.FromWeb(act.Thumb)
+                                If Not IsNothing(img.Image) Then
+                                    img.SaveAsActorThumb(act, Directory.GetParent(DBScrapeMovie.Filename).FullName, DBScrapeMovie)
+                                End If
+                            Next
+                        End If
+
+
+                        '-----
+
 
                         If bwMovieScraper.CancellationPending Then Exit For
 

@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="clsScrapeImages.vb" />
     <Compile Include="clsTheming.vb" />
     <Compile Include="dlgAbout.Designer.vb">
       <DependentUpon>dlgAbout.vb</DependentUpon>
@@ -165,6 +166,12 @@
       <DependentUpon>dlgImgManual.vb</DependentUpon>
     </Compile>
     <Compile Include="dlgImgManual.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgImgSelect.Designer.vb">
+      <DependentUpon>dlgImgSelect.vb</DependentUpon>
+    </Compile>
+    <Compile Include="dlgImgSelect.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="dlgImgView.Designer.vb">
@@ -313,6 +320,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="dlgImgManual.resx">
       <DependentUpon>dlgImgManual.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgImgSelect.resx">
+      <DependentUpon>dlgImgSelect.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="dlgImgView.resx">
       <DependentUpon>dlgImgView.vb</DependentUpon>
