@@ -257,7 +257,7 @@ Partial Class frmTMDBInfoSettingsHolder
         Me.gbOptions.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbOptions.Location = New System.Drawing.Point(8, 148)
         Me.gbOptions.Name = "gbOptions"
-        Me.gbOptions.Size = New System.Drawing.Size(283, 150)
+        Me.gbOptions.Size = New System.Drawing.Size(400, 150)
         Me.gbOptions.TabIndex = 3
         Me.gbOptions.TabStop = False
         Me.gbOptions.Text = "Scraper Fields"
@@ -266,7 +266,7 @@ Partial Class frmTMDBInfoSettingsHolder
         '
         Me.chkCrew.AutoSize = True
         Me.chkCrew.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCrew.Location = New System.Drawing.Point(225, 17)
+        Me.chkCrew.Location = New System.Drawing.Point(315, 19)
         Me.chkCrew.Name = "chkCrew"
         Me.chkCrew.Size = New System.Drawing.Size(52, 17)
         Me.chkCrew.TabIndex = 19
@@ -277,7 +277,7 @@ Partial Class frmTMDBInfoSettingsHolder
         '
         Me.chkCountry.AutoSize = True
         Me.chkCountry.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCountry.Location = New System.Drawing.Point(131, 123)
+        Me.chkCountry.Location = New System.Drawing.Point(173, 123)
         Me.chkCountry.Name = "chkCountry"
         Me.chkCountry.Size = New System.Drawing.Size(67, 17)
         Me.chkCountry.TabIndex = 18
@@ -288,7 +288,7 @@ Partial Class frmTMDBInfoSettingsHolder
         '
         Me.chkStudio.AutoSize = True
         Me.chkStudio.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkStudio.Location = New System.Drawing.Point(131, 19)
+        Me.chkStudio.Location = New System.Drawing.Point(173, 19)
         Me.chkStudio.Name = "chkStudio"
         Me.chkStudio.Size = New System.Drawing.Size(60, 17)
         Me.chkStudio.TabIndex = 8
@@ -310,7 +310,7 @@ Partial Class frmTMDBInfoSettingsHolder
         '
         Me.chkOutline.AutoSize = True
         Me.chkOutline.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkOutline.Location = New System.Drawing.Point(131, 53)
+        Me.chkOutline.Location = New System.Drawing.Point(173, 53)
         Me.chkOutline.Name = "chkOutline"
         Me.chkOutline.Size = New System.Drawing.Size(65, 17)
         Me.chkOutline.TabIndex = 10
@@ -321,7 +321,7 @@ Partial Class frmTMDBInfoSettingsHolder
         '
         Me.chkGenre.AutoSize = True
         Me.chkGenre.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkGenre.Location = New System.Drawing.Point(131, 72)
+        Me.chkGenre.Location = New System.Drawing.Point(173, 72)
         Me.chkGenre.Name = "chkGenre"
         Me.chkGenre.Size = New System.Drawing.Size(57, 17)
         Me.chkGenre.TabIndex = 15
@@ -332,7 +332,7 @@ Partial Class frmTMDBInfoSettingsHolder
         '
         Me.chkTagline.AutoSize = True
         Me.chkTagline.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTagline.Location = New System.Drawing.Point(131, 36)
+        Me.chkTagline.Location = New System.Drawing.Point(173, 36)
         Me.chkTagline.Name = "chkTagline"
         Me.chkTagline.Size = New System.Drawing.Size(63, 17)
         Me.chkTagline.TabIndex = 9
@@ -343,7 +343,7 @@ Partial Class frmTMDBInfoSettingsHolder
         '
         Me.chkCast.AutoSize = True
         Me.chkCast.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCast.Location = New System.Drawing.Point(131, 89)
+        Me.chkCast.Location = New System.Drawing.Point(173, 89)
         Me.chkCast.Name = "chkCast"
         Me.chkCast.Size = New System.Drawing.Size(48, 17)
         Me.chkCast.TabIndex = 12
@@ -365,7 +365,7 @@ Partial Class frmTMDBInfoSettingsHolder
         '
         Me.chkTrailer.AutoSize = True
         Me.chkTrailer.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkTrailer.Location = New System.Drawing.Point(131, 106)
+        Me.chkTrailer.Location = New System.Drawing.Point(173, 106)
         Me.chkTrailer.Name = "chkTrailer"
         Me.chkTrailer.Size = New System.Drawing.Size(57, 17)
         Me.chkTrailer.TabIndex = 17

@@ -203,9 +203,13 @@ Public Class Interfaces
 
 		Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
 
-		Event SetupNeedsRestart()
+        Event SetupNeedsRestart()
 
-#End Region	'Events
+        Event PostersDownloaded(ByVal Posters As List(Of MediaContainers.Image))
+
+        Event ProgressUpdated(ByVal iPercent As Integer)
+
+#End Region 'Events
 
 #Region "Properties"
 
@@ -227,13 +231,9 @@ Public Class Interfaces
 
 		Function QueryScraperCapabilities(ByVal cap As Enums.PostScraperCapabilities) As Boolean
 
-		Function Scraper(ByRef DBMovie As Structures.DBMovie, ByVal ScrapeType As Enums.ScrapeType) As ModuleResult
+        Sub SaveSetupScraper(ByVal DoDispose As Boolean)
 
-		Sub SaveSetupScraper(ByVal DoDispose As Boolean)
-
-		Function ReturnImageList(ByRef DBMovie As Structures.DBMovie, ByVal _DLType As Enums.ImageType, ByRef pResults As Containers.ImgResult, Optional ByVal _isEdit As Boolean = False, Optional ByVal preload As Boolean = False) As ModuleResult
-
-		Function SelectImageOfType(ByRef DBMovie As Structures.DBMovie, ByVal _DLType As Enums.ImageType, ByRef pResults As Containers.ImgResult, Optional ByVal _isEdit As Boolean = False, Optional ByVal preload As Boolean = False) As ModuleResult
+        Function Scraper(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.PostScraperCapabilities, ByRef ImageList As List(Of MediaContainers.Image)) As Interfaces.ModuleResult
 
 #End Region	'Methods
 

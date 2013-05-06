@@ -1,9 +1,9 @@
 <strings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <string id="0">Ember Native TV Scrapers</string>
-  <string id="1">Use OFDB Genre</string>
-  <string id="2">Use OFDB Plot</string>
-  <string id="3">Use OFDB Outline</string>
-  <string id="4">Use OFDB Title</string>
+  <string id="1">Crew</string>
+  <string id="2"></string>
+  <string id="3"></string>
+  <string id="4"></string>
   <string id="5">TMDB Mirror:</string>
   <string id="6">Scraper Fields - Scraper specific</string>
   <string id="7">Timeout:</string>

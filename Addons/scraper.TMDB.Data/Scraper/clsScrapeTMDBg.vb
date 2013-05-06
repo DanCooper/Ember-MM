@@ -99,13 +99,16 @@ Namespace TMDBg
 
 #Region "Methods"
 
-		Public Sub New(ByRef tTMDBConf As V3.TmdbConfiguration, ByRef tTMDBConfE As V3.TmdbConfiguration, ByRef tTMDBApi As V3.Tmdb, ByRef tTMDBApiE As V3.Tmdb, ByRef tMySettings As EmberTMDBScraperModule.sMySettings)
-			_MySettings = tMySettings
-			_TMDBApi = tTMDBApi
-			_TMDBConf = tTMDBConf
-			_TMDBApiE = tTMDBApiE
-			_TMDBConfE = tTMDBConfE
-		End Sub
+        Public Sub New(ByRef tTMDBConf As V3.TmdbConfiguration, ByRef tTMDBConfE As V3.TmdbConfiguration, ByRef tTMDBApi As V3.Tmdb, ByRef tTMDBApiE As V3.Tmdb)
+            _MySettings.TMDBAPIKey = AdvancedSettings.GetSetting("TMDBAPIKey", "Get your API Key from http://www.themoviedb.org")
+            _MySettings.FallBackEng = AdvancedSettings.GetBooleanSetting("FallBackEn", False)
+            _MySettings.TMDBLanguage = AdvancedSettings.GetSetting("TMDBLanguage", "en")
+
+            _TMDBApi = tTMDBApi
+            _TMDBConf = tTMDBConf
+            _TMDBApiE = tTMDBApiE
+            _TMDBConfE = tTMDBConfE
+        End Sub
 
 		Public Sub CancelAsync()
 			If bwTMDBg.IsBusy Then bwTMDBg.CancelAsync()

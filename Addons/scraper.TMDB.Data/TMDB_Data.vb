@@ -47,7 +47,7 @@ Public Class EmberTMDBScraperModule
 	''' <remarks></remarks>
 	Private _MySettings As New sMySettings
 	Private _TMDBg As TMDBg.Scraper
-	Private _Name As String = "Ember TMDB Movie Scrapers - Data"
+    Private _Name As String = "TMDB"
 	Private _ScraperEnabled As Boolean = False
 	Private _setup As frmTMDBInfoSettingsHolder
 	Private _TMDBConf As V3.TmdbConfiguration
@@ -61,8 +61,7 @@ Public Class EmberTMDBScraperModule
 
 	Public Event ModuleSettingsChanged() Implements Interfaces.EmberMovieScraperModule_Data.ModuleSettingsChanged
 
-	'Public Event ScraperUpdateMediaList(ByVal col As Integer, ByVal v As Boolean) Implements Interfaces.EmberMovieScraperModule.MovieScraperEvent
-	Public Event MovieScraperEvent(ByVal eType As Enums.MovieScraperEventType, ByVal Parameter As Object) Implements Interfaces.EmberMovieScraperModule_Data.MovieScraperEvent
+    Public Event MovieScraperEvent(ByVal eType As Enums.MovieScraperEventType, ByVal Parameter As Object) Implements Interfaces.EmberMovieScraperModule_Data.MovieScraperEvent
 
 	Public Event SetupScraperChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer) Implements Interfaces.EmberMovieScraperModule_Data.ScraperSetupChanged
 
@@ -130,9 +129,8 @@ Public Class EmberTMDBScraperModule
 		_TMDBConf = _TMDBApi.GetConfiguration()
 		_TMDBApiE = New WatTmdb.V3.Tmdb(_MySettings.TMDBAPIKey)
 		_TMDBConfE = _TMDBApiE.GetConfiguration()
-		_TMDBg = New TMDBg.Scraper(_TMDBConf, _TMDBConfE, _TMDBApi, _TMDBApiE, _MySettings)
-
-	End Sub
+        _TMDBg = New TMDBg.Scraper(_TMDBConf, _TMDBConfE, _TMDBApi, _TMDBApiE)
+    End Sub
 
 	Function InjectSetupScraper() As Containers.SettingsPanel Implements Interfaces.EmberMovieScraperModule_Data.InjectSetupScraper
 		Dim SPanel As New Containers.SettingsPanel
@@ -166,13 +164,10 @@ Public Class EmberTMDBScraperModule
 		_setup.cbTMDBPrefLanguage.Text = _MySettings.TMDBLanguage
 		_setup.chkFallBackEng.Checked = _MySettings.FallBackEng
 		_setup.orderChanged()
-		If String.IsNullOrEmpty(_MySettings.FANARTTVApiKey) Then
-			_MySettings.FANARTTVApiKey = Master.eLang.GetString(123, "Get your API Key from fanart.tv")
-		End If
 
-		SPanel.Name = String.Concat(Me._Name, "Scraper")
+        SPanel.Name = String.Concat(Me._Name, "Scraper")
 		SPanel.Text = Master.eLang.GetString(104, "Ember TMDB Movie Scrapers")
-		SPanel.Prefix = "TMDBMovieInfo_"
+        SPanel.Prefix = "TMDBMovieInfo_"
 		SPanel.Order = 110
 		SPanel.Parent = "pnlMovieData"
 		SPanel.Type = Master.eLang.GetString(36, "Movies", True)
@@ -213,21 +208,8 @@ Public Class EmberTMDBScraperModule
 		ConfigOptions.bFullCrew = AdvancedSettings.GetBooleanSetting("FullCrew", True)
 
 		_MySettings.TMDBAPIKey = AdvancedSettings.GetSetting("TMDBAPIKey", "Get your API Key from http://www.themoviedb.org")
-		_MySettings.FANARTTVApiKey = AdvancedSettings.GetSetting("FANARTTVApiKey", "Get your API Key from http://fanart.tv")
-		_MySettings.FallBackEng = AdvancedSettings.GetBooleanSetting("FallBackEn", False)
+        _MySettings.FallBackEng = AdvancedSettings.GetBooleanSetting("FallBackEn", False)
 		_MySettings.TMDBLanguage = AdvancedSettings.GetSetting("TMDBLanguage", "en")
-		_MySettings.DownloadTrailers = AdvancedSettings.GetBooleanSetting("DownloadTraliers", False)
-
-		_MySettings.TrailerTimeout = Convert.ToInt32(AdvancedSettings.GetSetting("TrailerTimeout", "10"))
-		_MySettings.UseTMDBTrailer = AdvancedSettings.GetBooleanSetting("UseTMDBTrailer", True)
-		_MySettings.UseTMDBTrailerXBMC = AdvancedSettings.GetBooleanSetting("UseTMDBTrailerXBMC", False)
-		_MySettings.UseIMPA = AdvancedSettings.GetBooleanSetting("UseIMPA", False)
-		_MySettings.UseMPDB = AdvancedSettings.GetBooleanSetting("UseMPDB", False)
-		_MySettings.UseIMDB = AdvancedSettings.GetBooleanSetting("UseIMDB", False)
-		_MySettings.UseFANARTTV = AdvancedSettings.GetBooleanSetting("UseFANARTTV", False)
-		_MySettings.UseIMDBTrailer = AdvancedSettings.GetBooleanSetting("UseIMDBTrailer", True)
-		_MySettings.ManualETSize = Convert.ToString(AdvancedSettings.GetSetting("ManualETSize", "thumb"))
-		_MySettings.UseTMDBTrailerPref = Convert.ToString(AdvancedSettings.GetSetting("UseTMDBTrailerPref", "en"))
 
 		ConfigScrapeModifier.DoSearch = True
 		ConfigScrapeModifier.Meta = True
@@ -268,29 +250,14 @@ Public Class EmberTMDBScraperModule
 
 		AdvancedSettings.SetBooleanSetting("FullCast", ConfigOptions.bFullCast)
 		AdvancedSettings.SetBooleanSetting("FullCrew", ConfigOptions.bFullCrew)
-		AdvancedSettings.SetBooleanSetting("DownloadTraliers", _MySettings.DownloadTrailers)
-
-		AdvancedSettings.SetSetting("TrailerTimeout", _MySettings.TrailerTimeout.ToString)
-		AdvancedSettings.SetBooleanSetting("UseTMDBTrailer", _MySettings.UseTMDBTrailer)
-		AdvancedSettings.SetBooleanSetting("UseTMDBTrailerXBMC", _MySettings.UseTMDBTrailerXBMC)
-		AdvancedSettings.SetBooleanSetting("UseIMDBTrailer", _MySettings.UseIMDBTrailer)
-
-		AdvancedSettings.SetSetting("ManualETSize", _MySettings.ManualETSize.ToString)
-		AdvancedSettings.SetSetting("UseTMDBTrailerPref", _MySettings.UseTMDBTrailerPref.ToString)
 
 		AdvancedSettings.SetBooleanSetting("DoPoster", ConfigScrapeModifier.Poster)
 		AdvancedSettings.SetBooleanSetting("DoFanart", ConfigScrapeModifier.Fanart)
-		AdvancedSettings.SetBooleanSetting("DoTrailer", ConfigScrapeModifier.Trailer)
 
 		AdvancedSettings.SetSetting("TMDBAPIKey", _MySettings.TMDBAPIKey)
-		AdvancedSettings.SetSetting("FANARTTVApiKey", _MySettings.FANARTTVApiKey)
-		AdvancedSettings.SetBooleanSetting("FallBackEn", _MySettings.FallBackEng)
+        AdvancedSettings.SetBooleanSetting("FallBackEn", _MySettings.FallBackEng)
 		AdvancedSettings.SetSetting("TMDBLanguage", _MySettings.TMDBLanguage)
-		AdvancedSettings.SetBooleanSetting("UseIMPA", _MySettings.UseIMPA)
-		AdvancedSettings.SetBooleanSetting("UseMPDB", _MySettings.UseMPDB)
-		AdvancedSettings.SetBooleanSetting("UseIMDB", _MySettings.UseIMDB)
-		AdvancedSettings.SetBooleanSetting("UseFANARTTV", _MySettings.UseFANARTTV)
-	End Sub
+    End Sub
 
 	Sub SaveSetupScraper(ByVal DoDispose As Boolean) Implements Interfaces.EmberMovieScraperModule_Data.SaveSetupScraper
 		If Not String.IsNullOrEmpty(_setup.txtTMDBApiKey.Text) Then
@@ -324,9 +291,7 @@ Public Class EmberTMDBScraperModule
 		ConfigOptions.bFullCrew = _setup.chkCrew.Checked
 		ConfigOptions.bFullCast = _setup.chkCast.Checked
 		ConfigOptions.bCert = ConfigOptions.bMPAA
-		_MySettings.FallBackEng = _setup.chkFallBackEng.Checked
-		_MySettings.TMDBLanguage = _setup.cbTMDBPrefLanguage.Text
-		SaveSettings()
+        SaveSettings()
 		'ModulesManager.Instance.SaveSettings()
 		If DoDispose Then
 			RemoveHandler _setup.SetupScraperChanged, AddressOf Handle_SetupScraperChanged
@@ -338,7 +303,6 @@ Public Class EmberTMDBScraperModule
 	Function GetMovieStudio(ByRef DBMovie As Structures.DBMovie, ByRef sStudio As List(Of String)) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule_Data.GetMovieStudio
 		Return Nothing
 	End Function
-
 
 	Function Scraper(ByRef DBMovie As Structures.DBMovie, ByRef ScrapeType As Enums.ScrapeType, ByRef Options As Structures.ScrapeOptions) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule_Data.Scraper
 		'LoadSettings()
@@ -360,28 +324,27 @@ Public Class EmberTMDBScraperModule
 			End If
 		End If
 
+        If Master.GlobalScrapeMod.NFO AndAlso Not Master.GlobalScrapeMod.DoSearch Then
+            If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then
+                _TMDBg.GetMovieInfo(DBMovie.Movie.ID, DBMovie.Movie, Options.bFullCrew, Options.bFullCast, False, Options, False)
+            ElseIf Not ScrapeType = Enums.ScrapeType.SingleScrape Then
+                DBMovie.Movie = _TMDBg.GetSearchMovieInfo(DBMovie.Movie.Title, DBMovie, ScrapeType, Options)
+                If String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then Return New Interfaces.ModuleResult With {.breakChain = False, .Cancelled = True}
+            End If
+        End If
 
-		If Master.GlobalScrapeMod.NFO AndAlso Not Master.GlobalScrapeMod.DoSearch Then
-			If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then
-				_TMDBg.GetMovieInfo(DBMovie.Movie.ID, DBMovie.Movie, Options.bFullCrew, Options.bFullCast, False, Options, False)
-			ElseIf Not ScrapeType = Enums.ScrapeType.SingleScrape Then
-				DBMovie.Movie = _TMDBg.GetSearchMovieInfo(DBMovie.Movie.Title, DBMovie, ScrapeType, Options)
-				If String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then Return New Interfaces.ModuleResult With {.breakChain = False, .Cancelled = True}
-			End If
-		End If
-
-		If ScrapeType = Enums.ScrapeType.SingleScrape AndAlso Master.GlobalScrapeMod.DoSearch _
-		 AndAlso ModulesManager.Instance.externalDataScrapersModules.OrderBy(Function(y) y.ScraperOrder).FirstOrDefault(Function(e) e.ProcessorModule.ScraperEnabled).AssemblyName = _AssemblyName Then
-			DBMovie.Movie.IMDBID = String.Empty
-			DBMovie.ClearExtras = True
-			DBMovie.PosterPath = String.Empty
-			DBMovie.FanartPath = String.Empty
-			DBMovie.TrailerPath = String.Empty
-			DBMovie.ExtraPath = String.Empty
-			DBMovie.SubPath = String.Empty
-			DBMovie.NfoPath = String.Empty
-			DBMovie.Movie.Clear()
-		End If
+        'If ScrapeType = Enums.ScrapeType.SingleScrape AndAlso Master.GlobalScrapeMod.DoSearch _
+        ' AndAlso ModulesManager.Instance.externalDataScrapersModules.OrderBy(Function(y) y.ScraperOrder).FirstOrDefault(Function(e) e.ProcessorModule.ScraperEnabled).AssemblyName = _AssemblyName Then
+        '	DBMovie.Movie.IMDBID = String.Empty
+        '	DBMovie.ClearExtras = True
+        '	DBMovie.PosterPath = String.Empty
+        '	DBMovie.FanartPath = String.Empty
+        '	DBMovie.TrailerPath = String.Empty
+        '	DBMovie.ExtraPath = String.Empty
+        '	DBMovie.SubPath = String.Empty
+        '	DBMovie.NfoPath = String.Empty
+        '	DBMovie.Movie.Clear()
+        'End If
 		If String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then
 			Select Case ScrapeType
 				Case Enums.ScrapeType.FilterAuto, Enums.ScrapeType.FullAuto, Enums.ScrapeType.MarkAuto, Enums.ScrapeType.NewAuto, Enums.ScrapeType.UpdateAuto
@@ -402,22 +365,22 @@ Public Class EmberTMDBScraperModule
 					End If
 					Dim filterOptions As Structures.ScrapeOptions = Functions.ScrapeOptionsAndAlso(Options, ConfigOptions)
 					If dSearch.ShowDialog(tmpTitle, filterOptions) = Windows.Forms.DialogResult.OK Then
-						If Not String.IsNullOrEmpty(Master.tmpMovie.IMDBID) Then
-							DBMovie.Movie.IMDBID = Master.tmpMovie.IMDBID
-						End If
-						If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then
-
-							Master.currMovie.ClearExtras = True
-							Master.currMovie.PosterPath = String.Empty
-							Master.currMovie.FanartPath = String.Empty
-							Master.currMovie.TrailerPath = String.Empty
-							Master.currMovie.ExtraPath = String.Empty
-							Master.currMovie.SubPath = String.Empty
-							Master.currMovie.NfoPath = String.Empty
-
-
-							_TMDBg.GetMovieInfo(DBMovie.Movie.ID, DBMovie.Movie, filterOptions.bFullCrew, filterOptions.bFullCast, False, filterOptions, False)
-						End If
+                        If Not String.IsNullOrEmpty(Master.tmpMovie.IMDBID) Then
+                            ' if we changed the ID tipe we need to clear everything and rescrape
+                            If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) AndAlso Not (DBMovie.Movie.IMDBID = Master.tmpMovie.IMDBID) Then
+                                Master.currMovie.ClearExtras = True
+                                Master.currMovie.PosterPath = String.Empty
+                                Master.currMovie.FanartPath = String.Empty
+                                Master.currMovie.TrailerPath = String.Empty
+                                Master.currMovie.ExtraPath = String.Empty
+                                Master.currMovie.SubPath = String.Empty
+                                Master.currMovie.NfoPath = String.Empty
+                            End If
+                            DBMovie.Movie.IMDBID = Master.tmpMovie.IMDBID
+                        End If
+                        If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) AndAlso Master.GlobalScrapeMod.NFO Then
+                            _TMDBg.GetMovieInfo(DBMovie.Movie.ID, DBMovie.Movie, filterOptions.bFullCrew, filterOptions.bFullCast, False, filterOptions, False)
+                        End If
 					Else
 						Return New Interfaces.ModuleResult With {.breakChain = False, .Cancelled = True}
 					End If
@@ -459,27 +422,15 @@ Public Class EmberTMDBScraperModule
 
 #Region "Nested Types"
 
-	Structure sMySettings
+    Structure sMySettings
 
 #Region "Fields"
-		Dim DownloadTrailers As Boolean
-		Dim TrailerTimeout As Integer
-		Dim UseTMDBTrailer As Boolean
-		Dim UseTMDBTrailerXBMC As Boolean
-		Dim ManualETSize As String
-		Dim UseTMDBTrailerPref As String
-		Dim TMDBAPIKey As String
-		Dim FANARTTVApiKey As String
-		Dim TMDBLanguage As String
-		Dim FallBackEng As Boolean
-		Dim UseIMDB As Boolean
-		Dim UseIMPA As Boolean
-		Dim UseMPDB As Boolean
-		Dim UseFANARTTV As Boolean
-		Dim UseIMDBTrailer As Boolean
-#End Region	'Fields
+        Dim TMDBAPIKey As String
+        Dim TMDBLanguage As String
+        Dim FallBackEng As Boolean
+#End Region 'Fields
 
-	End Structure
+    End Structure
 
 #End Region	'Nested Types
 

@@ -34,6 +34,7 @@ Public Class Master
     Public Shared eLang As New Localization
     Public Shared eLog As New ErrorLogger
     Public Shared eSettings As New Settings
+    Public Shared eSize As New Globals
     Public Shared GlobalScrapeMod As New Structures.ScrapeModifier    
     Public Shared isWindows As Boolean = Functions.CheckIfWindows
     'Public Shared MediaJobLog As New MediaLog
