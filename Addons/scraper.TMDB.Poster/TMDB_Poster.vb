@@ -137,7 +137,7 @@ Public Class EmberTMDBScraperModule
         _TMDBConf = _TMDBApi.GetConfiguration()
         _TMDBApiE = New WatTmdb.V3.Tmdb(_MySettings.TMDBAPIKey)
         _TMDBConfE = _TMDBApiE.GetConfiguration()
-        _TMDBg = New TMDBg.Scraper(_TMDBConf, _TMDBConfE, _TMDBApi, _TMDBApiE, _MySettings)
+        _TMDBg = New TMDBg.Scraper(_TMDBConf, _TMDBConfE, _TMDBApi, _TMDBApiE)
         TMDB = New TMDB.Scraper(_TMDBConf, _TMDBConfE, _TMDBApi, _TMDBApiE, _MySettings)
     End Sub
 

@@ -27,6 +27,11 @@ Partial Class dlgImgSelect
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.pnlBG = New System.Windows.Forms.Panel()
+        Me.pnlDLStatus = New System.Windows.Forms.Panel()
+        Me.pnlDwld = New System.Windows.Forms.Panel()
+        Me.lblDL1Status = New System.Windows.Forms.Label()
+        Me.lblDL1 = New System.Windows.Forms.Label()
+        Me.pbDL1 = New System.Windows.Forms.ProgressBar()
         Me.pnlBottomMain = New System.Windows.Forms.Panel()
         Me.pnlSize = New System.Windows.Forms.Panel()
         Me.btnPreview = New System.Windows.Forms.Button()
@@ -39,7 +44,11 @@ Partial Class dlgImgSelect
         Me.chkMid = New System.Windows.Forms.CheckBox()
         Me.chkOriginal = New System.Windows.Forms.CheckBox()
         Me.lblInfo = New System.Windows.Forms.Label()
+        Me.lblDL2 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
+        Me.pnlBG.SuspendLayout()
+        Me.pnlDLStatus.SuspendLayout()
+        Me.pnlDwld.SuspendLayout()
         Me.pnlBottomMain.SuspendLayout()
         Me.pnlSize.SuspendLayout()
         Me.pnlFanart.SuspendLayout()
@@ -85,12 +94,59 @@ Partial Class dlgImgSelect
         'pnlBG
         '
         Me.pnlBG.AutoScroll = True
+        Me.pnlBG.Controls.Add(Me.pnlDLStatus)
         Me.pnlBG.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pnlBG.Location = New System.Drawing.Point(0, 0)
         Me.pnlBG.Name = "pnlBG"
         Me.pnlBG.Size = New System.Drawing.Size(836, 495)
         Me.pnlBG.TabIndex = 1
         Me.pnlBG.Visible = False
+        '
+        'pnlDLStatus
+        '
+        Me.pnlDLStatus.BackColor = System.Drawing.Color.White
+        Me.pnlDLStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pnlDLStatus.Controls.Add(Me.pnlDwld)
+        Me.pnlDLStatus.Location = New System.Drawing.Point(265, 177)
+        Me.pnlDLStatus.Name = "pnlDLStatus"
+        Me.pnlDLStatus.Size = New System.Drawing.Size(331, 85)
+        Me.pnlDLStatus.TabIndex = 0
+        Me.pnlDLStatus.Visible = False
+        '
+        'pnlDwld
+        '
+        Me.pnlDwld.Controls.Add(Me.lblDL1Status)
+        Me.pnlDwld.Controls.Add(Me.lblDL1)
+        Me.pnlDwld.Controls.Add(Me.pbDL1)
+        Me.pnlDwld.Location = New System.Drawing.Point(3, 3)
+        Me.pnlDwld.Name = "pnlDwld"
+        Me.pnlDwld.Size = New System.Drawing.Size(321, 75)
+        Me.pnlDwld.TabIndex = 10
+        '
+        'lblDL1Status
+        '
+        Me.lblDL1Status.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.lblDL1Status.Location = New System.Drawing.Point(5, 34)
+        Me.lblDL1Status.Name = "lblDL1Status"
+        Me.lblDL1Status.Size = New System.Drawing.Size(310, 13)
+        Me.lblDL1Status.TabIndex = 8
+        '
+        'lblDL1
+        '
+        Me.lblDL1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblDL1.Location = New System.Drawing.Point(5, 10)
+        Me.lblDL1.Name = "lblDL1"
+        Me.lblDL1.Size = New System.Drawing.Size(310, 13)
+        Me.lblDL1.TabIndex = 7
+        Me.lblDL1.Text = "Performing Preliminary Tasks..."
+        '
+        'pbDL1
+        '
+        Me.pbDL1.Location = New System.Drawing.Point(6, 52)
+        Me.pbDL1.Name = "pbDL1"
+        Me.pbDL1.Size = New System.Drawing.Size(309, 19)
+        Me.pbDL1.Style = System.Windows.Forms.ProgressBarStyle.Continuous
+        Me.pbDL1.TabIndex = 6
         '
         'pnlBottomMain
         '
@@ -238,6 +294,15 @@ Partial Class dlgImgSelect
         Me.lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.lblInfo.Visible = False
         '
+        'lblDL2
+        '
+        Me.lblDL2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblDL2.Location = New System.Drawing.Point(5, 10)
+        Me.lblDL2.Name = "lblDL2"
+        Me.lblDL2.Size = New System.Drawing.Size(310, 13)
+        Me.lblDL2.TabIndex = 7
+        Me.lblDL2.Text = "Performing Preliminary Tasks..."
+        '
         'dlgImgSelect
         '
         Me.AcceptButton = Me.OK_Button
@@ -258,6 +323,9 @@ Partial Class dlgImgSelect
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Select Poster"
         Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.pnlBG.ResumeLayout(False)
+        Me.pnlDLStatus.ResumeLayout(False)
+        Me.pnlDwld.ResumeLayout(False)
         Me.pnlBottomMain.ResumeLayout(False)
         Me.pnlSize.ResumeLayout(False)
         Me.pnlSize.PerformLayout()
@@ -266,21 +334,27 @@ Partial Class dlgImgSelect
         Me.ResumeLayout(False)
 
     End Sub
-	Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
-	Friend WithEvents OK_Button As System.Windows.Forms.Button
-	Friend WithEvents Cancel_Button As System.Windows.Forms.Button
-	Friend WithEvents pnlBG As System.Windows.Forms.Panel
-	Friend WithEvents pnlBottomMain As System.Windows.Forms.Panel
+    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents OK_Button As System.Windows.Forms.Button
+    Friend WithEvents Cancel_Button As System.Windows.Forms.Button
+    Friend WithEvents pnlBG As System.Windows.Forms.Panel
+    Friend WithEvents pnlBottomMain As System.Windows.Forms.Panel
+    Friend WithEvents pnlDLStatus As System.Windows.Forms.Panel
     Friend WithEvents lblInfo As System.Windows.Forms.Label
-	Friend WithEvents pnlSize As System.Windows.Forms.Panel
-	Friend WithEvents rbSmall As System.Windows.Forms.RadioButton
-	Friend WithEvents rbMedium As System.Windows.Forms.RadioButton
-	Friend WithEvents rbLarge As System.Windows.Forms.RadioButton
-	Friend WithEvents rbXLarge As System.Windows.Forms.RadioButton
+    Friend WithEvents pnlSize As System.Windows.Forms.Panel
+    Friend WithEvents rbSmall As System.Windows.Forms.RadioButton
+    Friend WithEvents rbMedium As System.Windows.Forms.RadioButton
+    Friend WithEvents rbLarge As System.Windows.Forms.RadioButton
+    Friend WithEvents rbXLarge As System.Windows.Forms.RadioButton
     Friend WithEvents pnlFanart As System.Windows.Forms.Panel
-	Friend WithEvents chkThumb As System.Windows.Forms.CheckBox
-	Friend WithEvents chkMid As System.Windows.Forms.CheckBox
-	Friend WithEvents chkOriginal As System.Windows.Forms.CheckBox
-	Friend WithEvents btnPreview As System.Windows.Forms.Button
+    Friend WithEvents chkThumb As System.Windows.Forms.CheckBox
+    Friend WithEvents chkMid As System.Windows.Forms.CheckBox
+    Friend WithEvents chkOriginal As System.Windows.Forms.CheckBox
+    Friend WithEvents btnPreview As System.Windows.Forms.Button
+    Friend WithEvents pnlDwld As System.Windows.Forms.Panel
+    Friend WithEvents lblDL1Status As System.Windows.Forms.Label
+    Friend WithEvents pbDL1 As System.Windows.Forms.ProgressBar
+    Friend WithEvents lblDL1 As System.Windows.Forms.Label
+    Friend WithEvents lblDL2 As System.Windows.Forms.Label
 
 End Class

@@ -1144,7 +1144,7 @@ Namespace MediaContainers
             End Property
 
             <XmlIgnore()> _
-Public ReadOnly Property IDMovieDBSpecified() As Boolean
+            Public ReadOnly Property IDMovieDBSpecified() As Boolean
                 Get
                     Return Not String.IsNullOrEmpty(Me._moviedb)
                 End Get
@@ -1769,11 +1769,24 @@ Public ReadOnly Property IDMovieDBSpecified() As Boolean
 #Region "Properties"
         Public Property Width As String
         Public Property Height As String
-        Public Property Description As String
+        Public Property Description As String 'Is the size of the image. Acceptable values are:
+        ' POSTER
+        ' "thumb" - smallest, the one downloaded to show in the dlgImgSelect. If no thumb format image will NOT be shown
+        ' "w154" - Small
+        ' "cover"- "w185" intermediate
+        ' "w342" - Intermediate
+        ' "mid" - w500 - Medium
+        ' "original" - full size
+        '
+        ' FANART
+        ' "thumb" - smallest, the one downloaded to show in the dlgImgSelect. If no thumb format image will NOT be shown
+        ' "poster" - w780 - Medium
+        ' "w1280" - Large
+        ' "original" - full size
         Public Property isChecked As Boolean
-        Public Property URL As String
+        Public Property URL As String ' path to image (local or url)
         Public Property WebImage As Images
-        Public Property ParentID As String
+        Public Property ParentID As String 'All images of the same size must have this identical, is used to group the images.
 #End Region 'Properties
 
 #Region "Methods"
@@ -1787,6 +1800,25 @@ Public ReadOnly Property IDMovieDBSpecified() As Boolean
 
 #End Region 'Methods
 
+    End Class
+
+    Public Class GroupImg
+#Region "Fields"
+        Public pictures(4) As Image
+        ' POSTER
+        ' "thumb" - smallest, the one downloaded to show in the dlgImgSelect. If no thumb format image will NOT be shown
+        ' "w154" - Small
+        ' "cover"- "w185" intermediate
+        ' "w342" - Intermediate
+        ' "mid" - w500 - Medium
+        ' "original" - full size
+        '
+        ' FANART
+        ' "thumb" - smallest, the one downloaded to show in the dlgImgSelect. If no thumb format image will NOT be shown
+        ' "poster" - w780 - Medium
+        ' "w1280" - Large
+        ' "original" - full size
+#End Region
     End Class
 
     Public Class [Set]

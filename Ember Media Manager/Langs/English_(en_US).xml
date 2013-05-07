@@ -884,4 +884,5 @@
   <string id="883">Fill only if empty</string>
   <string id="884">IMDB Mirror:</string>
   <string id="885">IMDB</string>
+  <string id="886">Downloading {0}</string>
 </strings>

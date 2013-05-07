@@ -502,12 +502,12 @@ Public Class Enums
         DoSearch = 7
         Actor = 8
     End Enum
+
     Public Enum PostScraperCapabilities
         Poster = 1
         Fanart = 2
         Trailer = 3
     End Enum
-
 
     Public Enum ModuleEventType As Integer
         Generic = 0
@@ -518,7 +518,7 @@ Public Class Enums
         MovieFrameExtrator = 5
         TVFrameExtrator = 6
         RandomFrameExtrator = 7
-        CommandLine = 8            ' Command Line Module Call
+        CommandLine = 8                 ' Command Line Module Call
         MovieSync = 9
         ShowMovie = 10                  ' Called after displaying Movie  (not in place yet)
         ShowTVShow = 11                 ' Called after displaying TVShow (not in place yet)
@@ -1081,15 +1081,9 @@ Public Class Structures
 #Region "Nested Types"
 
     Public Structure CustomUpdaterStruct
-
-#Region "Fields"
-
         Dim Canceled As Boolean
         Dim Options As ScrapeOptions
         Dim ScrapeType As Enums.ScrapeType
-
-#End Region 'Fields
-
     End Structure
 
     Public Structure MovieSource
@@ -1100,6 +1094,7 @@ Public Class Structures
         Dim UseFolderName As Boolean
         Dim IsSingle As Boolean
     End Structure
+
     Public Structure TVSource
         Dim id As String
         Dim Name As String
@@ -1107,9 +1102,6 @@ Public Class Structures
     End Structure
 
     Public Structure DBMovie
-
-#Region "Fields"
-
         Dim ClearExtras As Boolean
         Dim DateAdd As Long
         Dim ExtraPath As String
@@ -1132,14 +1124,9 @@ Public Class Structures
         Dim TrailerPath As String
         Dim UseFolder As Boolean
         Dim JobLog As MediaLog
-#End Region 'Fields
-
     End Structure
 
     Public Structure DBTV
-
-#Region "Fields"
-
         Dim EpFanartPath As String
         Dim EpID As Long
         Dim EpNeedsSave As Boolean
@@ -1165,27 +1152,15 @@ Public Class Structures
         Dim TVEp As MediaContainers.EpisodeDetails
         Dim TVShow As MediaContainers.TVShow
         Dim Ordering As Enums.Ordering
-
-#End Region 'Fields
-
     End Structure
 
     Public Structure Scans
-
-#Region "Fields"
-
         Dim Movies As Boolean
         Dim TV As Boolean
-
-#End Region 'Fields
-
     End Structure
 
     Public Structure ScrapeInfo
-
-#Region "Fields"
-
-		Dim CurrentImage As Images
+        Dim CurrentImage As Images
         Dim Ordering As Enums.Ordering
         Dim iEpisode As Integer
         Dim ImageType As Enums.TVImageType
@@ -1197,15 +1172,9 @@ Public Class Structures
         Dim TVDBID As String
         Dim WithCurrent As Boolean
         Dim ScrapeType As Enums.ScrapeType
-
-#End Region 'Fields
-
     End Structure
 
     Public Structure ScrapeModifier
-
-#Region "Fields"
-
         Dim DoSearch As Boolean
         Dim Extra As Boolean
         Dim Fanart As Boolean
@@ -1214,14 +1183,9 @@ Public Class Structures
         Dim Poster As Boolean
         Dim Trailer As Boolean
         Dim Actors As Boolean
-#End Region 'Fields
-
     End Structure
 
     Public Structure ScrapeOptions
-
-#Region "Fields"
-
         Dim bCast As Boolean
         Dim bCert As Boolean
         Dim bDirector As Boolean
@@ -1251,27 +1215,16 @@ Public Class Structures
         Dim bVotes As Boolean
         Dim bWriters As Boolean
         Dim bYear As Boolean
-
-#End Region 'Fields
-
     End Structure
 
     Public Structure SettingsResult
-
-#Region "Fields"
-
         Dim DidCancel As Boolean
         Dim NeedsRefresh As Boolean
         Dim NeedsUpdate As Boolean
         Dim NeedsRestart As Boolean
-#End Region 'Fields
-
     End Structure
 
     Public Structure TVScrapeOptions
-
-#Region "Fields"
-
         Dim bEpActors As Boolean
         Dim bEpAired As Boolean
         Dim bEpCredits As Boolean
@@ -1290,9 +1243,6 @@ Public Class Structures
         Dim bShowRating As Boolean
         Dim bShowStudio As Boolean
         Dim bShowTitle As Boolean
-
-#End Region 'Fields
-
     End Structure
 
     Public Structure ModulesMenus

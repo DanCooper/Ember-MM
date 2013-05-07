@@ -1200,7 +1200,7 @@ Public Class frmMain
         Dim Poster As New Images
         Dim Fanart As New Images
         Dim tURL As String = String.Empty
-        Dim aList As List(Of MediaContainers.Image)
+        Dim aList As New List(Of MediaContainers.Image)
 
         AddHandler ModulesManager.Instance.MovieScraperEvent, AddressOf MovieScraperEvent
 
@@ -1251,17 +1251,19 @@ Public Class frmMain
                                         ElseIf Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
                                             MsgBox(Master.eLang.GetString(76, "A poster of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(77, "No Preferred Size"))
                                             Using dImgSelect As New dlgImgSelect()
-                                                If dImgSelect.ShowDialog(DBScrapeMovie, Enums.ImageType.Poster, aList, Poster) Then
+                                                Poster = dImgSelect.ShowDialog(DBScrapeMovie, Enums.ImageType.Posters, aList)
+                                                If Not IsNothing(Poster) Then
                                                     tURL = Poster.SaveAsPoster(DBScrapeMovie)
                                                     If Not String.IsNullOrEmpty(tURL) Then
-                                                        If Not String.IsNullOrEmpty(pResults.ImagePath) Then
-                                                            DBScrapeMovie.PosterPath = pResults.ImagePath
-                                                            MovieScraperEvent(Enums.MovieScraperEventType.PosterItem, True) '4, True)
-                                                            If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
-                                                                DBScrapeMovie.Movie.Thumb = pResults.Posters
-                                                            End If
+                                                        If Not String.IsNullOrEmpty(tURL) Then
+                                                            DBScrapeMovie.PosterPath = tURL
+                                                            MovieScraperEvent(Enums.MovieScraperEventType.PosterItem, True)
+                                                            'If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
+                                                            '    DBScrapeMovie.Movie.Thumb = pResults.Posters
+                                                            'End If
                                                         End If
                                                     End If
+                                                End If
                                             End Using
                                         End If
 
@@ -1269,33 +1271,32 @@ Public Class frmMain
                                 End If
                             End If
                         End If
-                        Dim didEts As Boolean
                         If Master.GlobalScrapeMod.Fanart Then
                             Fanart.Clear()
+                            aList.Clear()
                             If Fanart.IsAllowedToDownload(DBScrapeMovie, Enums.ImageType.Fanart) Then
-                                fResults = New Containers.ImgResult
-                                didEts = True
-                                If aScrapeImages.GetPreferredImage(Fanart, DBScrapeMovie.Movie.IMDBID, DBScrapeMovie.Movie.TMDBID, Enums.ImageType.Fanart, fResults, DBScrapeMovie.Filename, Master.GlobalScrapeMod.Extra, If(ScrapeType = Enums.ScrapeType.FullAsk OrElse ScrapeType = Enums.ScrapeType.NewAsk OrElse ScrapeType = Enums.ScrapeType.MarkAsk OrElse ScrapeType = Enums.ScrapeType.UpdateAsk, True, False)) Then
+                                Dim fResults = New Containers.ImgResult
+                                If Not ModulesManager.Instance.MovieScrapeImages(DBScrapeMovie, Enums.PostScraperCapabilities.Fanart, aList) Then
+                                    'If aScrapeImages.GetPreferredImage(Fanart, DBScrapeMovie.Movie.IMDBID, DBScrapeMovie.Movie.TMDBID, Enums.ImageType.Fanart, fResults, DBScrapeMovie.Filename, Master.GlobalScrapeMod.Extra, If(ScrapeType = Enums.ScrapeType.FullAsk OrElse ScrapeType = Enums.ScrapeType.NewAsk OrElse ScrapeType = Enums.ScrapeType.MarkAsk OrElse ScrapeType = Enums.ScrapeType.UpdateAsk, True, False)) Then
                                     If Not IsNothing(Fanart.Image) Then
                                         fResults.ImagePath = Fanart.SaveAsFanart(DBScrapeMovie)
                                         If Not String.IsNullOrEmpty(fResults.ImagePath) Then
                                             DBScrapeMovie.FanartPath = fResults.ImagePath
                                             MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True) '
-                                            If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
-                                                DBScrapeMovie.Movie.Fanart = fResults.Fanart
-                                            End If
+                                            'If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
+                                            '    DBScrapeMovie.Movie.Fanart = fResults.Fanart
+                                            'End If
                                         End If
                                     ElseIf Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
                                         MsgBox(Master.eLang.GetString(78, "Fanart of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(77, "No Preferred Size:"))
-
-                                        Using dImgSelect As New dlgImgSelect(_TMDBConf, _TMDBConfE, _TMDBApi, _TMDBApi, _MySettings)
-                                            fResults = dImgSelect.ShowDialog(DBScrapeMovie, Enums.ImageType.Fanart)
+                                        Using dImgSelect As New dlgImgSelect()
+                                            Fanart = dImgSelect.ShowDialog(DBScrapeMovie, Enums.ImageType.Posters, aList)
                                             If Not String.IsNullOrEmpty(fResults.ImagePath) Then
                                                 DBScrapeMovie.FanartPath = fResults.ImagePath
-                                                RaiseEvent MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True)
-                                                If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
-                                                    DBScrapeMovie.Movie.Fanart = fResults.Fanart
-                                                End If
+                                                MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True)
+                                                'If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
+                                                '    DBScrapeMovie.Movie.Fanart = fResults.Fanart
+                                                'End If
                                             End If
                                         End Using
                                     End If
@@ -1322,7 +1323,7 @@ Public Class frmMain
                         If Master.GlobalScrapeMod.Extra Then
                             If Master.eSettings.AutoET AndAlso DBScrapeMovie.isSingle Then
                                 Try
-                                    aScrapeImages.GetPreferredFAasET(DBScrapeMovie.Movie.TMDBID, DBScrapeMovie.Filename)
+                                    'aScrapeImages.GetPreferredFAasET(DBScrapeMovie.Movie.TMDBID, DBScrapeMovie.Filename)
                                     MovieScraperEvent(Enums.MovieScraperEventType.ThumbsItem, True)
                                 Catch ex As Exception
                                 End Try

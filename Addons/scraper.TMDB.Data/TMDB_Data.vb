@@ -129,7 +129,7 @@ Public Class EmberTMDBScraperModule
 		_TMDBConf = _TMDBApi.GetConfiguration()
 		_TMDBApiE = New WatTmdb.V3.Tmdb(_MySettings.TMDBAPIKey)
 		_TMDBConfE = _TMDBApiE.GetConfiguration()
-		_TMDBg = New TMDBg.Scraper(_TMDBConf, _TMDBConfE, _TMDBApi, _TMDBApiE, _MySettings)
+        _TMDBg = New TMDBg.Scraper(_TMDBConf, _TMDBConfE, _TMDBApi, _TMDBApiE)
     End Sub
 
 	Function InjectSetupScraper() As Containers.SettingsPanel Implements Interfaces.EmberMovieScraperModule_Data.InjectSetupScraper
@@ -424,15 +424,15 @@ Public Class EmberTMDBScraperModule
 
 #Region "Nested Types"
 
-	Structure sMySettings
+    Structure sMySettings
 
 #Region "Fields"
         Dim TMDBAPIKey As String
         Dim TMDBLanguage As String
-		Dim FallBackEng As Boolean
+        Dim FallBackEng As Boolean
 #End Region 'Fields
 
-	End Structure
+    End Structure
 
 #End Region	'Nested Types
 

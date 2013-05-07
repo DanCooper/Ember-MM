@@ -418,19 +418,19 @@ Public Class ModulesManager
         End If
     End Sub
 
-    Public Function MoviePostScrapeOnly(ByRef DBMovie As Structures.DBMovie, ByVal ScrapeType As Enums.PostScraperCapabilities) As Interfaces.ModuleResult
-        Dim ret As Interfaces.ModuleResult
-        For Each _externalScraperModule As _externalScraperModuleClass_Poster In externalPosterScrapersModules.Where(Function(e) e.ProcessorModule.ScraperEnabled).OrderBy(Function(e) e.ScraperOrder)
-            AddHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
-            Try
-                ret = _externalScraperModule.ProcessorModule.Scraper(DBMovie, ScrapeType)
-            Catch ex As Exception
-            End Try
-            RemoveHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
-            If ret.breakChain Then Exit For
-        Next
-        Return ret
-    End Function
+    'Public Function MoviePostScrapeOnly(ByRef DBMovie As Structures.DBMovie, ByVal ScrapeType As Enums.PostScraperCapabilities) As Interfaces.ModuleResult
+    '    Dim ret As Interfaces.ModuleResult
+    '    For Each _externalScraperModule As _externalScraperModuleClass_Poster In externalPosterScrapersModules.Where(Function(e) e.ProcessorModule.ScraperEnabled).OrderBy(Function(e) e.ScraperOrder)
+    '        AddHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
+    '        Try
+    '            ret = _externalScraperModule.ProcessorModule.Scraper(DBMovie, ScrapeType)
+    '        Catch ex As Exception
+    '        End Try
+    '        RemoveHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
+    '        If ret.breakChain Then Exit For
+    '    Next
+    '    Return ret
+    'End Function
 
     Function ScraperSelectImageOfType(ByRef DBMovie As Structures.DBMovie, ByVal _DLType As Enums.ImageType, ByRef pResults As Containers.ImgResult, Optional ByVal _isEdit As Boolean = False, Optional ByVal preload As Boolean = False) As Boolean
         Dim ret As Interfaces.ModuleResult
