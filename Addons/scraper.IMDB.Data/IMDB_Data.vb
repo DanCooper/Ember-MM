@@ -272,18 +272,20 @@ Public Class IMDB_Data
             End If
         End If
 
-        If ScrapeType = Enums.ScrapeType.SingleScrape AndAlso Master.GlobalScrapeMod.DoSearch _
-            AndAlso ModulesManager.Instance.externalDataScrapersModules.OrderBy(Function(y) y.ScraperOrder).FirstOrDefault(Function(e) e.ProcessorModule.ScraperEnabled).AssemblyName = _AssemblyName Then
-            DBMovie.Movie.IMDBID = String.Empty
-            DBMovie.ClearExtras = True
-            DBMovie.PosterPath = String.Empty
-            DBMovie.FanartPath = String.Empty
-            DBMovie.TrailerPath = String.Empty
-            DBMovie.ExtraPath = String.Empty
-            DBMovie.SubPath = String.Empty
-            DBMovie.NfoPath = String.Empty
-            DBMovie.Movie.Clear()
-        End If
+        ' why a scraper should initialize the DBMovie structure?
+        'If ScrapeType = Enums.ScrapeType.SingleScrape AndAlso Master.GlobalScrapeMod.DoSearch _
+        '    AndAlso ModulesManager.Instance.externalDataScrapersModules.OrderBy(Function(y) y.ScraperOrder).FirstOrDefault(Function(e) e.ProcessorModule.ScraperEnabled).AssemblyName = _AssemblyName Then
+        '    DBMovie.Movie.IMDBID = String.Empty
+        '    DBMovie.ClearExtras = True
+        '    DBMovie.PosterPath = String.Empty
+        '    DBMovie.FanartPath = String.Empty
+        '    DBMovie.TrailerPath = String.Empty
+        '    DBMovie.ExtraPath = String.Empty
+        '    DBMovie.SubPath = String.Empty
+        '    DBMovie.NfoPath = String.Empty
+        '    DBMovie.Movie.Clear()
+        'End If
+
         If String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then
             Select Case ScrapeType
                 Case Enums.ScrapeType.FilterAuto, Enums.ScrapeType.FullAuto, Enums.ScrapeType.MarkAuto, Enums.ScrapeType.NewAuto, Enums.ScrapeType.UpdateAuto
@@ -304,19 +306,19 @@ Public Class IMDB_Data
                     Dim filterOptions As Structures.ScrapeOptions = Functions.ScrapeOptionsAndAlso(Options, ConfigOptions)
                     If dSearch.ShowDialog(tmpTitle, filterOptions) = Windows.Forms.DialogResult.OK Then
                         If Not String.IsNullOrEmpty(Master.tmpMovie.IMDBID) Then
+                            ' if we changed the ID tipe we need to clear everything and rescrape
+                            If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) AndAlso Not (DBMovie.Movie.IMDBID = Master.tmpMovie.IMDBID) Then
+                                Master.currMovie.ClearExtras = True
+                                Master.currMovie.PosterPath = String.Empty
+                                Master.currMovie.FanartPath = String.Empty
+                                Master.currMovie.TrailerPath = String.Empty
+                                Master.currMovie.ExtraPath = String.Empty
+                                Master.currMovie.SubPath = String.Empty
+                                Master.currMovie.NfoPath = String.Empty
+                            End If
                             DBMovie.Movie.IMDBID = Master.tmpMovie.IMDBID
                         End If
-                        If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then
-
-                            Master.currMovie.ClearExtras = True
-                            Master.currMovie.PosterPath = String.Empty
-                            Master.currMovie.FanartPath = String.Empty
-                            Master.currMovie.TrailerPath = String.Empty
-                            Master.currMovie.ExtraPath = String.Empty
-                            Master.currMovie.SubPath = String.Empty
-                            Master.currMovie.NfoPath = String.Empty
-
-
+                        If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) AndAlso Master.GlobalScrapeMod.NFO Then
                             IMDB.GetMovieInfo(DBMovie.Movie.IMDBID, DBMovie.Movie, filterOptions.bFullCrew, filterOptions.bFullCast, False, filterOptions, False)
                         End If
                     Else
