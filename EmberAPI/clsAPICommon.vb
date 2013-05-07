@@ -465,6 +465,64 @@ Public Class Containers
 
 End Class
 
+Public Class Globals
+
+#Region "Fields"
+
+    Public Shared backdrop_names(3) As Structures.v3Size
+    Public Shared poster_names(5) As Structures.v3Size
+
+#End Region 'Fields
+
+#Region "Methods"
+
+    Public Sub New()
+        poster_names(0).description = "thumb"
+        poster_names(0).index = Enums.PosterSize.Small
+        poster_names(0).size = "w92"
+        poster_names(0).width = 92
+        poster_names(1).description = "w154"
+        poster_names(1).index = -1 'not used in combo box
+        poster_names(1).size = "w154"
+        poster_names(1).width = 154
+        poster_names(2).description = "cover"
+        poster_names(2).index = Enums.PosterSize.Mid
+        poster_names(2).size = "w185"
+        poster_names(2).width = 185
+        poster_names(3).description = "w342"
+        poster_names(1).index = -1 'not used in combo box
+        poster_names(3).size = "w342"
+        poster_names(3).width = 342
+        poster_names(4).description = "mid"
+        poster_names(4).index = Enums.PosterSize.Lrg
+        poster_names(4).size = "w500"
+        poster_names(4).width = 500
+        poster_names(5).description = "original"
+        poster_names(5).index = Enums.PosterSize.Xlrg
+        poster_names(5).size = "original"
+        poster_names(5).width = 0
+
+        backdrop_names(0).description = "thumb"
+        backdrop_names(0).index = Enums.PosterSize.Small
+        backdrop_names(0).size = "w300"
+        backdrop_names(0).width = 300
+        backdrop_names(1).description = "poster"
+        backdrop_names(1).index = Enums.PosterSize.Mid
+        backdrop_names(1).size = "w780"
+        backdrop_names(1).width = 780
+        backdrop_names(2).description = "w1280"
+        backdrop_names(2).index = Enums.PosterSize.Lrg
+        backdrop_names(2).size = "w1280"
+        backdrop_names(2).width = 1280
+        backdrop_names(3).description = "original"
+        backdrop_names(3).index = Enums.PosterSize.Xlrg
+        backdrop_names(3).size = "original"
+        backdrop_names(3).width = 0
+    End Sub
+#End Region
+
+End Class
+
 Public Class Enums
 
 #Region "Enumerations"
@@ -1079,6 +1137,13 @@ End Class
 Public Class Structures
 
 #Region "Nested Types"
+
+    Public Structure v3Size
+        Dim size As String
+        Dim description As String
+        Dim index As Integer
+        Dim width As Integer
+    End Structure
 
     Public Structure CustomUpdaterStruct
         Dim Canceled As Boolean

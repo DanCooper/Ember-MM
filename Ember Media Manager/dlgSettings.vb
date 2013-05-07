@@ -184,10 +184,10 @@ Public Class dlgSettings
              .Order = 400})
         Me.SettingsPanels.Add(New Containers.SettingsPanel With { _
              .Name = "pnlMovieTrailer", _
-             .Text = Master.eLang.GetString(557, "Scrapers - Trailers"), _
+             .Text = Master.eLang.GetString(559, "Scrapers - Trailers"), _
              .ImageIndex = 6, _
              .Type = Master.eLang.GetString(36, "Movies"), _
-             .Panel = Me.pnlImages, _
+             .Panel = Me.pnlTrailer, _
              .Order = 500})
         Me.SettingsPanels.Add(New Containers.SettingsPanel With { _
              .Name = "pnlShows", _
@@ -1006,7 +1006,7 @@ Public Class dlgSettings
         Me.SetApplyButton(True)
     End Sub
 
-    Private Sub cbTrailerQuality_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTrailerQuality.SelectedIndexChanged
+    Private Sub cbTrailerQuality_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 
@@ -1171,7 +1171,7 @@ Public Class dlgSettings
         Me.SetApplyButton(True)
     End Sub
 
-    Private Sub chkDeleteAllTrailers_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDeleteAllTrailers.CheckedChanged
+    Private Sub chkDeleteAllTrailers_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 
@@ -1192,7 +1192,7 @@ Public Class dlgSettings
         Me.SetApplyButton(True)
     End Sub
 
-    Private Sub chkDownloadTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDownloadTrailer.CheckedChanged
+    Private Sub chkDownloadTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
         Me.chkUpdaterTrailer.Enabled = Me.chkDownloadTrailer.Checked
 
@@ -1538,7 +1538,7 @@ Public Class dlgSettings
         End If
     End Sub
 
-    Private Sub chkNoDLTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkNoDLTrailer.CheckedChanged
+    Private Sub chkNoDLTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 
@@ -1625,7 +1625,7 @@ Public Class dlgSettings
         Me.SetApplyButton(True)
     End Sub
 
-    Private Sub chkOverwriteTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkOverwriteTrailer.CheckedChanged
+    Private Sub chkOverwriteTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 
@@ -2019,7 +2019,7 @@ Public Class dlgSettings
         Me.SetApplyButton(True)
     End Sub
 
-    Private Sub chkSingleScrapeTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkSingleScrapeTrailer.CheckedChanged
+    Private Sub chkSingleScrapeTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 
@@ -2077,7 +2077,7 @@ Public Class dlgSettings
         Me.SetApplyButton(True)
     End Sub
 
-    Private Sub chkUpdaterTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkUpdaterTrailer.CheckedChanged
+    Private Sub chkUpdaterTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 

@@ -35,9 +35,6 @@ Namespace TMDB
 		Private _TMDBApiE As V3.Tmdb
 		Private _MySettings As EmberTMDBScraperModule.sMySettings
 
-		Private backdrop_names(3) As v3Size
-		Private poster_names(5) As v3Size
-
         'Friend WithEvents bwTMDB As New System.ComponentModel.BackgroundWorker
 
 #End Region	'Fields
@@ -59,37 +56,7 @@ Namespace TMDB
 			_TMDBApiE = tTMDBApiE
 			_MySettings = tMySettings
 			' v3 does not have description anymore
-			poster_names(0).description = "thumb"
-			poster_names(0).size = "w92"
-			poster_names(0).width = 92
-			poster_names(1).description = "w154"
-			poster_names(1).size = "w154"
-			poster_names(1).width = 154
-			poster_names(2).description = "cover"
-			poster_names(2).size = "w185"
-			poster_names(2).width = 185
-			poster_names(3).description = "w342"
-			poster_names(3).size = "w342"
-			poster_names(3).width = 342
-			poster_names(4).description = "mid"
-			poster_names(4).size = "w500"
-			poster_names(4).width = 500
-			poster_names(5).description = "original"
-			poster_names(5).size = "original"
-			poster_names(5).width = 0
-			backdrop_names(0).description = "thumb"
-			backdrop_names(0).size = "w300"
-			backdrop_names(0).width = 300
-			backdrop_names(1).description = "poster"
-			backdrop_names(1).size = "w780"
-			backdrop_names(1).width = 780
-			backdrop_names(2).description = "w1280"
-			backdrop_names(2).size = "w1280"
-			backdrop_names(2).width = 1280
-			backdrop_names(3).description = "original"
-			backdrop_names(3).size = "original"
-			backdrop_names(3).width = 0
-		End Sub
+        End Sub
 
         'Public Sub Cancel()
         '	If bwTMDB.IsBusy Then bwTMDB.CancelAsync()
@@ -145,7 +112,7 @@ Namespace TMDB
                 If Type = Enums.PostScraperCapabilities.Poster Then
                     For Each tmdbI As V3.Poster In images.posters
                         'If bwTMDB.CancellationPending Then Return Nothing
-                        For Each aSize In poster_names
+                        For Each aSize In Globals.poster_names
                             Select Case aSize.size
                                 Case "original"
                                     aW = tmdbI.width
@@ -161,7 +128,7 @@ Namespace TMDB
                 ElseIf Type = Enums.PostScraperCapabilities.Fanart Then
                     For Each tmdbI As V3.Backdrop In images.backdrops
                         'If bwTMDB.CancellationPending Then Return Nothing
-                        For Each aSize In backdrop_names
+                        For Each aSize In Globals.backdrop_names
                             Select Case aSize.size
                                 Case "original"
                                     aW = tmdbI.width
@@ -219,18 +186,6 @@ Namespace TMDB
 
 			Dim Parameter As String
             Dim Type As Enums.PostScraperCapabilities
-
-#End Region	'Fields
-
-		End Structure
-
-		Private Structure v3Size
-
-#Region "Fields"
-
-			Dim size As String
-			Dim description As String
-			Dim width As Integer
 
 #End Region	'Fields
 

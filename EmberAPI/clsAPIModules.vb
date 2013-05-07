@@ -210,7 +210,7 @@ Public Class ModulesManager
                         'Activate the located module
                         Dim t1 As Type = fileType.GetInterface("EmberMovieScraperModule_Data")
                         If Not t1 Is Nothing Then
-                            Debug.Print("Loading :" & file)
+                            Debug.Print("Loading - data :" & file)
                             Dim ProcessorModule As Interfaces.EmberMovieScraperModule_Data
                             ProcessorModule = CType(Activator.CreateInstance(fileType), Interfaces.EmberMovieScraperModule_Data)
                             'Add the activated module to the arraylist
@@ -237,6 +237,7 @@ Public Class ModulesManager
                         Else
                             Dim t2 As Type = fileType.GetInterface("EmberMovieScraperModule_Poster")
                             If Not t2 Is Nothing Then
+                                Debug.Print("Loading - poster :" & file)
                                 Dim ProcessorModule As Interfaces.EmberMovieScraperModule_Poster
                                 ProcessorModule = CType(Activator.CreateInstance(fileType), Interfaces.EmberMovieScraperModule_Poster)
                                 'Add the activated module to the arraylist
