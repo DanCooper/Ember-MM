@@ -112,7 +112,7 @@ Namespace TMDB
                 If Type = Enums.PostScraperCapabilities.Poster Then
                     For Each tmdbI As V3.Poster In images.posters
                         'If bwTMDB.CancellationPending Then Return Nothing
-                        For Each aSize In Globals.poster_names
+                        For Each aSize In Master.eSize.poster_names
                             Select Case aSize.size
                                 Case "original"
                                     aW = tmdbI.width
@@ -128,7 +128,7 @@ Namespace TMDB
                 ElseIf Type = Enums.PostScraperCapabilities.Fanart Then
                     For Each tmdbI As V3.Backdrop In images.backdrops
                         'If bwTMDB.CancellationPending Then Return Nothing
-                        For Each aSize In Globals.backdrop_names
+                        For Each aSize In Master.eSize.backdrop_names
                             Select Case aSize.size
                                 Case "original"
                                     aW = tmdbI.width

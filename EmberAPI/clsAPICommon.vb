@@ -469,8 +469,8 @@ Public Class Globals
 
 #Region "Fields"
 
-    Public Shared backdrop_names(3) As Structures.v3Size
-    Public Shared poster_names(5) As Structures.v3Size
+    Public backdrop_names(3) As Structures.v3Size
+    Public poster_names(5) As Structures.v3Size
 
 #End Region 'Fields
 
@@ -490,7 +490,7 @@ Public Class Globals
         poster_names(2).size = "w185"
         poster_names(2).width = 185
         poster_names(3).description = "w342"
-        poster_names(1).index = -1 'not used in combo box
+        poster_names(3).index = -1 'not used in combo box
         poster_names(3).size = "w342"
         poster_names(3).width = 342
         poster_names(4).description = "mid"
