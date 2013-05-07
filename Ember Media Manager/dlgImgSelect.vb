@@ -193,29 +193,13 @@ Public Class dlgImgSelect
 
             Select Case True
                 Case rbXLarge.Checked
-                    If Master.eSettings.UseImgCache Then
-                        tImage.FromFile(Path.Combine(CachePath, String.Concat("poster_(original)_(url=", Me.rbXLarge.Tag, ").jpg")))
-                    Else
-                        tImage.FromWeb(Me.rbXLarge.Tag.ToString)
-                    End If
+                    tImage.FromWeb(Me.rbXLarge.Tag.ToString)
                 Case rbLarge.Checked
-                    If Master.eSettings.UseImgCache Then
-                        tImage.FromFile(Path.Combine(CachePath, String.Concat("poster_(mid)_(url=", Me.rbLarge.Tag, ").jpg")))
-                    Else
-                        tImage.FromWeb(Me.rbLarge.Tag.ToString)
-                    End If
+                    tImage.FromWeb(Me.rbLarge.Tag.ToString)
                 Case rbMedium.Checked
-                    If Master.eSettings.UseImgCache Then
-                        tImage.FromFile(Path.Combine(CachePath, String.Concat("poster_(cover)_(url=", Me.rbMedium.Tag, ").jpg")))
-                    Else
-                        tImage.FromWeb(Me.rbMedium.Tag.ToString)
-                    End If
+                    tImage.FromWeb(Me.rbMedium.Tag.ToString)
                 Case rbSmall.Checked
-                    If Master.eSettings.UseImgCache Then
-                        tImage.FromFile(Path.Combine(CachePath, String.Concat("poster_(thumb)_(url=", Me.rbSmall.Tag, ").jpg")))
-                    Else
-                        tImage.FromWeb(Me.rbSmall.Tag.ToString)
-                    End If
+                    tImage.FromWeb(Me.rbSmall.Tag.ToString)
             End Select
 
             If Not IsNothing(tImage.Image) Then
@@ -669,24 +653,16 @@ Public Class dlgImgSelect
                 Application.DoEvents()
                 Select Case True
                     Case Me.rbXLarge.Checked
-                        If Master.eSettings.UseImgCache Then
-                            tmpImage.WebImage.FromFile(Path.Combine(CachePath, String.Concat("poster_(original)_(url=", Me.rbXLarge.Tag, ").jpg")))
+                        If extrathumbSize = "original" And DLType = Enums.ImageType.Fanart Then
+                            Me.tmpImage.WebImage = CType(Me.pbImage(selIndex).Tag, MediaContainers.Image).WebImage
                         Else
-                            If extrathumbSize = "original" And DLType = Enums.ImageType.Fanart Then
-                                Me.tmpImage.WebImage = CType(Me.pbImage(selIndex).Tag, MediaContainers.Image).WebImage
-                            Else
-                                Me.tmpImage.WebImage.FromWeb(Me.rbXLarge.Tag.ToString)
-                            End If
+                            Me.tmpImage.WebImage.FromWeb(Me.rbXLarge.Tag.ToString)
                         End If
                     Case Me.rbLarge.Checked
-                        If Master.eSettings.UseImgCache Then
-                            Me.tmpImage.WebImage.FromFile(Path.Combine(CachePath, String.Concat("poster_(mid)_(url=", Me.rbLarge.Tag, ").jpg")))
+                        If extrathumbSize = "w1280" And DLType = Enums.ImageType.Fanart Or Not DLType = Enums.ImageType.Fanart Then
+                            Me.tmpImage.WebImage = CType(Me.pbImage(selIndex).Tag, MediaContainers.Image).WebImage
                         Else
-                            If extrathumbSize = "w1280" And DLType = Enums.ImageType.Fanart Or Not DLType = Enums.ImageType.Fanart Then
-                                Me.tmpImage.WebImage = CType(Me.pbImage(selIndex).Tag, MediaContainers.Image).WebImage
-                            Else
-                                Me.tmpImage.WebImage.FromWeb(Me.rbLarge.Tag.ToString)
-                            End If
+                            Me.tmpImage.WebImage.FromWeb(Me.rbLarge.Tag.ToString)
                         End If
                     Case Me.rbMedium.Checked
                         If extrathumbSize = "poster" And DLType = Enums.ImageType.Fanart Then
@@ -695,14 +671,10 @@ Public Class dlgImgSelect
                             Me.tmpImage.WebImage.FromWeb(Me.rbMedium.Tag.ToString)
                         End If
                     Case Me.rbSmall.Checked
-                        If Master.eSettings.UseImgCache Then
-                            Me.tmpImage.WebImage.FromFile(Path.Combine(CachePath, String.Concat("poster_(thumb)_(url=", Me.rbSmall.Tag, ").jpg")))
+                        If extrathumbSize = "thumb" And DLType = Enums.ImageType.Fanart Then
+                            Me.tmpImage.WebImage = CType(Me.pbImage(selIndex).Tag, MediaContainers.Image).WebImage
                         Else
-                            If extrathumbSize = "thumb" And DLType = Enums.ImageType.Fanart Then
-                                Me.tmpImage.WebImage = CType(Me.pbImage(selIndex).Tag, MediaContainers.Image).WebImage
-                            Else
-                                Me.tmpImage.WebImage.FromWeb(Me.rbSmall.Tag.ToString)
-                            End If
+                            Me.tmpImage.WebImage.FromWeb(Me.rbSmall.Tag.ToString)
                         End If
                 End Select
             End If
@@ -869,10 +841,6 @@ Public Class dlgImgSelect
                 Me.pnlDwld.Visible = True
                 Me.pnlDLStatus.Height = 165
                 Me.pnlDLStatus.Top = 129
-
-                If Master.eSettings.AutoET Then
-                    ETHashes = HashFile.CurrentETHashes(tMovie.Filename)
-                End If
             End If
 
             CachePath = String.Concat(Master.TempPath, Path.DirectorySeparatorChar, tMovie.Movie.IMDBID, Path.DirectorySeparatorChar, If(Me.DLType = Enums.ImageType.Posters, "posters", "fanart"))
@@ -930,7 +898,7 @@ Public Class dlgImgSelect
                 Select Case TMDBPoster.Description
                     Case "original"
                         ' xlarge
-                        If Not Master.eSettings.UseImgCache OrElse Not IsNothing(TMDBPoster.WebImage.Image) Then
+                        If Not IsNothing(TMDBPoster.WebImage.Image) Then
                             rbXLarge.Enabled = True
                             rbXLarge.Tag = TMDBPoster.URL
                             'If Master.eSettings.UseImgCache Then Me.rbXLarge.Text = String.Format(Master.eLang.GetString(51, "Original ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)
@@ -938,7 +906,7 @@ Public Class dlgImgSelect
                         End If
                     Case "cover"
                         ' large
-                        If Not Master.eSettings.UseImgCache OrElse Not IsNothing(TMDBPoster.WebImage.Image) Then
+                        If Not IsNothing(TMDBPoster.WebImage.Image) Then
                             rbLarge.Enabled = True
                             rbLarge.Tag = TMDBPoster.URL
                             'If Master.eSettings.UseImgCache Then Me.rbLarge.Text = String.Format(Master.eLang.GetString(52, "Cover ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)
@@ -946,7 +914,7 @@ Public Class dlgImgSelect
                         End If
                     Case "w1280"
                         ' large
-                        If Not Master.eSettings.UseImgCache OrElse Not IsNothing(TMDBPoster.WebImage.Image) Then
+                        If Not IsNothing(TMDBPoster.WebImage.Image) Then
                             rbLarge.Enabled = True
                             rbLarge.Tag = TMDBPoster.URL
                             'If Master.eSettings.UseImgCache Then Me.rbLarge.Text = String.Format(Master.eLang.GetString(52, "Cover ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)
@@ -954,7 +922,7 @@ Public Class dlgImgSelect
                         End If
                     Case "thumb"
                         ' small                        
-                        If Not Master.eSettings.UseImgCache OrElse Not IsNothing(TMDBPoster.WebImage.Image) Then
+                        If Not IsNothing(TMDBPoster.WebImage.Image) Then
                             rbSmall.Enabled = True
                             rbSmall.Tag = TMDBPoster.URL
                             'If Master.eSettings.UseImgCache Then Me.rbSmall.Text = String.Format(Master.eLang.GetString(53, "Small ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)

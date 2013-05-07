@@ -45,54 +45,54 @@ Namespace FANARTTVs
 
 #Region "Fields"
 
-		Private _MySettings As EmberTMDBScraperModule.sMySettings
+        Private _MySettings As EmberFanartTVScraperModule.sMySettings
 		Private _FanartTV As FanartTV.V1.FanartTV
 		Friend WithEvents bwFANARTTV As New System.ComponentModel.BackgroundWorker
 		Private _APIInvalid As Boolean = False
 #End Region	'Fields
 
-#Region "Events"
+        '#Region "Events"
 
-		Public Event PostersDownloaded(ByVal Posters As List(Of MediaContainers.Image))
+        '		Public Event PostersDownloaded(ByVal Posters As List(Of MediaContainers.Image))
 
-		Public Event ProgressUpdated(ByVal iPercent As Integer)
+        '		Public Event ProgressUpdated(ByVal iPercent As Integer)
 
-#End Region	'Events
+        '#End Region	'Events
 
 #Region "Methods"
 
-		Public Sub New(ByRef tMySettings As EmberTMDBScraperModule.sMySettings)
-			_MySettings = tMySettings
-			_FanartTV = New FanartTV.V1.FanartTV(_MySettings.FANARTTVApiKey)
-			Dim Result As FanartTV.V1.FanartTVMovie = _FanartTV.GetMovieInfo(New FanartTV.V1.FanartTVRequest("1", "JSON", "all", 1, 1))
-			If IsNothing(Result) Then
-				If Not IsNothing(_FanartTV.Error) Then
-					Master.eLog.WriteToErrorLog(_FanartTV.Error, "", "Error")
-					_APIInvalid = True
-				End If
-			End If
-		End Sub
+        Public Sub New(ByRef tMySettings As EmberFanartTVScraperModule.sMySettings)
+            _MySettings = tMySettings
+            _FanartTV = New FanartTV.V1.FanartTV(_MySettings.FANARTTVApiKey)
+            Dim Result As FanartTV.V1.FanartTVMovie = _FanartTV.GetMovieInfo(New FanartTV.V1.FanartTVRequest("1", "JSON", "all", 1, 1))
+            If IsNothing(Result) Then
+                If Not IsNothing(_FanartTV.Error) Then
+                    Master.eLog.WriteToErrorLog(_FanartTV.Error, "", "Error")
+                    _APIInvalid = True
+                End If
+            End If
+        End Sub
 
-		Public Sub Cancel()
-			If Me.bwFANARTTV.IsBusy Then Me.bwFANARTTV.CancelAsync()
+        'Public Sub Cancel()
+        '	If Me.bwFANARTTV.IsBusy Then Me.bwFANARTTV.CancelAsync()
 
-			While Me.bwFANARTTV.IsBusy
-				Application.DoEvents()
-				Threading.Thread.Sleep(50)
-			End While
-		End Sub
+        '	While Me.bwFANARTTV.IsBusy
+        '		Application.DoEvents()
+        '		Threading.Thread.Sleep(50)
+        '	End While
+        'End Sub
 
-		Public Sub GetImagesAsync(ByVal sURL As String)
-			Try
-				If Not bwFANARTTV.IsBusy Then
-					bwFANARTTV.WorkerSupportsCancellation = True
-					bwFANARTTV.WorkerReportsProgress = True
-					bwFANARTTV.RunWorkerAsync(New Arguments With {.Parameter = sURL})
-				End If
-			Catch ex As Exception
-				Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-			End Try
-		End Sub
+        'Public Sub GetImagesAsync(ByVal sURL As String)
+        '	Try
+        '		If Not bwFANARTTV.IsBusy Then
+        '			bwFANARTTV.WorkerSupportsCancellation = True
+        '			bwFANARTTV.WorkerReportsProgress = True
+        '			bwFANARTTV.RunWorkerAsync(New Arguments With {.Parameter = sURL})
+        '		End If
+        '	Catch ex As Exception
+        '		Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
+        '	End Try
+        'End Sub
 
 		Public Function GetFANARTTVImages(ByVal imdbID As String) As List(Of MediaContainers.Image)
 			Dim alPoster As New List(Of MediaContainers.Image)
@@ -106,8 +106,8 @@ Namespace FANARTTVs
 				If IsNothing(Result) Then Return alPoster
 				If IsNothing(Result.movieinfo.moviebackground) Then Return alPoster
 				For Each image In Result.movieinfo.moviebackground
-					alPoster.Add(New MediaContainers.Image With {.Description = "original", .URL = image.url})
-					alPoster.Add(New MediaContainers.Image With {.Description = "thumb", .URL = image.url & "/preview"})
+                    alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.backdrop_names(3).description, .URL = image.url})
+                    alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.backdrop_names(0).description, .URL = image.url & "/preview"})
 				Next
 			Catch ex As Exception
 				Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
@@ -116,27 +116,27 @@ Namespace FANARTTVs
 			Return alPoster
 		End Function
 
-		Private Sub bwFANARTTVA_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bwFANARTTV.DoWork
-			Dim Args As Arguments = DirectCast(e.Argument, Arguments)
-			Try
-				e.Result = GetFANARTTVImages(Args.Parameter)
-			Catch ex As Exception
-				Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-				e.Result = Nothing
-			End Try
-		End Sub
+        'Private Sub bwFANARTTVA_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bwFANARTTV.DoWork
+        '	Dim Args As Arguments = DirectCast(e.Argument, Arguments)
+        '	Try
+        '		e.Result = GetFANARTTVImages(Args.Parameter)
+        '	Catch ex As Exception
+        '		Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
+        '		e.Result = Nothing
+        '	End Try
+        'End Sub
 
-		Private Sub bwFANARTTV_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles bwFANARTTV.ProgressChanged
-			If Not bwFANARTTV.CancellationPending Then
-				RaiseEvent ProgressUpdated(e.ProgressPercentage)
-			End If
-		End Sub
+        'Private Sub bwFANARTTV_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles bwFANARTTV.ProgressChanged
+        '	If Not bwFANARTTV.CancellationPending Then
+        '		RaiseEvent ProgressUpdated(e.ProgressPercentage)
+        '	End If
+        'End Sub
 
-		Private Sub bwFANARTTV_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bwFANARTTV.RunWorkerCompleted
-			If Not IsNothing(e.Result) Then
-				RaiseEvent PostersDownloaded(DirectCast(e.Result, List(Of MediaContainers.Image)))
-			End If
-		End Sub
+        'Private Sub bwFANARTTV_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bwFANARTTV.RunWorkerCompleted
+        '	If Not IsNothing(e.Result) Then
+        '		RaiseEvent PostersDownloaded(DirectCast(e.Result, List(Of MediaContainers.Image)))
+        '	End If
+        'End Sub
 
 
 #End Region	'Methods

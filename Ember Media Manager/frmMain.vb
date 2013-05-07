@@ -1343,7 +1343,7 @@ Public Class frmMain
                     '    End If
                     'End If
                     If Master.GlobalScrapeMod.Extra Then
-                        If Master.eSettings.AutoET AndAlso DBScrapeMovie.isSingle Then
+                        If DBScrapeMovie.isSingle Then
                             Try
                                 'aScrapeImages.GetPreferredFAasET(DBScrapeMovie.Movie.TMDBID, DBScrapeMovie.Filename)
                                 MovieScraperEvent(Enums.MovieScraperEventType.ThumbsItem, True)
@@ -1375,8 +1375,8 @@ Public Class frmMain
                     End If
 
                     If Master.GlobalScrapeMod.Extra Then
-                        If Master.eSettings.AutoThumbs > 0 AndAlso DBScrapeMovie.isSingle Then
-                            Dim params As New List(Of Object)(New Object() {DBScrapeMovie, Master.eSettings.AutoThumbs, False, ""})
+                        If DBScrapeMovie.isSingle Then
+                            Dim params As New List(Of Object)(New Object() {DBScrapeMovie, 0, False, ""})
                             ModulesManager.Instance.RunGeneric(Enums.ModuleEventType.RandomFrameExtrator, params, Nothing, True)
                             MovieScraperEvent(Enums.MovieScraperEventType.ThumbsItem, True)
                             Dim ETasFA As String = DirectCast(params(3), String)
@@ -1856,22 +1856,7 @@ doCancel:
     End Sub
 
     Private Sub ClearAllCachesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ClearAllCachesToolStripMenuItem.Click, ClearAllCachesToolStripMenuItem1.Click
-        Me.ClearCache()
-    End Sub
-
-    Private Sub ClearCache()
-        If Directory.Exists(Master.TempPath) Then
-            Dim dInfo As New DirectoryInfo(Master.TempPath)
-            For Each dDir As DirectoryInfo In dInfo.GetDirectories.Where(Function(d) Not d.Name.ToLower = "shows" AndAlso Not d.Name.ToLower = "addons")
-                FileUtils.Delete.DeleteDirectory(dDir.FullName)
-            Next
-
-            For Each fFile As FileInfo In dInfo.GetFiles("*.*", SearchOption.TopDirectoryOnly)
-                fFile.Delete()
-            Next
-        Else
-            Directory.CreateDirectory(Master.TempPath)
-        End If
+        'for future use
     End Sub
 
     Private Sub ClearFilters(Optional ByVal Reload As Boolean = False)
@@ -5400,9 +5385,6 @@ doCancel:
             If Not isCL Then
                 Master.DB.Close()
             End If
-            If Not Master.eSettings.PersistImgCache Then
-                Me.ClearCache()
-            End If
 
             If Not isCL Then
                 Master.eSettings.WindowLoc = Me.Location
@@ -6555,11 +6537,11 @@ doCancel:
                     End If
                 End If
 
-                If Master.eSettings.AutoThumbs > 0 AndAlso Master.currMovie.isSingle Then
+                If Master.currMovie.isSingle Then
                     Me.tslLoading.Text = Master.eLang.GetString(575, "Generating Extrathumbs:")
                     Application.DoEvents()
                     'ThumbGenerator.CreateRandomThumbs(Master.currMovie, Master.eSettings.AutoThumbs, True)
-                    Dim params As New List(Of Object)(New Object() {Master.currMovie, Master.eSettings.AutoThumbs, True, ""})
+                    Dim params As New List(Of Object)(New Object() {Master.currMovie, 0, True, ""})
                     ModulesManager.Instance.RunGeneric(Enums.ModuleEventType.RandomFrameExtrator, params, Nothing, True)
                     MovieScraperEvent(Enums.MovieScraperEventType.ThumbsItem, True)
                     Dim ETasFA As String = DirectCast(params(3), String)
@@ -6664,7 +6646,7 @@ doCancel:
                                 (Master.GlobalScrapeMod.Fanart AndAlso Master.eSettings.MissingFilterFanart AndAlso FanartAllowed AndAlso Not Convert.ToBoolean(drvRow.Item(5))) OrElse _
                                 (Master.GlobalScrapeMod.NFO AndAlso Master.eSettings.MissingFilterNFO AndAlso Not Convert.ToBoolean(drvRow.Item(6))) OrElse _
                                 (Master.GlobalScrapeMod.Trailer AndAlso Master.eSettings.MissingFilterTrailer AndAlso TrailerAllowed AndAlso Not Convert.ToBoolean(drvRow.Item(7))) OrElse _
-                                (Master.GlobalScrapeMod.Extra AndAlso Master.eSettings.MissingFilterExtras AndAlso (Master.eSettings.AutoET OrElse Master.eSettings.AutoThumbs > 0) AndAlso Not Convert.ToBoolean(drvRow.Item(9)))) Then
+                                (Master.GlobalScrapeMod.Extra AndAlso Master.eSettings.MissingFilterExtras AndAlso Not Convert.ToBoolean(drvRow.Item(9)))) Then
                             Continue For
                         End If
                 End Select
@@ -7882,18 +7864,32 @@ doCancel:
 
                 Me.CopyExistingFanartToBackdropsFolderToolStripMenuItem.Enabled = Directory.Exists(.BDPath)
 
-                Me.ClearAllCachesToolStripMenuItem.Enabled = .UseImgCache
+                ' for future use
+                Me.ClearAllCachesToolStripMenuItem.Enabled = False
 
-                Me.mnuAllAutoExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
-                Me.mnuAllAskExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
-                Me.mnuMissAutoExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
-                Me.mnuMissAskExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
-                Me.mnuMarkAutoExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
-                Me.mnuMarkAskExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
-                Me.mnuNewAutoExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
-                Me.mnuNewAskExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
-                Me.mnuFilterAutoExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
-                Me.mnuFilterAskExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
+                'Me.mnuAllAutoExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
+                'Me.mnuAllAskExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
+                'Me.mnuMissAutoExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
+                'Me.mnuMissAskExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
+                'Me.mnuMarkAutoExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
+                'Me.mnuMarkAskExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
+                'Me.mnuNewAutoExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
+                'Me.mnuNewAskExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
+                'Me.mnuFilterAutoExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
+                'Me.mnuFilterAskExtra.Enabled = .AutoThumbs > 0 OrElse .AutoET
+
+
+                'here for future use
+                Me.mnuAllAutoExtra.Enabled = False
+                Me.mnuAllAskExtra.Enabled = False
+                Me.mnuMissAutoExtra.Enabled = False
+                Me.mnuMissAskExtra.Enabled = False
+                Me.mnuMarkAutoExtra.Enabled = False
+                Me.mnuMarkAskExtra.Enabled = False
+                Me.mnuNewAutoExtra.Enabled = False
+                Me.mnuNewAskExtra.Enabled = False
+                Me.mnuFilterAutoExtra.Enabled = False
+                Me.mnuFilterAskExtra.Enabled = False
 
                 Dim PosterAllowed As Boolean = ModulesManager.Instance.QueryPostScraperCapabilities(Enums.PostScraperCapabilities.Poster)
                 Me.mnuAllAutoPoster.Enabled = PosterAllowed

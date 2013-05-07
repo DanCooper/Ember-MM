@@ -47,7 +47,7 @@ Public Class EmberTMDBScraperModule
 	''' <remarks></remarks>
 	Private _MySettings As New sMySettings
 	Private _TMDBg As TMDBg.Scraper
-    Private _Name As String = "TMDB"
+    Private _Name As String = "TMDB_Data"
 	Private _ScraperEnabled As Boolean = False
 	Private _setup As frmTMDBInfoSettingsHolder
 	Private _TMDBConf As V3.TmdbConfiguration
@@ -166,7 +166,7 @@ Public Class EmberTMDBScraperModule
 		_setup.orderChanged()
 
         SPanel.Name = String.Concat(Me._Name, "Scraper")
-		SPanel.Text = Master.eLang.GetString(104, "Ember TMDB Movie Scrapers")
+        SPanel.Text = Master.eLang.GetString(104, "TMDB Scraper")
         SPanel.Prefix = "TMDBMovieInfo_"
 		SPanel.Order = 110
 		SPanel.Parent = "pnlMovieData"

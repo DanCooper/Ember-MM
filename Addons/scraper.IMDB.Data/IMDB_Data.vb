@@ -41,7 +41,7 @@ Public Class IMDB_Data
     ''' </summary>
     ''' <remarks></remarks>
     Private IMDB As New IMDB.Scraper
-    Private _Name As String = "IMDB"
+    Private _Name As String = "IMDB_Data"
     Private _PostScraperEnabled As Boolean = False
     Private _ScraperEnabled As Boolean = False
     Private _setup As frmInfoSettingsHolder
@@ -144,7 +144,7 @@ Public Class IMDB_Data
 
         _setup.orderChanged()
         SPanel.Name = String.Concat(Me._Name, "Scraper")
-        SPanel.Text = Master.eLang.GetString(104, "Ember Native Movie Scrapers")
+        SPanel.Text = Master.eLang.GetString(104, "IMDB Scraper")
         SPanel.Prefix = "IMDBMovieInfo_"
         SPanel.Order = 110
         SPanel.Parent = "pnlMovieData"

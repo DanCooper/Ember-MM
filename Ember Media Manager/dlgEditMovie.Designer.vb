@@ -130,7 +130,6 @@ Partial Class dlgEditMovie
         Me.chkMark = New System.Windows.Forms.CheckBox()
         Me.btnRescrape = New System.Windows.Forms.Button()
         Me.btnChangeMovie = New System.Windows.Forms.Button()
-        Me.btnClearCache = New System.Windows.Forms.Button()
         Me.DelayTimer = New System.Windows.Forms.Timer(Me.components)
         Me.chkWatched = New System.Windows.Forms.CheckBox()
         Me.pnlTop.SuspendLayout()
@@ -1300,20 +1299,6 @@ Partial Class dlgEditMovie
         Me.btnChangeMovie.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.btnChangeMovie.UseVisualStyleBackColor = True
         '
-        'btnClearCache
-        '
-        Me.btnClearCache.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.btnClearCache.Image = CType(resources.GetObject("btnClearCache.Image"), System.Drawing.Image)
-        Me.btnClearCache.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnClearCache.Location = New System.Drawing.Point(751, 66)
-        Me.btnClearCache.Name = "btnClearCache"
-        Me.btnClearCache.Size = New System.Drawing.Size(96, 23)
-        Me.btnClearCache.TabIndex = 4
-        Me.btnClearCache.Text = "Clear Cache"
-        Me.btnClearCache.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnClearCache.UseVisualStyleBackColor = True
-        Me.btnClearCache.Visible = False
-        '
         'DelayTimer
         '
         Me.DelayTimer.Interval = 250
@@ -1337,7 +1322,6 @@ Partial Class dlgEditMovie
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(854, 582)
         Me.Controls.Add(Me.chkWatched)
-        Me.Controls.Add(Me.btnClearCache)
         Me.Controls.Add(Me.btnChangeMovie)
         Me.Controls.Add(Me.btnRescrape)
         Me.Controls.Add(Me.chkMark)
@@ -1463,7 +1447,6 @@ Partial Class dlgEditMovie
     Friend WithEvents lbGenre As System.Windows.Forms.CheckedListBox
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents btnSetAsFanart As System.Windows.Forms.Button
-    Friend WithEvents btnClearCache As System.Windows.Forms.Button
     Friend WithEvents btnDLTrailer As System.Windows.Forms.Button
     Friend WithEvents btnPlayTrailer As System.Windows.Forms.Button
     Friend WithEvents lblLocalTrailer As System.Windows.Forms.Label

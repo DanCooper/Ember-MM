@@ -490,15 +490,16 @@ Public Class Images
 		End Try
 	End Function
 
-	Public Sub ResizeExtraThumb(ByVal fromPath As String, ByVal toPath As String)
-		Me.FromFile(fromPath)
-		If Not Master.eSettings.ETNative Then
-			Dim iWidth As Integer = Master.eSettings.ETWidth
-			Dim iHeight As Integer = Master.eSettings.ETHeight
-			ImageUtils.ResizeImage(_image, iWidth, iHeight, Master.eSettings.ETPadding, Color.Black.ToArgb)
-		End If
-		Me.Save(toPath)
-	End Sub
+    Public Sub ResizeExtraThumb(ByVal fromPath As String, ByVal toPath As String)
+        Debug.Print("---------- ResizeExtraThumb ----------")
+        'Me.FromFile(fromPath)
+        'If Not Master.eSettings.ETNative Then
+        '	Dim iWidth As Integer = Master.eSettings.ETWidth
+        '	Dim iHeight As Integer = Master.eSettings.ETHeight
+        '	ImageUtils.ResizeImage(_image, iWidth, iHeight, Master.eSettings.ETPadding, Color.Black.ToArgb)
+        'End If
+        'Me.Save(toPath)
+    End Sub
 
 	Public Sub Save(ByVal sPath As String, Optional ByVal iQuality As Long = 0, Optional ByVal sUrl As String = "", Optional ByVal doResize As Boolean = False)
 		Dim retSave() As Byte

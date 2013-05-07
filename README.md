@@ -1,4 +1,5 @@
-[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=bodrick&url=https://github.com/bodrick/Ember-MM&title=Ember%2dTeam%3a%20DanCooper%2c%20m%2esavazzi%20%26%20Cocotus&language=en_GB&tags=github&category=software) 
+<a href="http://flattr.com/thing/1321788/" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
+
 # Ember Media Manager
 
 We decided that was time to give Ember a new home. We've taken it upon ourselves not only to pick up the code where it was left off but to attempt to continue it's development.
@@ -11,9 +12,8 @@ If you found our work useful feel free to [donate](https://www.paypal.com/cgi-bi
 To continue development of EmberMM, because its a great product, that in my opinion is the most stable and useful media manager available, I've tried all others, but yet still come back to Ember.
 
 ## Links
-Main discussion : http://forum.xbmc.org/showthread.php?tid=116941
-GitHub : https://github.com/DanCooper/Ember-MM
-(DanCooper is mainaining the most aligned version)
+- Main discussion : http://forum.xbmc.org/showthread.php?tid=116941
+- GitHub : https://github.com/DanCooper/Ember-MM (DanCooper is mainaining the most aligned version)
 
 ## Helping the development
 Any help is more than welcome. We do suggest everyone to participate in the forum to be aligned and updated.

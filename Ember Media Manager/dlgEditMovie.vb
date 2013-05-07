@@ -95,18 +95,6 @@ Public Class dlgEditMovie
         Me.Close()
     End Sub
 
-    Private Sub btnClearCache_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClearCache.Click
-        Try
-            If Directory.Exists(CachePath) Then
-                FileUtils.Delete.DeleteDirectory(CachePath)
-            End If
-
-            btnClearCache.Visible = False
-        Catch ex As Exception
-            MsgBox(Master.eLang.GetString(267, "One or more cache resources is currently in use and cannot be deleted at the moment."), MsgBoxStyle.Information, Master.eLang.GetString(268, "Cannot Clear Cache"))
-        End Try
-    End Sub
-
     Private Sub btnDLTrailer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDLTrailer.Click
         Dim tURL As String = ModulesManager.Instance.ScraperDownloadTrailer(Master.currMovie)
         If Not String.IsNullOrEmpty(tURL) Then
@@ -244,9 +232,6 @@ Public Class dlgEditMovie
                 Me.lblFanartSize.Visible = True
             End If
 
-            If Master.eSettings.UseImgCache AndAlso Directory.Exists(CachePath) Then
-                Me.btnClearCache.Visible = True
-            End If
         Catch ex As Exception
             Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
         End Try
@@ -302,9 +287,6 @@ Public Class dlgEditMovie
                 Me.lblPosterSize.Visible = True
             End If
 
-            If Master.eSettings.UseImgCache AndAlso Directory.Exists(CachePath) Then
-                Me.btnClearCache.Visible = True
-            End If
         Catch ex As Exception
             Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
         End Try
@@ -777,13 +759,6 @@ Public Class dlgEditMovie
                         .btnSetFanartScrape.Enabled = False
                     End If
 
-                End If
-
-                If Not String.IsNullOrEmpty(Master.currMovie.Movie.IMDBID) AndAlso Master.eSettings.UseImgCache Then
-                    CachePath = String.Concat(Master.TempPath, Path.DirectorySeparatorChar, Master.currMovie.Movie.IMDBID.Replace("tt", String.Empty))
-                    If Directory.Exists(CachePath) Then
-                        Me.btnClearCache.Visible = True
-                    End If
                 End If
             End With
         Catch ex As Exception
@@ -1394,7 +1369,6 @@ Public Class dlgEditMovie
         Me.chkMark.Text = Master.eLang.GetString(23, "Mark")
         Me.btnRescrape.Text = Master.eLang.GetString(716, "Re-scrape")
         Me.btnChangeMovie.Text = Master.eLang.GetString(32, "Change Movie")
-        Me.btnClearCache.Text = Master.eLang.GetString(264, "Clear Cache")
         Me.btnSetPosterDL.Text = Master.eLang.GetString(265, "Change Poster (Download)")
         Me.btnSetFanartDL.Text = Master.eLang.GetString(266, "Change Fanart (Download)")
         Me.Label6.Text = String.Concat(Master.eLang.GetString(642, "Sort Title"), ":")

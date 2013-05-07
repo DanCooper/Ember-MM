@@ -39,14 +39,6 @@ Namespace TMDB
 
 #End Region	'Fields
 
-#Region "Events"
-
-		Public Event PostersDownloaded(ByVal Posters As List(Of MediaContainers.Image))
-
-		Public Event ProgressUpdated(ByVal iPercent As Integer)
-
-#End Region	'Events
-
 #Region "Methods"
 
 		Public Sub New(ByRef tTMDBConf As V3.TmdbConfiguration, ByRef tTMDBConfE As V3.TmdbConfiguration, ByRef tTMDBApi As V3.Tmdb, ByRef tTMDBApiE As V3.Tmdb, ByRef tMySettings As EmberTMDBScraperModule.sMySettings)
