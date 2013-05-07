@@ -193,9 +193,9 @@ Public Class frmMovieExtractor
 
 
 	Private Sub frmMovieExtrator_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-		If Master.eSettings.AutoThumbs > 0 Then
-			txtThumbCount.Text = Master.eSettings.AutoThumbs.ToString
-		End If
+        'If Master.eSettings.AutoThumbs > 0 Then
+        '	txtThumbCount.Text = Master.eSettings.AutoThumbs.ToString
+        'End If
 
 	End Sub
 

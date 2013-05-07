@@ -96,15 +96,15 @@ Public Class ThumbGenerator
             Dim tThread As Threading.Thread = New Threading.Thread(AddressOf CreateRandom)
 
             Try
-                tThread.Start()
+                '    tThread.Start()
 
-                If Not tThread.Join(Math.Max(120000, 30000 * Master.eSettings.AutoThumbs)) Then 'give it 30 seconds per image with a minimum of two minutes
-                    'something went wrong and the thread is hung (movie is corrupt?)... kill it forcibly
-                    isAborting = True
-                    If Not ffmpeg.HasExited Then
-                        ffmpeg.Kill()
-                    End If
-                End If
+                '    If Not tThread.Join(Math.Max(120000, 30000 * Master.eSettings.AutoThumbs)) Then 'give it 30 seconds per image with a minimum of two minutes
+                '        'something went wrong and the thread is hung (movie is corrupt?)... kill it forcibly
+                '        isAborting = True
+                '        If Not ffmpeg.HasExited Then
+                '            ffmpeg.Kill()
+                '        End If
+                '    End If
 
             Catch ex As Exception
                 Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
@@ -195,36 +195,36 @@ Public Class ThumbGenerator
 
                     If isAborting Then Exit Sub
 
-                    If intSeconds > 0 AndAlso ((Master.eSettings.AutoThumbsNoSpoilers AndAlso intSeconds / 2 > _thumbcount + 300) OrElse (Not Master.eSettings.AutoThumbsNoSpoilers AndAlso intSeconds > _thumbcount + 2)) Then
-                        If Master.eSettings.AutoThumbsNoSpoilers Then
-                            intSeconds = Convert.ToInt32(((intSeconds / 2) - 300) / _thumbcount)
-                            intAdd = intSeconds
-                            intSeconds += intAdd + 300
-                        Else
-                            intSeconds = Convert.ToInt32(intSeconds / (_thumbcount + 2))
-                            intAdd = intSeconds
-                            intSeconds += intAdd
-                        End If
+                    'If intSeconds > 0 AndAlso ((Master.eSettings.AutoThumbsNoSpoilers AndAlso intSeconds / 2 > _thumbcount + 300) OrElse (Not Master.eSettings.AutoThumbsNoSpoilers AndAlso intSeconds > _thumbcount + 2)) Then
+                    '    If Master.eSettings.AutoThumbsNoSpoilers Then
+                    '        intSeconds = Convert.ToInt32(((intSeconds / 2) - 300) / _thumbcount)
+                    '        intAdd = intSeconds
+                    '        intSeconds += intAdd + 300
+                    '    Else
+                    '        intSeconds = Convert.ToInt32(intSeconds / (_thumbcount + 2))
+                    '        intAdd = intSeconds
+                    '        intSeconds += intAdd
+                    '    End If
 
-                        For i = 0 To (_thumbcount - 1)
-                            'check to see if file already exists... if so, don't bother running ffmpeg since we're not
-                            'overwriting current thumbs anyway
-                            If Not File.Exists(Path.Combine(tPath, String.Concat("thumb", (i + 1), ".jpg"))) Then
+                    '    For i = 0 To (_thumbcount - 1)
+                    '        'check to see if file already exists... if so, don't bother running ffmpeg since we're not
+                    '        'overwriting current thumbs anyway
+                    '        If Not File.Exists(Path.Combine(tPath, String.Concat("thumb", (i + 1), ".jpg"))) Then
 
-                                ffmpeg.StartInfo.Arguments = String.Format("-ss {0} -i ""{1}"" -an -f rawvideo -vframes 1 -vcodec mjpeg ""{2}""", intSeconds, eMovieFile, Path.Combine(tPath, String.Concat("thumb", (i + 1), ".jpg")))
+                    '            ffmpeg.StartInfo.Arguments = String.Format("-ss {0} -i ""{1}"" -an -f rawvideo -vframes 1 -vcodec mjpeg ""{2}""", intSeconds, eMovieFile, Path.Combine(tPath, String.Concat("thumb", (i + 1), ".jpg")))
 
-                                ffmpeg.Start()
-                                ffmpeg.WaitForExit()
-                                If isAborting Then Exit Sub
-                                ffmpeg.Close()
-                                exImage = New Images
-                                exImage.ResizeExtraThumb(Path.Combine(tPath, String.Concat("thumb", (i + 1), ".jpg")), Path.Combine(tPath, String.Concat("thumb", (i + 1), ".jpg")))
-                                exImage.Dispose()
-                                exImage = Nothing
-                            End If
-                            intSeconds += intAdd
-                        Next
-                    End If
+                    '            ffmpeg.Start()
+                    '            ffmpeg.WaitForExit()
+                    '            If isAborting Then Exit Sub
+                    '            ffmpeg.Close()
+                    '            exImage = New Images
+                    '            exImage.ResizeExtraThumb(Path.Combine(tPath, String.Concat("thumb", (i + 1), ".jpg")), Path.Combine(tPath, String.Concat("thumb", (i + 1), ".jpg")))
+                    '            exImage.Dispose()
+                    '            exImage = Nothing
+                    '        End If
+                    '        intSeconds += intAdd
+                    '    Next
+                    'End If
 
                     If isAborting Then Exit Sub
 
@@ -240,7 +240,7 @@ Public Class ThumbGenerator
                         'always set to something if extrathumbs are created so we know during scrapers
                         _setfa = "TRUE"
                         Using exFanart As New Images
-                            If Master.eSettings.UseETasFA AndAlso String.IsNullOrEmpty(_movie.FanartPath) Then
+                            If String.IsNullOrEmpty(_movie.FanartPath) Then
                                 exFanart.FromFile(Path.Combine(tPath, "thumb1.jpg"))
                                 _setfa = exFanart.SaveAsFanart(_movie)
                             End If
