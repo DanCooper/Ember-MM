@@ -46,7 +46,7 @@ Public Class dlgImgSelect
     Private pbImage() As PictureBox
     Private pnlImage() As Panel
     Private PreDL As Boolean = False
-    Private Results As New Images
+    Private Results As New MediaContainers.Image
     Private selIndex As Integer = -1
 
     Private tMovie As New Structures.DBMovie
@@ -69,7 +69,7 @@ Public Class dlgImgSelect
         InitializeComponent()
     End Sub
 
-    Public Overloads Function ShowDialog(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.ImageType, ByRef ImageList As List(Of MediaContainers.Image), Optional ByVal _isEdit As Boolean = False) As Images
+    Public Overloads Function ShowDialog(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.ImageType, ByRef ImageList As List(Of MediaContainers.Image), Optional ByVal _isEdit As Boolean = False) As MediaContainers.Image
         '//
         ' Overload to pass data
         '\\
@@ -86,7 +86,7 @@ Public Class dlgImgSelect
         Return Results
     End Function
 
-    Public Overloads Function ShowDialog() As Images
+    Public Overloads Function ShowDialog() As MediaContainers.Image
         'Me.isShown = True
         MyBase.ShowDialog()
 
@@ -716,7 +716,7 @@ Public Class dlgImgSelect
                     Me.tmpImage.WebImage.SaveAsPoster(tMovie)
                 End If
             End If
-            Results = Me.tmpImage.WebImage
+            Results = Me.tmpImage
 
             'Extrathumb management to be fixed / checked
             'If Me.DLType = Enums.ImageType.Fanart Then

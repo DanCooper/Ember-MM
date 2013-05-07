@@ -304,7 +304,6 @@ Public Class EmberTMDBScraperModule
 		Return Nothing
 	End Function
 
-
 	Function Scraper(ByRef DBMovie As Structures.DBMovie, ByRef ScrapeType As Enums.ScrapeType, ByRef Options As Structures.ScrapeOptions) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule_Data.Scraper
 		'LoadSettings()
 		''TMDBg.IMDBURL = MySettings.IMDBURL
@@ -325,15 +324,14 @@ Public Class EmberTMDBScraperModule
 			End If
 		End If
 
-
-		If Master.GlobalScrapeMod.NFO AndAlso Not Master.GlobalScrapeMod.DoSearch Then
-			If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then
-				_TMDBg.GetMovieInfo(DBMovie.Movie.ID, DBMovie.Movie, Options.bFullCrew, Options.bFullCast, False, Options, False)
-			ElseIf Not ScrapeType = Enums.ScrapeType.SingleScrape Then
-				DBMovie.Movie = _TMDBg.GetSearchMovieInfo(DBMovie.Movie.Title, DBMovie, ScrapeType, Options)
-				If String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then Return New Interfaces.ModuleResult With {.breakChain = False, .Cancelled = True}
-			End If
-		End If
+        If Master.GlobalScrapeMod.NFO AndAlso Not Master.GlobalScrapeMod.DoSearch Then
+            If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then
+                _TMDBg.GetMovieInfo(DBMovie.Movie.ID, DBMovie.Movie, Options.bFullCrew, Options.bFullCast, False, Options, False)
+            ElseIf Not ScrapeType = Enums.ScrapeType.SingleScrape Then
+                DBMovie.Movie = _TMDBg.GetSearchMovieInfo(DBMovie.Movie.Title, DBMovie, ScrapeType, Options)
+                If String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then Return New Interfaces.ModuleResult With {.breakChain = False, .Cancelled = True}
+            End If
+        End If
 
 		If ScrapeType = Enums.ScrapeType.SingleScrape AndAlso Master.GlobalScrapeMod.DoSearch _
 		 AndAlso ModulesManager.Instance.externalDataScrapersModules.OrderBy(Function(y) y.ScraperOrder).FirstOrDefault(Function(e) e.ProcessorModule.ScraperEnabled).AssemblyName = _AssemblyName Then

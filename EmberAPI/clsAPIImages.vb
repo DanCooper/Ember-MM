@@ -1457,21 +1457,21 @@ Public Class Images
         Return Nothing
     End Function
 
-    Public Shared Function GetPreferredPoster(ByRef ImageList As List(Of MediaContainers.Image), ByRef imgResult As Images) As Boolean
+    Public Shared Function GetPreferredPoster(ByRef ImageList As List(Of MediaContainers.Image), ByRef imgResult As MediaContainers.Image) As Boolean
         Dim aDesc = From aD As Structures.v3Size In Master.eSize.poster_names Where (aD.index = Master.eSettings.PreferredPosterSize)
         Dim x = From MI As MediaContainers.Image In ImageList Where (MI.Description = aDesc(0).description)
         If x.Count > 0 Then
-            imgResult = x(0).WebImage
+            imgResult = x(0)
             Return True
         End If
         Return False
     End Function
 
-    Public Shared Function GetPreferredFanart(ByRef ImageList As List(Of MediaContainers.Image), ByRef imgResult As Images) As Boolean
+    Public Shared Function GetPreferredFanart(ByRef ImageList As List(Of MediaContainers.Image), ByRef imgResult As MediaContainers.Image) As Boolean
         Dim aDesc = From aD As Structures.v3Size In Master.eSize.backdrop_names Where (aD.index = Master.eSettings.PreferredFanartSize)
         Dim x = From MI As MediaContainers.Image In ImageList Where (MI.Description = aDesc(0).description)
         If x.Count > 0 Then
-            imgResult = x(0).WebImage
+            imgResult = x(0)
             Return True
         End If
         Return False

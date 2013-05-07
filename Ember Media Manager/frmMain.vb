@@ -1197,8 +1197,8 @@ Public Class frmMain
         Dim Args As Arguments = DirectCast(e.Argument, Arguments)
         Dim OldTitle As String = String.Empty
         Dim NewTitle As String = String.Empty
-        Dim Poster As New Images
-        Dim Fanart As New Images
+        Dim Poster As New MediaContainers.Image
+        Dim Fanart As New MediaContainers.Image
         Dim tURL As String = String.Empty
         Dim aList As New List(Of MediaContainers.Image)
 
@@ -1236,11 +1236,14 @@ Public Class frmMain
 
                         If Master.GlobalScrapeMod.Poster Then
                             Poster.Clear()
-                            If Poster.IsAllowedToDownload(DBScrapeMovie, Enums.ImageType.Posters) Then
-                                If Not ModulesManager.Instance.MovieScrapeImages(DBScrapeMovie, Enums.PostScraperCapabilities.Poster , aList) Then
+                            If Poster.WebImage.IsAllowedToDownload(DBScrapeMovie, Enums.ImageType.Posters) Then
+                                If Not ModulesManager.Instance.MovieScrapeImages(DBScrapeMovie, Enums.PostScraperCapabilities.Poster, aList) Then
                                     If Images.GetPreferredPoster(aList, Poster) Then
-                                        If Not IsNothing(Poster.Image) Then
-                                            tURL = Poster.SaveAsPoster(DBScrapeMovie)
+                                        If IsNothing(Poster.WebImage.Image) Then
+                                            Poster.WebImage.FromWeb(Poster.URL)
+                                        End If
+                                        If Not IsNothing(Poster.WebImage.Image) Then
+                                            tURL = Poster.WebImage.SaveAsPoster(DBScrapeMovie)
                                             If Not String.IsNullOrEmpty(tURL) Then
                                                 DBScrapeMovie.PosterPath = tURL
                                                 MovieScraperEvent(Enums.MovieScraperEventType.PosterItem, True)
@@ -1254,7 +1257,7 @@ Public Class frmMain
                                         Using dImgSelect As New dlgImgSelect()
                                             Poster = dImgSelect.ShowDialog(DBScrapeMovie, Enums.ImageType.Posters, aList)
                                             If Not IsNothing(Poster) Then
-                                                tURL = Poster.SaveAsPoster(DBScrapeMovie)
+                                                tURL = Poster.WebImage.SaveAsPoster(DBScrapeMovie)
                                                 If Not String.IsNullOrEmpty(tURL) Then
                                                     If Not String.IsNullOrEmpty(tURL) Then
                                                         DBScrapeMovie.PosterPath = tURL
@@ -1273,12 +1276,15 @@ Public Class frmMain
                         If Master.GlobalScrapeMod.Fanart Then
                             Fanart.Clear()
                             aList.Clear()
-                            If Fanart.IsAllowedToDownload(DBScrapeMovie, Enums.ImageType.Fanart) Then
+                            If Fanart.WebImage.IsAllowedToDownload(DBScrapeMovie, Enums.ImageType.Fanart) Then
                                 Dim fResults = New Containers.ImgResult
                                 If Not ModulesManager.Instance.MovieScrapeImages(DBScrapeMovie, Enums.PostScraperCapabilities.Fanart, aList) Then
                                     If Images.GetPreferredFanart(aList, Fanart) Then
-                                        If Not IsNothing(Fanart.Image) Then
-                                            fResults.ImagePath = Fanart.SaveAsFanart(DBScrapeMovie)
+                                        If IsNothing(Fanart.WebImage.Image) Then
+                                            Fanart.WebImage.FromWeb(Fanart.URL)
+                                        End If
+                                        If Not IsNothing(Fanart.WebImage.Image) Then
+                                            fResults.ImagePath = Fanart.WebImage.SaveAsFanart(DBScrapeMovie)
                                             If Not String.IsNullOrEmpty(fResults.ImagePath) Then
                                                 DBScrapeMovie.FanartPath = fResults.ImagePath
                                                 MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True) '
