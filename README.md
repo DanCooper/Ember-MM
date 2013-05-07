@@ -12,9 +12,8 @@ If you found our work useful feel free to [donate](https://www.paypal.com/cgi-bi
 To continue development of EmberMM, because its a great product, that in my opinion is the most stable and useful media manager available, I've tried all others, but yet still come back to Ember.
 
 ## Links
-Main discussion : http://forum.xbmc.org/showthread.php?tid=116941
-GitHub : https://github.com/DanCooper/Ember-MM
-(DanCooper is mainaining the most aligned version)
+- Main discussion : http://forum.xbmc.org/showthread.php?tid=116941
+- GitHub : https://github.com/DanCooper/Ember-MM (DanCooper is mainaining the most aligned version)
 
 ## Helping the development
 Any help is more than welcome. We do suggest everyone to participate in the forum to be aligned and updated.
