@@ -206,104 +206,43 @@ Public Class EmberNativeScraperModule
         End If
     End Sub
 
-    Function Scraper(ByRef DBMovie As Structures.DBMovie, ByRef ScrapeType As Enums.ScrapeType, ByRef Options As Structures.ScrapeOptions) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule.Scraper
-        'LoadSettings()
-        'IMDB.IMDBURL = MySettings.IMDBURL
-        'IMDB.UseOFDBTitle = MySettings.UseOFDBTitle
-        'IMDB.UseOFDBOutline = MySettings.UseOFDBOutline
-        'IMDB.UseOFDBPlot = MySettings.UseOFDBPlot
-        'IMDB.UseOFDBGenre = MySettings.UseOFDBGenre
-        'Dim tTitle As String = String.Empty
-        'Dim OldTitle As String = DBMovie.Movie.Title
+    Function Scraper(ByRef DBMovie As Structures.DBMovie, ByRef ScrapeType As Enums.ScrapeType, ByRef Options As Structures.ScrapeOptions) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule_Data.Scraper
+        ' as we do not have a OFDB search / show dialog we use IMDB
+        If String.IsNullOrEmpty(DBMovie.Movie.ID) Then
+            Dim tOpt As New Structures.ScrapeOptions 'all false value not to override any field
+            Dim IMDB As New IMDB_Data
+            Dim aRet As Interfaces.ModuleResult = IMDB.Scraper(DBMovie, ScrapeType, tOpt)
+            If String.IsNullOrEmpty(DBMovie.Movie.ID) Then
+                Return aRet
+            End If
+        End If
 
-        'If Master.GlobalScrapeMod.NFO AndAlso Not Master.GlobalScrapeMod.DoSearch Then
-        '    If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then
-        '        IMDB.GetMovieInfo(DBMovie.Movie.IMDBID, DBMovie.Movie, Options.bFullCrew, Options.bFullCast, False, Options, False)
-        '    ElseIf Not ScrapeType = Enums.ScrapeType.SingleScrape Then
-        '        DBMovie.Movie = IMDB.GetSearchMovieInfo(DBMovie.Movie.Title, DBMovie, ScrapeType, Options)
-        '        If String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then Return New Interfaces.ModuleResult With {.breakChain = False, .Cancelled = True}
-        '    End If
-        'End If
+        ' we have the ID
+        Dim tOFDB As New OFDB(DBMovie.Movie.ID, DBMovie.Movie)
 
-        'If ScrapeType = Enums.ScrapeType.SingleScrape AndAlso Master.GlobalScrapeMod.DoSearch _
-        '    AndAlso ModulesManager.Instance.externalScrapersModules.OrderBy(Function(y) y.ScraperOrder).FirstOrDefault(Function(e) e.ProcessorModule.IsScraper AndAlso e.ProcessorModule.ScraperEnabled).AssemblyName = _AssemblyName Then
-        '    DBMovie.Movie.IMDBID = String.Empty
-        '    DBMovie.ClearExtras = True
-        '    DBMovie.PosterPath = String.Empty
-        '    DBMovie.FanartPath = String.Empty
-        '    DBMovie.TrailerPath = String.Empty
-        '    DBMovie.ExtraPath = String.Empty
-        '    DBMovie.SubPath = String.Empty
-        '    DBMovie.NfoPath = String.Empty
-        '    DBMovie.Movie.Clear()
-        'End If
-        'If String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then
-        '    Select Case ScrapeType
-        '        Case Enums.ScrapeType.FilterAuto, Enums.ScrapeType.FullAuto, Enums.ScrapeType.MarkAuto, Enums.ScrapeType.NewAuto, Enums.ScrapeType.UpdateAuto
-        '            Return New Interfaces.ModuleResult With {.breakChain = False}
-        '    End Select
-        '    If ScrapeType = Enums.ScrapeType.SingleScrape Then
-        '        Using dSearch As New dlgIMDBSearchResults
-        '            dSearch.IMDBURL = MySettings.IMDBURL
-        '            Dim tmpTitle As String = DBMovie.Movie.Title
-        '            If String.IsNullOrEmpty(tmpTitle) Then
-        '                If FileUtils.Common.isVideoTS(DBMovie.Filename) Then
-        '                    tmpTitle = StringUtils.FilterName(Directory.GetParent(Directory.GetParent(DBMovie.Filename).FullName).Name, False)
-        '                ElseIf FileUtils.Common.isBDRip(DBMovie.Filename) Then
-        '                    tmpTitle = StringUtils.FilterName(Directory.GetParent(Directory.GetParent(Directory.GetParent(DBMovie.Filename).FullName).FullName).Name, False)
-        '                Else
-        '                    tmpTitle = StringUtils.FilterName(If(DBMovie.isSingle, Directory.GetParent(DBMovie.Filename).Name, Path.GetFileNameWithoutExtension(DBMovie.Filename)))
-        '                End If
-        '            End If
-        '            Dim filterOptions As Structures.ScrapeOptions = Functions.ScrapeOptionsAndAlso(Options, ConfigOptions)
-        '            If dSearch.ShowDialog(tmpTitle, filterOptions) = Windows.Forms.DialogResult.OK Then
-        '                If Not String.IsNullOrEmpty(Master.tmpMovie.IMDBID) Then
-        '                    DBMovie.Movie.IMDBID = Master.tmpMovie.IMDBID
-        '                End If
-        '                If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) Then
+        If Options.bTitle AndAlso (String.IsNullOrEmpty(DBMovie.Movie.Title) OrElse Not Master.eSettings.LockTitle) Then
+            DBMovie.Movie.Title = tOFDB.Title
+        End If
+        If Options.bOutline AndAlso (String.IsNullOrEmpty(DBMovie.Movie.Outline) OrElse Not Master.eSettings.LockOutline) Then
 
-        '                    Master.currMovie.ClearExtras = True
-        '                    Master.currMovie.PosterPath = String.Empty
-        '                    Master.currMovie.FanartPath = String.Empty
-        '                    Master.currMovie.TrailerPath = String.Empty
-        '                    Master.currMovie.ExtraPath = String.Empty
-        '                    Master.currMovie.SubPath = String.Empty
-        '                    Master.currMovie.NfoPath = String.Empty
+            If Not String.IsNullOrEmpty(tOFDB.Outline) Then
+                DBMovie.Movie.Outline = tOFDB.Outline
+            End If
+        End If
 
+        If Options.bPlot AndAlso (String.IsNullOrEmpty(DBMovie.Movie.Plot) OrElse Not Master.eSettings.LockPlot) Then
+            If Not String.IsNullOrEmpty(tOFDB.Plot) Then
+                DBMovie.Movie.Plot = tOFDB.Plot
+            End If
+        End If
 
-        '                    IMDB.GetMovieInfo(DBMovie.Movie.IMDBID, DBMovie.Movie, filterOptions.bFullCrew, filterOptions.bFullCast, False, filterOptions, False)
-        '                End If
-        '            Else
-        '                Return New Interfaces.ModuleResult With {.breakChain = False, .Cancelled = True}
-        '            End If
-        '        End Using
-        '    End If
-        'End If
+        If Options.bGenre AndAlso (String.IsNullOrEmpty(DBMovie.Movie.Genre) OrElse Not Master.eSettings.LockGenre) Then
+            If Not String.IsNullOrEmpty(tOFDB.Genre) Then
+                DBMovie.Movie.Genre = tOFDB.Genre
+            End If
+        End If
 
-        'If Not String.IsNullOrEmpty(DBMovie.Movie.Title) Then
-        '    tTitle = StringUtils.FilterTokens(DBMovie.Movie.Title)
-        '    If Not OldTitle = DBMovie.Movie.Title OrElse String.IsNullOrEmpty(DBMovie.Movie.SortTitle) Then DBMovie.Movie.SortTitle = tTitle
-        '    If Master.eSettings.DisplayYear AndAlso Not String.IsNullOrEmpty(DBMovie.Movie.Year) Then
-        '        DBMovie.ListTitle = String.Format("{0} ({1})", tTitle, DBMovie.Movie.Year)
-        '    Else
-        '        DBMovie.ListTitle = tTitle
-        '    End If
-        'Else
-        '    If FileUtils.Common.isVideoTS(DBMovie.Filename) Then
-        '        DBMovie.ListTitle = StringUtils.FilterName(Directory.GetParent(Directory.GetParent(DBMovie.Filename).FullName).Name)
-        '    ElseIf FileUtils.Common.isBDRip(DBMovie.Filename) Then
-        '        DBMovie.ListTitle = StringUtils.FilterName(Directory.GetParent(Directory.GetParent(Directory.GetParent(DBMovie.Filename).FullName).FullName).Name)
-        '    Else
-        '        If DBMovie.UseFolder AndAlso DBMovie.isSingle Then
-        '            DBMovie.ListTitle = StringUtils.FilterName(Directory.GetParent(DBMovie.Filename).Name)
-        '        Else
-        '            DBMovie.ListTitle = StringUtils.FilterName(Path.GetFileNameWithoutExtension(DBMovie.Filename))
-        '        End If
-        '    End If
-        '    If Not OldTitle = DBMovie.Movie.Title OrElse String.IsNullOrEmpty(DBMovie.Movie.SortTitle) Then DBMovie.Movie.SortTitle = DBMovie.ListTitle
-        'End If
-
-        'Return New Interfaces.ModuleResult With {.breakChain = False}
+        Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function
 
     Public Sub ScraperOrderChanged() Implements EmberAPI.Interfaces.EmberMovieScraperModule_Data.ScraperOrderChanged
