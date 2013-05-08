@@ -19,16 +19,12 @@
 ' ################################################################################
 
 Imports System.IO
-
 Imports EmberAPI
+Imports RestSharp
+Imports WatTmdb
 
-''' <summary>
-''' Native Scraper
-''' </summary>
-''' <remarks></remarks>
-Public Class IMDB_Poster
+Public Class IMPA_Poster
     Implements Interfaces.EmberMovieScraperModule_Poster
-
 
 #Region "Fields"
 
@@ -36,10 +32,10 @@ Public Class IMDB_Poster
     Public Shared ConfigScrapeModifier As New Structures.ScrapeModifier
     Public Shared _AssemblyName As String
 
-    Private _Name As String = "IMDB_Poster"
+    Private IMPA As IMPA.Scraper
+    Private _Name As String = "IMPA_Poster"
     Private _ScraperEnabled As Boolean = False
-    Private _setup As frmIMDBMediaSettingsHolder
-    Private IMDB As IMDBg.Scraper
+    Private _setup As frmIMPAMediaSettingsHolder
 
 #End Region 'Fields
 
@@ -69,7 +65,7 @@ Public Class IMDB_Poster
 
     ReadOnly Property ModuleVersion() As String Implements Interfaces.EmberMovieScraperModule_Poster.ModuleVersion
         Get
-            Return FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
+            Return System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
         End Get
     End Property
 
@@ -105,29 +101,31 @@ Public Class IMDB_Poster
         RaiseEvent ModuleSettingsChanged()
     End Sub
 
+    Private Sub Handle_SetupNeedsRestart()
+        RaiseEvent SetupNeedsRestart()
+    End Sub
+
     Private Sub Handle_SetupScraperChanged(ByVal state As Boolean, ByVal difforder As Integer)
         ScraperEnabled = state
         RaiseEvent SetupScraperChanged(String.Concat(Me._Name, "Scraper"), state, difforder)
     End Sub
 
-    Private Sub Handle_SetupNeedsRestart()
-        RaiseEvent SetupNeedsRestart()
-    End Sub
-
     Sub Init(ByVal sAssemblyName As String) Implements Interfaces.EmberMovieScraperModule_Poster.Init
         _AssemblyName = sAssemblyName
         LoadSettings()
+        'Must be after Load settings to retrieve the correct API key
     End Sub
+
 
     Function InjectSetupScraper() As Containers.SettingsPanel Implements Interfaces.EmberMovieScraperModule_Poster.InjectSetupScraper
         Dim SPanel As New Containers.SettingsPanel
-        _setup = New frmIMDBMediaSettingsHolder
+        _setup = New frmIMPAMediaSettingsHolder
         LoadSettings()
         _setup.cbEnabled.Checked = _ScraperEnabled
-        _setup.orderChanged()
+
         SPanel.Name = String.Concat(Me._Name, "Scraper")
-        SPanel.Text = Master.eLang.GetString(104, "IMDB Poster")
-        SPanel.Prefix = "IMDBMovieMedia_"
+        SPanel.Text = Master.eLang.GetString(104, "IMPA Poster")
+        SPanel.Prefix = "IMPAMovieMedia_"
         SPanel.Order = 110
         SPanel.Parent = "pnlMovieMedia"
         SPanel.Type = Master.eLang.GetString(36, "Movies", True)
@@ -155,13 +153,15 @@ Public Class IMDB_Poster
 
         LoadSettings()
 
-        ImageList = IMDB.GetIMDBPosters(DBMovie.Movie.ID)
+        ImageList = IMPA.GetIMPAPosters(DBMovie.Movie.ID)
 
         Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function
 
     Sub SaveSettings()
         AdvancedSettings.SetBooleanSetting("DoPoster", ConfigScrapeModifier.Poster)
+        AdvancedSettings.SetBooleanSetting("DoFanart", ConfigScrapeModifier.Fanart)
+        AdvancedSettings.SetBooleanSetting("DoTrailer", ConfigScrapeModifier.Trailer)
     End Sub
 
     Sub SaveSetupScraper(ByVal DoDispose As Boolean) Implements Interfaces.EmberMovieScraperModule_Poster.SaveSetupScraper
@@ -182,7 +182,6 @@ Public Class IMDB_Poster
 #End Region 'Methods
 
 #Region "Nested Types"
-
 
 #End Region 'Nested Types
 
