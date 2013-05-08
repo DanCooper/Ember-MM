@@ -42,10 +42,6 @@ Public Class Settings
     Private _askcheckboxscrape As Boolean
     Private _autobd As Boolean
     Private _autodetectvts As Boolean
-    Private _autoET As Boolean
-    Private _autoETsize As Enums.FanartSize
-    Private _autothumbnospoilers As Boolean
-    Private _autothumbs As Integer
     Private _bdpath As String
     Private _castimagesonly As Boolean
     Private _certificationLang As String
@@ -95,10 +91,6 @@ Public Class Settings
     Private _epposterQuality As Integer
     Private _epposterwidth As Integer
     Private _epproperCase As Boolean
-    Private _etheight As Integer
-    Private _etnative As Boolean
-    Private _etpadding As Boolean
-    Private _etwidth As Integer
     Private _expertcleaner As Boolean
     Private _externaltvdbapikey As String
     Private _fanartheight As Integer
@@ -207,7 +199,6 @@ Public Class Settings
     Private _overwriteShowFanart As Boolean
     Private _overwriteShowPoster As Boolean
     Private _overwritetrailer As Boolean
-    Private _persistimagecache As Boolean
     Private _posterheight As Integer
     Private _posterjpg As Boolean
     Private _PosterPrefSizeOnly As Boolean
@@ -338,9 +329,6 @@ Public Class Settings
     Private _updatertrailers As Boolean
     Private _updatertrailersnodownload As Boolean
     Private _usecertformpaa As Boolean
-    Private _useetasfa As Boolean
-    Private _useimgcache As Boolean
-    Private _useimgcacheupdater As Boolean
     Private _usemiduration As Boolean
     Private _validexts As List(Of String)
     Private _version As String
@@ -475,42 +463,6 @@ Public Class Settings
         End Get
         Set(ByVal value As Boolean)
             Me._autodetectvts = value
-        End Set
-    End Property
-
-    Public Property AutoET() As Boolean
-        Get
-            Return Me._autoET
-        End Get
-        Set(ByVal value As Boolean)
-            Me._autoET = value
-        End Set
-    End Property
-
-    Public Property AutoETSize() As Enums.FanartSize
-        Get
-            Return Me._autoETsize
-        End Get
-        Set(ByVal value As Enums.FanartSize)
-            Me._autoETsize = value
-        End Set
-    End Property
-
-    Public Property AutoThumbs() As Integer
-        Get
-            Return Me._autothumbs
-        End Get
-        Set(ByVal value As Integer)
-            Me._autothumbs = value
-        End Set
-    End Property
-
-    Public Property AutoThumbsNoSpoilers() As Boolean
-        Get
-            Return Me._autothumbnospoilers
-        End Get
-        Set(ByVal value As Boolean)
-            Me._autothumbnospoilers = value
         End Set
     End Property
 
@@ -954,42 +906,6 @@ Public Class Settings
         End Get
         Set(ByVal value As Boolean)
             Me._epproperCase = value
-        End Set
-    End Property
-
-    Public Property ETHeight() As Integer
-        Get
-            Return Me._etheight
-        End Get
-        Set(ByVal value As Integer)
-            Me._etheight = value
-        End Set
-    End Property
-
-    Public Property ETNative() As Boolean
-        Get
-            Return Me._etnative
-        End Get
-        Set(ByVal value As Boolean)
-            Me._etnative = value
-        End Set
-    End Property
-
-    Public Property ETPadding() As Boolean
-        Get
-            Return Me._etpadding
-        End Get
-        Set(ByVal value As Boolean)
-            Me._etpadding = value
-        End Set
-    End Property
-
-    Public Property ETWidth() As Integer
-        Get
-            Return Me._etwidth
-        End Get
-        Set(ByVal value As Integer)
-            Me._etwidth = value
         End Set
     End Property
 
@@ -1967,15 +1883,6 @@ Public Class Settings
         End Get
         Set(ByVal value As Boolean)
             Me._overwritetrailer = value
-        End Set
-    End Property
-
-    Public Property PersistImgCache() As Boolean
-        Get
-            Return Me._persistimagecache
-        End Get
-        Set(ByVal value As Boolean)
-            Me._persistimagecache = value
         End Set
     End Property
 
@@ -3176,33 +3083,6 @@ Public Class Settings
         End Set
     End Property
 
-    Public Property UseETasFA() As Boolean
-        Get
-            Return Me._useetasfa
-        End Get
-        Set(ByVal value As Boolean)
-            Me._useetasfa = value
-        End Set
-    End Property
-
-    Public Property UseImgCache() As Boolean
-        Get
-            Return Me._useimgcache
-        End Get
-        Set(ByVal value As Boolean)
-            Me._useimgcache = value
-        End Set
-    End Property
-
-    Public Property UseImgCacheUpdaters() As Boolean
-        Get
-            Return Me._useimgcacheupdater
-        End Get
-        Set(ByVal value As Boolean)
-            Me._useimgcacheupdater = value
-        End Set
-    End Property
-
     Public Property UseMIDuration() As Boolean
         Get
             Return Me._usemiduration
@@ -3399,8 +3279,6 @@ Public Class Settings
         Me._epfanartsize = Enums.FanartSize.Lrg
         Me._seasonpostersize = Enums.SeasonPosterType.Poster
         Me._seasonfanartsize = Enums.FanartSize.Lrg
-        Me._autoET = False
-        Me._autoETsize = Enums.FanartSize.Lrg
         Me._fanartprefsizeonly = False
         Me._PosterPrefSizeOnly = False
         Me._posterQuality = 0
@@ -3485,8 +3363,6 @@ Public Class Settings
         Me._resizeseasonposter = False
         Me._seasonposterheight = 0
         Me._seasonposterwidth = 0
-        Me._autothumbs = 0
-        Me._autothumbnospoilers = False
         Me._windowloc = New Point(If(Screen.PrimaryScreen.WorkingArea.Width <= 1024, 0, Convert.ToInt32((Screen.PrimaryScreen.WorkingArea.Width - 1024) / 2)), If(Screen.PrimaryScreen.WorkingArea.Height <= 768, 0, Convert.ToInt32((Screen.PrimaryScreen.WorkingArea.Height - 768) / 2)))
         Me._windowsize = New Size(1024, 768)
         Me._windowstate = FormWindowState.Normal
@@ -3503,10 +3379,6 @@ Public Class Settings
         Me._usemiduration = False
         Me._runtimemask = "<m>"     'emm-r
         Me._genrefilter = "English"
-        Me._useetasfa = False
-        Me._useimgcache = False
-        Me._useimgcacheupdater = False
-        Me._persistimagecache = False
         Me._skiplessthan = 0
         Me._skipstacksizecheck = False
         Me._skiplessthanep = 0
@@ -3528,10 +3400,6 @@ Public Class Settings
         Me._allwaysdisplaygenrestext = False
         Me._displayyear = False
         Me._sorttokens = New List(Of String)
-        Me._etnative = True
-        Me._etwidth = 0
-        Me._etheight = 0
-        Me._etpadding = False
         Me._nofilters = False
         Me._noshowfilters = False
         Me._noepfilters = False

@@ -218,7 +218,9 @@
     <Compile Include="dlgSettings.Designer.vb">
       <DependentUpon>dlgSettings.vb</DependentUpon>
     </Compile>
-    <Compile Include="dlgSettings.vb" />
+    <Compile Include="dlgSettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="dlgSortFiles.Designer.vb">
       <DependentUpon>dlgSortFiles.vb</DependentUpon>
     </Compile>
@@ -246,7 +248,9 @@
     <Compile Include="dlgUpdateMedia.designer.vb">
       <DependentUpon>dlgUpdateMedia.vb</DependentUpon>
     </Compile>
-    <Compile Include="dlgUpdateMedia.vb" />
+    <Compile Include="dlgUpdateMedia.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="dlgWizard.Designer.vb">
       <DependentUpon>dlgWizard.vb</DependentUpon>
     </Compile>

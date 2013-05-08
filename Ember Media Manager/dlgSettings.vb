@@ -935,7 +935,7 @@ Public Class dlgSettings
         Me.chkShowTBN.Checked = False
     End Sub
 
-    Private Sub cbAutoETSize_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbAutoETSize.SelectedIndexChanged
+    Private Sub cbAutoETSize_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 
@@ -1048,23 +1048,6 @@ Public Class dlgSettings
     End Sub
 
     Private Sub chkVideoTSParentXBMC_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkVideoTSParentXBMC.CheckedChanged
-        Me.SetApplyButton(True)
-    End Sub
-
-    Private Sub chkAutoETSize_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkAutoETSize.CheckedChanged
-        Me.SetApplyButton(True)
-        Me.cbAutoETSize.Enabled = Me.chkAutoETSize.Checked
-    End Sub
-
-    Private Sub chkAutoThumbs_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkAutoThumbs.CheckedChanged
-        Me.txtAutoThumbs.Enabled = Me.chkAutoThumbs.Checked
-        Me.chkNoSpoilers.Enabled = Me.chkAutoThumbs.Checked
-        Me.chkUseETasFA.Enabled = Me.chkAutoThumbs.Checked
-        If Not chkAutoThumbs.Checked Then
-            Me.txtAutoThumbs.Text = String.Empty
-            Me.chkNoSpoilers.Checked = False
-            Me.chkUseETasFA.Checked = False
-        End If
         Me.SetApplyButton(True)
     End Sub
 
@@ -1292,7 +1275,7 @@ Public Class dlgSettings
         Me.sResult.NeedsRefresh = True
     End Sub
 
-    Private Sub chkETPadding_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkETPadding.CheckedChanged
+    Private Sub chkETPadding_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 
@@ -1558,7 +1541,7 @@ Public Class dlgSettings
         Me.SetApplyButton(True)
     End Sub
 
-    Private Sub chkNoSpoilers_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkNoSpoilers.CheckedChanged
+    Private Sub chkNoSpoilers_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 
@@ -1629,7 +1612,7 @@ Public Class dlgSettings
         Me.SetApplyButton(True)
     End Sub
 
-    Private Sub chkPersistImgCache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkPersistImgCache.CheckedChanged
+    Private Sub chkPersistImgCache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 
@@ -2095,21 +2078,11 @@ Public Class dlgSettings
         If Not Me.chkUseCertForMPAA.Checked Then Me.chkUseMPAAFSK.Checked = False
     End Sub
 
-    Private Sub chkUseETasFA_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkUseETasFA.CheckedChanged
+    Private Sub chkUseETasFA_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 
-    Private Sub chkUseImgCacheUpdaters_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkUseImgCacheUpdaters.CheckedChanged
-        Me.SetApplyButton(True)
-    End Sub
-
-    Private Sub chkUseImgCache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkUseImgCache.CheckedChanged
-        Me.chkPersistImgCache.Enabled = Me.chkUseImgCache.Checked
-        Me.chkUseImgCacheUpdaters.Enabled = Me.chkUseImgCache.Checked
-        If Not Me.chkUseImgCache.Checked Then
-            Me.chkPersistImgCache.Checked = False
-            Me.chkUseImgCacheUpdaters.Checked = False
-        End If
+    Private Sub chkUseImgCacheUpdaters_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 
@@ -2304,8 +2277,6 @@ Public Class dlgSettings
             Me.cbEpFanartSize.SelectedIndex = Master.eSettings.PreferredEpFanartSize
             Me.cbSeaPosterSize.SelectedIndex = Master.eSettings.PreferredSeasonPosterSize
             Me.cbSeaFanartSize.SelectedIndex = Master.eSettings.PreferredSeasonFanartSize
-            Me.chkAutoETSize.Checked = Master.eSettings.AutoET
-            Me.cbAutoETSize.SelectedIndex = Master.eSettings.AutoETSize
             Me.chkFanartOnly.Checked = Master.eSettings.FanartPrefSizeOnly
             Me.chkPosterOnly.Checked = Master.eSettings.PosterPrefSizeOnly
             Me.tbPosterQual.Value = Master.eSettings.PosterQuality
@@ -2406,15 +2377,6 @@ Public Class dlgSettings
                 Me.txtSeaPosterWidth.Text = Master.eSettings.SeasonPosterWidth.ToString
                 Me.txtSeaPosterHeight.Text = Master.eSettings.SeasonPosterHeight.ToString
             End If
-            If Master.eSettings.AutoThumbs > 0 Then
-                Me.chkAutoThumbs.Checked = True
-                Me.txtAutoThumbs.Enabled = True
-                Me.txtAutoThumbs.Text = Master.eSettings.AutoThumbs.ToString
-                Me.chkNoSpoilers.Enabled = True
-                Me.chkNoSpoilers.Checked = Master.eSettings.AutoThumbsNoSpoilers
-                Me.chkUseETasFA.Enabled = True
-                Me.chkUseETasFA.Checked = Master.eSettings.UseETasFA
-            End If
 
             Me.txtBDPath.Text = Master.eSettings.BDPath
             Me.txtBDPath.Enabled = Master.eSettings.AutoBD
@@ -2423,9 +2385,6 @@ Public Class dlgSettings
             Me.chkUseMIDuration.Checked = Master.eSettings.UseMIDuration
             Me.txtRuntimeFormat.Enabled = Master.eSettings.UseMIDuration
             Me.txtRuntimeFormat.Text = Master.eSettings.RuntimeMask
-            Me.chkUseImgCache.Checked = Master.eSettings.UseImgCache
-            Me.chkUseImgCacheUpdaters.Checked = Master.eSettings.UseImgCacheUpdaters
-            Me.chkPersistImgCache.Checked = Master.eSettings.PersistImgCache
             Me.txtSkipLessThan.Text = Master.eSettings.SkipLessThan.ToString
             Me.chkSkipStackedSizeCheck.Checked = Master.eSettings.SkipStackSizeCheck
             Me.txtTVSkipLessThan.Text = Master.eSettings.SkipLessThanEp.ToString
@@ -2449,16 +2408,6 @@ Public Class dlgSettings
 
             Me.chkShowGenresText.Checked = Master.eSettings.AllwaysDisplayGenresText
             Me.chkDisplayYear.Checked = Master.eSettings.DisplayYear
-
-            Me.rbETNative.Checked = Master.eSettings.ETNative
-            If Not Master.eSettings.ETNative AndAlso Master.eSettings.ETWidth > 0 AndAlso Master.eSettings.ETHeight > 0 Then
-                Me.rbETCustom.Checked = True
-                Me.txtETHeight.Text = Master.eSettings.ETHeight.ToString
-                Me.txtETWidth.Text = Master.eSettings.ETWidth.ToString
-                Me.chkETPadding.Checked = Master.eSettings.ETPadding
-            Else
-                Me.rbETNative.Checked = True
-            End If
 
             Me.lstSortTokens.Items.AddRange(Master.eSettings.SortTokens.ToArray)
 
@@ -3050,22 +2999,6 @@ Public Class dlgSettings
         Me.SetApplyButton(True)
     End Sub
 
-    Private Sub rbETCustom_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbETCustom.CheckedChanged
-        Me.SetApplyButton(False)
-        Me.txtETHeight.Enabled = Me.rbETCustom.Checked
-        Me.txtETWidth.Enabled = Me.rbETCustom.Checked
-        Me.chkETPadding.Enabled = Me.rbETCustom.Checked
-    End Sub
-
-    Private Sub rbETNative_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbETNative.CheckedChanged
-        Me.SetApplyButton(False)
-        If rbETNative.Checked Then
-            Me.txtETHeight.Text = String.Empty
-            Me.txtETWidth.Text = String.Empty
-            Me.chkETPadding.Checked = False
-        End If
-    End Sub
-
     Private Sub RefreshEpFilters()
         Me.lstEpFilters.Items.Clear()
         Me.lstEpFilters.Items.AddRange(Master.eSettings.EpFilterCustom.ToArray)
@@ -3418,8 +3351,6 @@ Public Class dlgSettings
             Master.eSettings.PreferredEpFanartSize = DirectCast(Me.cbEpFanartSize.SelectedIndex, Enums.FanartSize)
             Master.eSettings.PreferredSeasonPosterSize = DirectCast(Me.cbSeaPosterSize.SelectedIndex, Enums.SeasonPosterType)
             Master.eSettings.PreferredEpFanartSize = DirectCast(Me.cbSeaFanartSize.SelectedIndex, Enums.FanartSize)
-            Master.eSettings.AutoET = Me.chkAutoETSize.Checked
-            Master.eSettings.AutoETSize = DirectCast(Me.cbAutoETSize.SelectedIndex, Enums.FanartSize)
             Master.eSettings.FanartPrefSizeOnly = Me.chkFanartOnly.Checked
             Master.eSettings.PosterPrefSizeOnly = Me.chkPosterOnly.Checked
             Master.eSettings.PosterQuality = Me.tbPosterQual.Value
@@ -3506,15 +3437,6 @@ Public Class dlgSettings
                 Master.eSettings.IMDBURL = "akas.imdb.com"
             End If
 
-            If Not String.IsNullOrEmpty(txtAutoThumbs.Text) AndAlso Convert.ToInt32(txtAutoThumbs.Text) > 0 Then
-                Master.eSettings.AutoThumbs = Convert.ToInt32(txtAutoThumbs.Text)
-                Master.eSettings.AutoThumbsNoSpoilers = Me.chkNoSpoilers.Checked
-                Master.eSettings.UseETasFA = Me.chkUseETasFA.Checked
-            Else
-                Master.eSettings.AutoThumbs = 0
-                Master.eSettings.AutoThumbsNoSpoilers = False
-                Master.eSettings.UseETasFA = False
-            End If
             Master.eSettings.BDPath = Me.txtBDPath.Text
             If Not String.IsNullOrEmpty(Me.txtBDPath.Text) Then
                 Master.eSettings.AutoBD = Me.chkAutoBD.Checked
@@ -3523,9 +3445,6 @@ Public Class dlgSettings
             End If
             Master.eSettings.UseMIDuration = Me.chkUseMIDuration.Checked
             Master.eSettings.RuntimeMask = Me.txtRuntimeFormat.Text
-            Master.eSettings.UseImgCache = Me.chkUseImgCache.Checked
-            Master.eSettings.UseImgCacheUpdaters = Me.chkUseImgCacheUpdaters.Checked
-            Master.eSettings.PersistImgCache = Me.chkPersistImgCache.Checked
             Master.eSettings.SkipLessThan = Convert.ToInt32(Me.txtSkipLessThan.Text)
             Master.eSettings.SkipStackSizeCheck = Me.chkSkipStackedSizeCheck.Checked
             Master.eSettings.SkipLessThanEp = Convert.ToInt32(Me.txtTVSkipLessThan.Text)
@@ -3561,18 +3480,6 @@ Public Class dlgSettings
 
             Master.eSettings.AllwaysDisplayGenresText = Me.chkShowGenresText.Checked
             Master.eSettings.DisplayYear = Me.chkDisplayYear.Checked
-            Master.eSettings.ETNative = Me.rbETNative.Checked
-            Dim iWidth As Integer = If(Me.txtETWidth.Text.Length > 0, Convert.ToInt32(Me.txtETWidth.Text), 0)
-            Dim iHeight As Integer = If(Me.txtETHeight.Text.Length > 0, Convert.ToInt32(Me.txtETHeight.Text), 0)
-            If Me.rbETCustom.Checked AndAlso iWidth > 0 AndAlso iHeight > 0 Then
-                Master.eSettings.ETWidth = iWidth
-                Master.eSettings.ETHeight = iHeight
-                Master.eSettings.ETPadding = Me.chkETPadding.Checked
-            Else
-                Master.eSettings.ETWidth = 0
-                Master.eSettings.ETHeight = 0
-                Master.eSettings.ETPadding = False
-            End If
 
             Master.eSettings.SortTokens.Clear()
             Master.eSettings.SortTokens.AddRange(lstSortTokens.Items.OfType(Of String).ToList)
@@ -3905,10 +3812,6 @@ Public Class dlgSettings
         Me.chkLockLanguageA.Text = Master.eLang.GetString(880, "Lock Language (audio)")
         Me.chkLockMPAA.Text = Master.eLang.GetString(881, "Lock MPAA/Certification")
         Me.chkUseMPAAFSK.Text = Master.eLang.GetString(882, "Use MPAA as Fallback for FSK Rating")
-        Me.chkUseETasFA.Text = Master.eLang.GetString(503, "Use if no Fanart Found")
-        Me.chkNoSpoilers.Text = Master.eLang.GetString(505, "No Spoilers")
-        Me.Label15.Text = Master.eLang.GetString(506, "Number To Create:")
-        Me.chkAutoThumbs.Text = Master.eLang.GetString(507, "Extract During Scrapers")
         Me.chkOutlineForPlot.Text = Master.eLang.GetString(508, "Use Outline for Plot if Plot is Empty")
 
         Me.chkCastWithImg.Text = Master.eLang.GetString(510, "Scrape Only Actors With Images")
@@ -3952,17 +3855,6 @@ Public Class dlgSettings
         Me.Label20.Text = Master.eLang.GetString(540, "Skip files smaller than:")
         Me.Label6.Text = Me.Label21.Text
         Me.Label7.Text = Me.Label20.Text
-        Me.GroupBox23.Text = Master.eLang.GetString(153, "Extrathumbs")
-        Me.GroupBox24.Text = Master.eLang.GetString(541, "Sizing (Extracted Frames)")
-        Me.chkETPadding.Text = Master.eLang.GetString(542, "Padding")
-        Me.Label28.Text = Master.eLang.GetString(543, "Width:")
-        Me.Label29.Text = Master.eLang.GetString(544, "Height:")
-        Me.rbETCustom.Text = Master.eLang.GetString(545, "Use Custom Size")
-        Me.rbETNative.Text = Master.eLang.GetString(546, "Use Native Resolution")
-        Me.GroupBox17.Text = Master.eLang.GetString(547, "Caching")
-        Me.chkUseImgCacheUpdaters.Text = Master.eLang.GetString(548, "Use During Automated Scrapers")
-        Me.chkPersistImgCache.Text = Master.eLang.GetString(550, "Persistent Image Cache")
-        Me.chkUseImgCache.Text = Master.eLang.GetString(551, "Use Image Cache")
         Me.fbdBrowse.Description = Master.eLang.GetString(552, "Select the folder where you wish to store your backdrops.")
         Me.gbOptions.Text = Master.eLang.GetString(577, "Scraper Fields")
         Me.GroupBox32.Text = Master.eLang.GetString(577, "Scraper Fields")
@@ -4018,7 +3910,6 @@ Public Class dlgSettings
         Me.chkCountry.Text = Master.eLang.GetString(301, "Country")
         Me.chkClickScrape.Text = Master.eLang.GetString(849, "Enable Click Scrape")
 
-        Me.chkAutoETSize.Text = Master.eLang.GetString(599, "Download All Fanart Images of the Following Size as Extrathumbs:")
         Me.Label35.Text = String.Concat(Master.eLang.GetString(620, "Movie Theme"), ":")
         Me.Label1.Text = String.Concat(Master.eLang.GetString(666, "TV Show Theme"), ":")
         Me.Label3.Text = String.Concat(Master.eLang.GetString(667, "Episode Theme"), ":")
@@ -4194,8 +4085,6 @@ Public Class dlgSettings
         Me.cbPosterSize.Items.AddRange(New String() {Master.eLang.GetString(322, "X-Large"), Master.eLang.GetString(323, "Large"), Master.eLang.GetString(324, "Medium"), Master.eLang.GetString(325, "Small"), Master.eLang.GetString(558, "Wide")})
         Me.cbFanartSize.Items.Clear()
         Me.cbFanartSize.Items.AddRange(New String() {Master.eLang.GetString(323, "Large"), Master.eLang.GetString(324, "Medium"), Master.eLang.GetString(325, "Small")})
-        Me.cbAutoETSize.Items.Clear()
-        Me.cbAutoETSize.Items.AddRange(New String() {Master.eLang.GetString(323, "Large"), Master.eLang.GetString(324, "Medium"), Master.eLang.GetString(325, "Small")})
         Me.cbShowFanartSize.Items.Clear()
         Me.cbShowFanartSize.Items.AddRange(New String() {Master.eLang.GetString(323, "Large"), Master.eLang.GetString(324, "Medium"), Master.eLang.GetString(325, "Small")})
         Me.cbEpFanartSize.Items.Clear()
@@ -4469,11 +4358,11 @@ Public Class dlgSettings
         Me.SetApplyButton(True)
     End Sub
 
-    Private Sub txtAutoThumbs_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtAutoThumbs.KeyPress
+    Private Sub txtAutoThumbs_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs)
         e.Handled = StringUtils.NumericOnly(e.KeyChar)
     End Sub
 
-    Private Sub txtAutoThumbs_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtAutoThumbs.TextChanged
+    Private Sub txtAutoThumbs_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 
@@ -4533,19 +4422,19 @@ Public Class dlgSettings
         Me.ValidateRegex()
     End Sub
 
-    Private Sub txtETHeight_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtETHeight.KeyPress
+    Private Sub txtETHeight_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs)
         e.Handled = StringUtils.NumericOnly(e.KeyChar)
     End Sub
 
-    Private Sub txtETHeight_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtETHeight.TextChanged
+    Private Sub txtETHeight_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 
-    Private Sub txtETWidth_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtETWidth.KeyPress
+    Private Sub txtETWidth_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs)
         e.Handled = StringUtils.NumericOnly(e.KeyChar)
     End Sub
 
-    Private Sub txtETWidth_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtETWidth.TextChanged
+    Private Sub txtETWidth_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 
