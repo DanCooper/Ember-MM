@@ -166,7 +166,7 @@ Public Class EmberTMDBScraperModule
 		_setup.orderChanged()
 
         SPanel.Name = String.Concat(Me._Name, "Scraper")
-        SPanel.Text = Master.eLang.GetString(104, "TMDB Scrapers")
+        SPanel.Text = Master.eLang.GetString(104, "TMDB Scraper")
         SPanel.Prefix = "TMDBMovieInfo_"
 		SPanel.Order = 110
 		SPanel.Parent = "pnlMovieData"

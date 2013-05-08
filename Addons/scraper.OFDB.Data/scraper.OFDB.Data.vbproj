@@ -96,12 +96,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Scraper\clsScrapeOFDB.vb" />
-    <Compile Include="Scraper\dlgIMDBSearchResults.Designer.vb">
-      <DependentUpon>dlgIMDBSearchResults.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Scraper\dlgIMDBSearchResults.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -126,10 +120,6 @@
     <Compile Include="OFDB_Data.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scraper\dlgIMDBSearchResults.resx">
-      <DependentUpon>dlgIMDBSearchResults.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmOFDBInfoSettingsHolder.resx">
       <DependentUpon>frmOFDBInfoSettingsHolder.vb</DependentUpon>
       <SubType>Designer</SubType>
