@@ -24,21 +24,6 @@ Partial Class frmTMDBMediaSettingsHolder
 	Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmTMDBMediaSettingsHolder))
         Me.pnlSettings = New System.Windows.Forms.Panel()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
-        Me.cbManualETSize = New System.Windows.Forms.ComboBox()
-        Me.grpSaveFanart = New System.Windows.Forms.GroupBox()
-        Me.optFanartFolderExtraFanart = New System.Windows.Forms.RadioButton()
-        Me.optFanartFolderExtraThumbs = New System.Windows.Forms.RadioButton()
-        Me.chkScrapePoster = New System.Windows.Forms.CheckBox()
-        Me.chkScrapeFanart = New System.Windows.Forms.CheckBox()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.btnDown = New System.Windows.Forms.Button()
-        Me.btnUp = New System.Windows.Forms.Button()
-        Me.cbEnabled = New System.Windows.Forms.CheckBox()
         Me.GroupBox30 = New System.Windows.Forms.GroupBox()
         Me.pbTMDB = New System.Windows.Forms.PictureBox()
         Me.chkFallBackEng = New System.Windows.Forms.CheckBox()
@@ -46,14 +31,22 @@ Partial Class frmTMDBMediaSettingsHolder
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
         Me.txtTMDBApiKey = New System.Windows.Forms.TextBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.chkScrapePoster = New System.Windows.Forms.CheckBox()
+        Me.chkScrapeFanart = New System.Windows.Forms.CheckBox()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.btnDown = New System.Windows.Forms.Button()
+        Me.btnUp = New System.Windows.Forms.Button()
+        Me.cbEnabled = New System.Windows.Forms.CheckBox()
         Me.pnlSettings.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox3.SuspendLayout()
-        Me.GroupBox4.SuspendLayout()
-        Me.grpSaveFanart.SuspendLayout()
-        Me.Panel2.SuspendLayout()
         Me.GroupBox30.SuspendLayout()
         CType(Me.pbTMDB, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupBox3.SuspendLayout()
+        Me.Panel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'pnlSettings
@@ -67,6 +60,81 @@ Partial Class frmTMDBMediaSettingsHolder
         Me.pnlSettings.Name = "pnlSettings"
         Me.pnlSettings.Size = New System.Drawing.Size(617, 369)
         Me.pnlSettings.TabIndex = 0
+        '
+        'GroupBox30
+        '
+        Me.GroupBox30.Controls.Add(Me.pbTMDB)
+        Me.GroupBox30.Controls.Add(Me.chkFallBackEng)
+        Me.GroupBox30.Controls.Add(Me.cbTMDBPrefLanguage)
+        Me.GroupBox30.Controls.Add(Me.Label2)
+        Me.GroupBox30.Controls.Add(Me.Label18)
+        Me.GroupBox30.Controls.Add(Me.txtTMDBApiKey)
+        Me.GroupBox30.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
+        Me.GroupBox30.Location = New System.Drawing.Point(11, 31)
+        Me.GroupBox30.Name = "GroupBox30"
+        Me.GroupBox30.Size = New System.Drawing.Size(513, 102)
+        Me.GroupBox30.TabIndex = 95
+        Me.GroupBox30.TabStop = False
+        Me.GroupBox30.Text = "TMDB"
+        '
+        'pbTMDB
+        '
+        Me.pbTMDB.Image = CType(resources.GetObject("pbTMDB.Image"), System.Drawing.Image)
+        Me.pbTMDB.Location = New System.Drawing.Point(491, 32)
+        Me.pbTMDB.Name = "pbTMDB"
+        Me.pbTMDB.Size = New System.Drawing.Size(16, 16)
+        Me.pbTMDB.TabIndex = 5
+        Me.pbTMDB.TabStop = False
+        '
+        'chkFallBackEng
+        '
+        Me.chkFallBackEng.AutoSize = True
+        Me.chkFallBackEng.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkFallBackEng.Location = New System.Drawing.Point(190, 67)
+        Me.chkFallBackEng.Name = "chkFallBackEng"
+        Me.chkFallBackEng.Size = New System.Drawing.Size(129, 17)
+        Me.chkFallBackEng.TabIndex = 4
+        Me.chkFallBackEng.Text = "Fall back on english"
+        Me.chkFallBackEng.UseVisualStyleBackColor = True
+        '
+        'cbTMDBPrefLanguage
+        '
+        Me.cbTMDBPrefLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cbTMDBPrefLanguage.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.cbTMDBPrefLanguage.FormattingEnabled = True
+        Me.cbTMDBPrefLanguage.Items.AddRange(New Object() {"bg", "cs", "da", "de", "el", "en", "es", "fi", "fr", "he", "hu", "it", "nb", "nl", "no", "pl", "pt", "ru", "sk", "sv", "ta", "tr", "uk", "vi", "xx", "zh"})
+        Me.cbTMDBPrefLanguage.Location = New System.Drawing.Point(123, 65)
+        Me.cbTMDBPrefLanguage.Name = "cbTMDBPrefLanguage"
+        Me.cbTMDBPrefLanguage.Size = New System.Drawing.Size(45, 21)
+        Me.cbTMDBPrefLanguage.TabIndex = 3
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.Label2.Location = New System.Drawing.Point(6, 68)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(111, 13)
+        Me.Label2.TabIndex = 2
+        Me.Label2.Text = "Preferred Language:"
+        '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.Location = New System.Drawing.Point(6, 18)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(79, 13)
+        Me.Label18.TabIndex = 0
+        Me.Label18.Text = "TMDB API Key:"
+        '
+        'txtTMDBApiKey
+        '
+        Me.txtTMDBApiKey.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtTMDBApiKey.Location = New System.Drawing.Point(8, 32)
+        Me.txtTMDBApiKey.Name = "txtTMDBApiKey"
+        Me.txtTMDBApiKey.Size = New System.Drawing.Size(477, 22)
+        Me.txtTMDBApiKey.TabIndex = 1
         '
         'Label1
         '
@@ -94,74 +162,15 @@ Partial Class frmTMDBMediaSettingsHolder
         '
         'GroupBox3
         '
-        Me.GroupBox3.Controls.Add(Me.GroupBox4)
-        Me.GroupBox3.Controls.Add(Me.grpSaveFanart)
         Me.GroupBox3.Controls.Add(Me.chkScrapePoster)
         Me.GroupBox3.Controls.Add(Me.chkScrapeFanart)
         Me.GroupBox3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox3.Location = New System.Drawing.Point(11, 139)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(332, 129)
+        Me.GroupBox3.Size = New System.Drawing.Size(102, 64)
         Me.GroupBox3.TabIndex = 1
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Images"
-        '
-        'GroupBox4
-        '
-        Me.GroupBox4.Controls.Add(Me.cbManualETSize)
-        Me.GroupBox4.Location = New System.Drawing.Point(159, 19)
-        Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(160, 55)
-        Me.GroupBox4.TabIndex = 4
-        Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "TMDB Extrathumbs Size:"
-        '
-        'cbManualETSize
-        '
-        Me.cbManualETSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbManualETSize.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cbManualETSize.FormattingEnabled = True
-        Me.cbManualETSize.Items.AddRange(New Object() {"original", "w1280", "poster", "thumb"})
-        Me.cbManualETSize.Location = New System.Drawing.Point(12, 21)
-        Me.cbManualETSize.Name = "cbManualETSize"
-        Me.cbManualETSize.Size = New System.Drawing.Size(131, 21)
-        Me.cbManualETSize.TabIndex = 0
-        '
-        'grpSaveFanart
-        '
-        Me.grpSaveFanart.Controls.Add(Me.optFanartFolderExtraFanart)
-        Me.grpSaveFanart.Controls.Add(Me.optFanartFolderExtraThumbs)
-        Me.grpSaveFanart.Enabled = False
-        Me.grpSaveFanart.Location = New System.Drawing.Point(24, 54)
-        Me.grpSaveFanart.Name = "grpSaveFanart"
-        Me.grpSaveFanart.Size = New System.Drawing.Size(123, 66)
-        Me.grpSaveFanart.TabIndex = 2
-        Me.grpSaveFanart.TabStop = False
-        Me.grpSaveFanart.Text = "Save Fanart In:"
-        '
-        'optFanartFolderExtraFanart
-        '
-        Me.optFanartFolderExtraFanart.AutoSize = True
-        Me.optFanartFolderExtraFanart.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.optFanartFolderExtraFanart.Location = New System.Drawing.Point(22, 38)
-        Me.optFanartFolderExtraFanart.Name = "optFanartFolderExtraFanart"
-        Me.optFanartFolderExtraFanart.Size = New System.Drawing.Size(85, 17)
-        Me.optFanartFolderExtraFanart.TabIndex = 1
-        Me.optFanartFolderExtraFanart.TabStop = True
-        Me.optFanartFolderExtraFanart.Text = "\extrafanart"
-        Me.optFanartFolderExtraFanart.UseVisualStyleBackColor = True
-        '
-        'optFanartFolderExtraThumbs
-        '
-        Me.optFanartFolderExtraThumbs.AutoSize = True
-        Me.optFanartFolderExtraThumbs.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.optFanartFolderExtraThumbs.Location = New System.Drawing.Point(22, 19)
-        Me.optFanartFolderExtraThumbs.Name = "optFanartFolderExtraThumbs"
-        Me.optFanartFolderExtraThumbs.Size = New System.Drawing.Size(93, 17)
-        Me.optFanartFolderExtraThumbs.TabIndex = 0
-        Me.optFanartFolderExtraThumbs.TabStop = True
-        Me.optFanartFolderExtraThumbs.Text = "\extrathumbs"
-        Me.optFanartFolderExtraThumbs.UseVisualStyleBackColor = True
         '
         'chkScrapePoster
         '
@@ -241,81 +250,6 @@ Partial Class frmTMDBMediaSettingsHolder
         Me.cbEnabled.Text = "Enabled"
         Me.cbEnabled.UseVisualStyleBackColor = True
         '
-        'GroupBox30
-        '
-        Me.GroupBox30.Controls.Add(Me.pbTMDB)
-        Me.GroupBox30.Controls.Add(Me.chkFallBackEng)
-        Me.GroupBox30.Controls.Add(Me.cbTMDBPrefLanguage)
-        Me.GroupBox30.Controls.Add(Me.Label2)
-        Me.GroupBox30.Controls.Add(Me.Label18)
-        Me.GroupBox30.Controls.Add(Me.txtTMDBApiKey)
-        Me.GroupBox30.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.GroupBox30.Location = New System.Drawing.Point(11, 31)
-        Me.GroupBox30.Name = "GroupBox30"
-        Me.GroupBox30.Size = New System.Drawing.Size(513, 102)
-        Me.GroupBox30.TabIndex = 95
-        Me.GroupBox30.TabStop = False
-        Me.GroupBox30.Text = "TMDB"
-        '
-        'pbTMDB
-        '
-        Me.pbTMDB.Image = CType(resources.GetObject("pbTMDB.Image"), System.Drawing.Image)
-        Me.pbTMDB.Location = New System.Drawing.Point(491, 32)
-        Me.pbTMDB.Name = "pbTMDB"
-        Me.pbTMDB.Size = New System.Drawing.Size(16, 16)
-        Me.pbTMDB.TabIndex = 5
-        Me.pbTMDB.TabStop = False
-        '
-        'chkFallBackEng
-        '
-        Me.chkFallBackEng.AutoSize = True
-        Me.chkFallBackEng.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkFallBackEng.Location = New System.Drawing.Point(190, 67)
-        Me.chkFallBackEng.Name = "chkFallBackEng"
-        Me.chkFallBackEng.Size = New System.Drawing.Size(129, 17)
-        Me.chkFallBackEng.TabIndex = 4
-        Me.chkFallBackEng.Text = "Fall back on english"
-        Me.chkFallBackEng.UseVisualStyleBackColor = True
-        '
-        'cbTMDBPrefLanguage
-        '
-        Me.cbTMDBPrefLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbTMDBPrefLanguage.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.cbTMDBPrefLanguage.FormattingEnabled = True
-        Me.cbTMDBPrefLanguage.Items.AddRange(New Object() {"bg", "cs", "da", "de", "el", "en", "es", "fi", "fr", "he", "hu", "it", "nb", "nl", "no", "pl", "pt", "ru", "sk", "sv", "ta", "tr", "uk", "vi", "xx", "zh"})
-        Me.cbTMDBPrefLanguage.Location = New System.Drawing.Point(123, 65)
-        Me.cbTMDBPrefLanguage.Name = "cbTMDBPrefLanguage"
-        Me.cbTMDBPrefLanguage.Size = New System.Drawing.Size(45, 21)
-        Me.cbTMDBPrefLanguage.TabIndex = 3
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.Label2.Location = New System.Drawing.Point(6, 68)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(111, 13)
-        Me.Label2.TabIndex = 2
-        Me.Label2.Text = "Preferred Language:"
-        '
-        'Label18
-        '
-        Me.Label18.AutoSize = True
-        Me.Label18.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label18.Location = New System.Drawing.Point(6, 18)
-        Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(79, 13)
-        Me.Label18.TabIndex = 0
-        Me.Label18.Text = "TMDB API Key:"
-        '
-        'txtTMDBApiKey
-        '
-        Me.txtTMDBApiKey.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtTMDBApiKey.Location = New System.Drawing.Point(8, 32)
-        Me.txtTMDBApiKey.Name = "txtTMDBApiKey"
-        Me.txtTMDBApiKey.Size = New System.Drawing.Size(477, 22)
-        Me.txtTMDBApiKey.TabIndex = 1
-        '
         'frmTMDBMediaSettingsHolder
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -332,16 +266,13 @@ Partial Class frmTMDBMediaSettingsHolder
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Scraper Setup"
         Me.pnlSettings.ResumeLayout(False)
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GroupBox3.ResumeLayout(False)
-        Me.GroupBox4.ResumeLayout(False)
-        Me.grpSaveFanart.ResumeLayout(False)
-        Me.grpSaveFanart.PerformLayout()
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
         Me.GroupBox30.ResumeLayout(False)
         Me.GroupBox30.PerformLayout()
         CType(Me.pbTMDB, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupBox3.ResumeLayout(False)
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel2.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -356,11 +287,6 @@ Partial Class frmTMDBMediaSettingsHolder
 	Friend WithEvents btnUp As System.Windows.Forms.Button
 	Friend WithEvents Label1 As System.Windows.Forms.Label
 	Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
-	Friend WithEvents grpSaveFanart As System.Windows.Forms.GroupBox
-	Friend WithEvents optFanartFolderExtraFanart As System.Windows.Forms.RadioButton
-	Friend WithEvents optFanartFolderExtraThumbs As System.Windows.Forms.RadioButton
-    Friend WithEvents GroupBox4 As System.Windows.Forms.GroupBox
-    Friend WithEvents cbManualETSize As System.Windows.Forms.ComboBox
     Friend WithEvents GroupBox30 As System.Windows.Forms.GroupBox
     Friend WithEvents pbTMDB As System.Windows.Forms.PictureBox
     Friend WithEvents chkFallBackEng As System.Windows.Forms.CheckBox

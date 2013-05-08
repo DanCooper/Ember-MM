@@ -58,7 +58,7 @@ Partial Class frmOFDBInfoSettingsHolder
         Me.gbOptions.Controls.Add(Me.chkOFDBOutline)
         Me.gbOptions.Controls.Add(Me.chkOFDBTitle)
         Me.gbOptions.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.gbOptions.Location = New System.Drawing.Point(3, 31)
+        Me.gbOptions.Location = New System.Drawing.Point(11, 31)
         Me.gbOptions.Name = "gbOptions"
         Me.gbOptions.Size = New System.Drawing.Size(213, 87)
         Me.gbOptions.TabIndex = 2
@@ -166,7 +166,7 @@ Partial Class frmOFDBInfoSettingsHolder
         Me.pnlSettings.Controls.Add(Me.PictureBox1)
         Me.pnlSettings.Controls.Add(Me.Panel1)
         Me.pnlSettings.Controls.Add(Me.gbOptions)
-        Me.pnlSettings.Location = New System.Drawing.Point(12, 1)
+        Me.pnlSettings.Location = New System.Drawing.Point(12, 4)
         Me.pnlSettings.Name = "pnlSettings"
         Me.pnlSettings.Size = New System.Drawing.Size(617, 369)
         Me.pnlSettings.TabIndex = 0

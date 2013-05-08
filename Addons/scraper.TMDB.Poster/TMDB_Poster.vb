@@ -16,7 +16,7 @@
 ' #                                                                              #
 ' # You should have received a copy of the GNU General Public License            #
 ' # along with Ember Media Manager.  If not, see <http://www.gnu.org/licenses/>. #
-' ################################################################################
+' ###############################################################################
 
 Imports System.IO
 Imports EmberAPI
@@ -24,44 +24,40 @@ Imports RestSharp
 Imports WatTmdb
 Imports EmberScraperModule.TMDBg
 
-''' <summary>
-''' Native Scraper
-''' </summary>
-''' <remarks></remarks>
-Public Class EmberTMDBScraperModule
+Public Class TMDB_Poster
     Implements Interfaces.EmberMovieScraperModule_Poster
 
 
 #Region "Fields"
 
-	Public Shared ConfigOptions As New Structures.ScrapeOptions
-	Public Shared ConfigScrapeModifier As New Structures.ScrapeModifier
+    Public Shared ConfigOptions As New Structures.ScrapeOptions
+    Public Shared ConfigScrapeModifier As New Structures.ScrapeModifier
     Public Shared _AssemblyName As String
 
     Private TMDBId As String
     Private _TMDBg As TMDBg.Scraper
     Private TMDB As TMDB.Scraper
 
-	''' <summary>
-	''' Scraping Here
-	''' </summary>
-	''' <remarks></remarks>
-	Private _MySettings As New sMySettings
+    ''' <summary>
+    ''' Scraping Here
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private _MySettings As New sMySettings
     Private _Name As String = "TMDB_Poster"
     Private _ScraperEnabled As Boolean = False
     Private _setup As frmTMDBMediaSettingsHolder
-	Private _TMDBConf As V3.TmdbConfiguration
-	Private _TMDBConfE As V3.TmdbConfiguration
-	Private _TMDBApi As V3.Tmdb
-	Private _TMDBApiE As V3.Tmdb
+    Private _TMDBConf As V3.TmdbConfiguration
+    Private _TMDBConfE As V3.TmdbConfiguration
+    Private _TMDBApi As V3.Tmdb
+    Private _TMDBApiE As V3.Tmdb
 
-#End Region	'Fields
+#End Region 'Fields
 
 #Region "Events"
 
     Public Event ModuleSettingsChanged() Implements Interfaces.EmberMovieScraperModule_Poster.ModuleSettingsChanged
 
-	Public Event MovieScraperEvent(ByVal eType As Enums.MovieScraperEventType, ByVal Parameter As Object) Implements Interfaces.EmberMovieScraperModule_Poster.MovieScraperEvent
+    Public Event MovieScraperEvent(ByVal eType As Enums.MovieScraperEventType, ByVal Parameter As Object) Implements Interfaces.EmberMovieScraperModule_Poster.MovieScraperEvent
 
     Public Event SetupScraperChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer) Implements Interfaces.EmberMovieScraperModule_Poster.ScraperSetupChanged
 
@@ -71,7 +67,7 @@ Public Class EmberTMDBScraperModule
 
     Public Event ProgressUpdated(ByVal iPercent As Integer) Implements Interfaces.EmberMovieScraperModule_Poster.ProgressUpdated
 
-#End Region	'Events
+#End Region 'Events
 
 #Region "Properties"
 
@@ -96,22 +92,22 @@ Public Class EmberTMDBScraperModule
         End Set
     End Property
 
-#End Region	'Properties
+#End Region 'Properties
 
 #Region "Methods"
     Function QueryScraperCapabilities(ByVal cap As Enums.PostScraperCapabilities) As Boolean Implements Interfaces.EmberMovieScraperModule_Poster.QueryScraperCapabilities
         Select Case cap
             Case Enums.PostScraperCapabilities.Fanart
-                Return ConfigScrapeModifier.Fanart
+                Return True ' ConfigScrapeModifier.Fanart
             Case Enums.PostScraperCapabilities.Poster
-                Return ConfigScrapeModifier.Poster
+                Return True 'ConfigScrapeModifier.Poster
         End Select
         Return False
     End Function
 
-	Private Sub Handle_ModuleSettingsChanged()
-		RaiseEvent ModuleSettingsChanged()
-	End Sub
+    Private Sub Handle_ModuleSettingsChanged()
+        RaiseEvent ModuleSettingsChanged()
+    End Sub
 
     Private Sub Handle_SetupNeedsRestart()
         RaiseEvent SetupNeedsRestart()
@@ -158,8 +154,6 @@ Public Class EmberTMDBScraperModule
         _setup.cbTMDBPrefLanguage.Text = _MySettings.TMDBLanguage
         _setup.chkFallBackEng.Checked = _MySettings.FallBackEng
 
-        _setup.cbManualETSize.Text = _MySettings.ManualETSize
-
         _setup.orderChanged()
         Spanel.Name = String.Concat(Me._Name, "PostScraper")
         Spanel.Text = Master.eLang.GetString(104, "TMDB Scraper")
@@ -170,18 +164,17 @@ Public Class EmberTMDBScraperModule
         Spanel.ImageIndex = If(Me._ScraperEnabled, 9, 10)
         Spanel.Panel = Me._setup.pnlSettings
 
-        AddHandler _setup.SetupPostScraperChanged, AddressOf Handle_SetupScraperChanged
+        AddHandler _setup.SetupScraperChanged, AddressOf Handle_SetupScraperChanged
         AddHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
         AddHandler _setup.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
         Return Spanel
     End Function
 
-	Sub LoadSettings()
+    Sub LoadSettings()
 
-		_MySettings.TMDBAPIKey = AdvancedSettings.GetSetting("TMDBAPIKey", "Get your API Key from http://www.themoviedb.org")
+        _MySettings.TMDBAPIKey = AdvancedSettings.GetSetting("TMDBAPIKey", "Get your API Key from http://www.themoviedb.org")
         _MySettings.FallBackEng = AdvancedSettings.GetBooleanSetting("FallBackEn", False)
-		_MySettings.TMDBLanguage = AdvancedSettings.GetSetting("TMDBLanguage", "en")
-        _MySettings.ManualETSize = Convert.ToString(AdvancedSettings.GetSetting("ManualETSize", "thumb"))
+        _MySettings.TMDBLanguage = AdvancedSettings.GetSetting("TMDBLanguage", "en")
 
         ConfigScrapeModifier.DoSearch = True
         ConfigScrapeModifier.Meta = True
@@ -189,7 +182,7 @@ Public Class EmberTMDBScraperModule
         ConfigScrapeModifier.Extra = True
         ConfigScrapeModifier.Actors = True
 
-		ConfigScrapeModifier.Poster = AdvancedSettings.GetBooleanSetting("DoPoster", True)
+        ConfigScrapeModifier.Poster = AdvancedSettings.GetBooleanSetting("DoPoster", True)
         ConfigScrapeModifier.Fanart = AdvancedSettings.GetBooleanSetting("DoFanart", True)
         ConfigScrapeModifier.Trailer = False
 
@@ -197,7 +190,6 @@ Public Class EmberTMDBScraperModule
 
     Function Scraper(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.PostScraperCapabilities, ByRef ImageList As List(Of MediaContainers.Image)) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule_Poster.Scraper
         'LoadSettings()
-        Dim Poster As New Images
 
         LoadSettings()
         If String.IsNullOrEmpty(DBMovie.Movie.TMDBID) Then
@@ -209,14 +201,13 @@ Public Class EmberTMDBScraperModule
         Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function
 
-	Sub SaveSettings()
-        AdvancedSettings.SetSetting("ManualETSize", _MySettings.ManualETSize.ToString)
+    Sub SaveSettings()
         AdvancedSettings.SetBooleanSetting("DoPoster", ConfigScrapeModifier.Poster)
         AdvancedSettings.SetBooleanSetting("DoFanart", ConfigScrapeModifier.Fanart)
 
         AdvancedSettings.SetSetting("TMDBAPIKey", _MySettings.TMDBAPIKey)
         AdvancedSettings.SetBooleanSetting("FallBackEn", _MySettings.FallBackEng)
-		AdvancedSettings.SetSetting("TMDBLanguage", _MySettings.TMDBLanguage)
+        AdvancedSettings.SetSetting("TMDBLanguage", _MySettings.TMDBLanguage)
     End Sub
 
     Sub SaveSetupScraper(ByVal DoDispose As Boolean) Implements Interfaces.EmberMovieScraperModule_Poster.SaveSetupScraper
@@ -227,13 +218,12 @@ Public Class EmberTMDBScraperModule
         End If
         _MySettings.TMDBLanguage = _setup.cbTMDBPrefLanguage.Text
         _MySettings.FallBackEng = _setup.chkFallBackEng.Checked
-        _MySettings.ManualETSize = _setup.cbManualETSize.Text
         ConfigScrapeModifier.Poster = _setup.chkScrapePoster.Checked
         ConfigScrapeModifier.Fanart = _setup.chkScrapeFanart.Checked
         SaveSettings()
         'ModulesManager.Instance.SaveSettings()
         If DoDispose Then
-            RemoveHandler _setup.SetupPostScraperChanged, AddressOf Handle_SetupScraperChanged
+            RemoveHandler _setup.SetupScraperChanged, AddressOf Handle_SetupScraperChanged
             RemoveHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
             RemoveHandler _setup.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
             _setup.Dispose()
@@ -244,20 +234,19 @@ Public Class EmberTMDBScraperModule
         _setup.orderChanged()
     End Sub
 
-#End Region	'Methods
+#End Region 'Methods
 
 #Region "Nested Types"
 
-	Structure sMySettings
+    Structure sMySettings
 
 #Region "Fields"
         Dim TMDBAPIKey As String
         Dim TMDBLanguage As String
         Dim FallBackEng As Boolean
-        Dim ManualETSize As String
 #End Region 'Fields
 
-	End Structure
+    End Structure
 
 #End Region 'Nested Types
 

@@ -22,11 +22,7 @@ Imports System.IO
 
 Imports EmberAPI
 
-''' <summary>
-''' Native Scraper
-''' </summary>
-''' <remarks></remarks>
-Public Class EmberNativeScraperModule
+Public Class OFDB_Data
     Implements Interfaces.EmberMovieScraperModule_Data
 
 
@@ -125,7 +121,7 @@ Public Class EmberNativeScraperModule
 
         _setup.orderChanged()
         SPanel.Name = String.Concat(Me._Name, "Scraper")
-        SPanel.Text = Master.eLang.GetString(104, "OFDB Scrapers")
+        SPanel.Text = Master.eLang.GetString(104, "OFDB Scraper")
         SPanel.Prefix = "OFDBMovieInfo_"
         SPanel.Order = 110
         SPanel.Parent = "pnlMovieData"

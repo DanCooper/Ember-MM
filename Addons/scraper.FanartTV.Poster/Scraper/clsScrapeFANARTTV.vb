@@ -45,11 +45,11 @@ Namespace FANARTTVs
 
 #Region "Fields"
 
-        Private _MySettings As EmberFanartTVScraperModule.sMySettings
-		Private _FanartTV As FanartTV.V1.FanartTV
-		Friend WithEvents bwFANARTTV As New System.ComponentModel.BackgroundWorker
-		Private _APIInvalid As Boolean = False
-#End Region	'Fields
+        Private _MySettings As FanartTV_Poster.sMySettings
+        Private _FanartTV As FanartTV.V1.FanartTV
+        Friend WithEvents bwFANARTTV As New System.ComponentModel.BackgroundWorker
+        Private _APIInvalid As Boolean = False
+#End Region 'Fields
 
         '#Region "Events"
 
@@ -61,7 +61,7 @@ Namespace FANARTTVs
 
 #Region "Methods"
 
-        Public Sub New(ByRef tMySettings As EmberFanartTVScraperModule.sMySettings)
+        Public Sub New(ByRef tMySettings As FanartTV_Poster.sMySettings)
             _MySettings = tMySettings
             _FanartTV = New FanartTV.V1.FanartTV(_MySettings.FANARTTVApiKey)
             Dim Result As FanartTV.V1.FanartTVMovie = _FanartTV.GetMovieInfo(New FanartTV.V1.FanartTVRequest("1", "JSON", "all", 1, 1))
@@ -94,27 +94,27 @@ Namespace FANARTTVs
         '	End Try
         'End Sub
 
-		Public Function GetFANARTTVImages(ByVal imdbID As String) As List(Of MediaContainers.Image)
-			Dim alPoster As New List(Of MediaContainers.Image)
+        Public Function GetFANARTTVImages(ByVal imdbID As String) As List(Of MediaContainers.Image)
+            Dim alPoster As New List(Of MediaContainers.Image)
 
-			If _APIInvalid Then
-				Return Nothing
-			End If
-			Try
-				Dim Result As FanartTV.V1.FanartTVMovie = _FanartTV.GetMovieInfo(New FanartTV.V1.FanartTVRequest(imdbID, "JSON", "all", 1, 2))
-				If bwFANARTTV.CancellationPending Then Return Nothing
-				If IsNothing(Result) Then Return alPoster
-				If IsNothing(Result.movieinfo.moviebackground) Then Return alPoster
-				For Each image In Result.movieinfo.moviebackground
+            If _APIInvalid Then
+                Return Nothing
+            End If
+            Try
+                Dim Result As FanartTV.V1.FanartTVMovie = _FanartTV.GetMovieInfo(New FanartTV.V1.FanartTVRequest(imdbID, "JSON", "all", 1, 2))
+                If bwFANARTTV.CancellationPending Then Return Nothing
+                If IsNothing(Result) Then Return alPoster
+                If IsNothing(Result.movieinfo.moviebackground) Then Return alPoster
+                For Each image In Result.movieinfo.moviebackground
                     alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.backdrop_names(3).description, .URL = image.url})
                     alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.backdrop_names(0).description, .URL = image.url & "/preview"})
-				Next
-			Catch ex As Exception
-				Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-			End Try
+                Next
+            Catch ex As Exception
+                Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
+            End Try
 
-			Return alPoster
-		End Function
+            Return alPoster
+        End Function
 
         'Private Sub bwFANARTTVA_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bwFANARTTV.DoWork
         '	Dim Args As Arguments = DirectCast(e.Argument, Arguments)
@@ -139,7 +139,7 @@ Namespace FANARTTVs
         'End Sub
 
 
-#End Region	'Methods
+#End Region 'Methods
 
 #Region "Nested Types"
 

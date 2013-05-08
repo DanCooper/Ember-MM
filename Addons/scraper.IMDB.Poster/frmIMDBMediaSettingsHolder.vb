@@ -21,7 +21,7 @@
 Imports System.IO
 Imports EmberAPI
 
-Public Class frmFanartTVMediaSettingsHolder
+Public Class frmIMDBMediaSettingsHolder
 
 #Region "Events"
 
@@ -35,26 +35,21 @@ Public Class frmFanartTVMediaSettingsHolder
 
 #Region "Methods"
 
-    Public Sub New()
-        InitializeComponent()
-        Me.SetUp()
-    End Sub
-
     Private Sub btnDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDown.Click
-        Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = FanartTV_Poster._AssemblyName).ScraperOrder
+        Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = IMDB_Poster._AssemblyName).ScraperOrder
         If order < ModulesManager.Instance.externalPosterScrapersModules.Count - 1 Then
             ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order + 1).ScraperOrder = order
-            ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = FanartTV_Poster._AssemblyName).ScraperOrder = order + 1
+            ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = IMDB_Poster._AssemblyName).ScraperOrder = order + 1
             RaiseEvent SetupScraperChanged(cbEnabled.Checked, 1)
             orderChanged()
         End If
     End Sub
 
     Private Sub btnUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnUp.Click
-        Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = FanartTV_Poster._AssemblyName).ScraperOrder
+        Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = IMDB_Poster._AssemblyName).ScraperOrder
         If order > 0 Then
             ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order - 1).ScraperOrder = order
-            ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = FanartTV_Poster._AssemblyName).ScraperOrder = order - 1
+            ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = IMDB_Poster._AssemblyName).ScraperOrder = order - 1
             RaiseEvent SetupScraperChanged(cbEnabled.Checked, -1)
             orderChanged()
         End If
@@ -64,22 +59,21 @@ Public Class frmFanartTVMediaSettingsHolder
         RaiseEvent SetupScraperChanged(cbEnabled.Checked, 0)
     End Sub
 
+    Public Sub New()
+        InitializeComponent()
+        Me.SetUp()
+    End Sub
+
     Sub orderChanged()
-        Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = FanartTV_Poster._AssemblyName).ScraperOrder
+        Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = IMDB_Poster._AssemblyName).ScraperOrder
         btnDown.Enabled = (order < ModulesManager.Instance.externalPosterScrapersModules.Count - 1)
         btnUp.Enabled = (order > 1)
     End Sub
 
     Sub SetUp()
-        Me.Label3.Text = Master.eLang.GetString(124, "Fanart.tv API Key:")
-        Me.Label5.Text = Master.eLang.GetString(168, "Scrape Order", True)
-        Me.GroupBox1.Text = Master.eLang.GetString(125, "Fanart.tv")
+        Me.Label3.Text = Master.eLang.GetString(168, "Scrape Order", True)
         Me.cbEnabled.Text = Master.eLang.GetString(774, "Enabled", True)
         Me.Label1.Text = String.Format(Master.eLang.GetString(103, "These settings are specific to this module.{0}Please refer to the global settings for more options."), vbCrLf)
-    End Sub
-
-    Private Sub txtFANARTTVApiKey_TextChanged(sender As System.Object, e As System.EventArgs) Handles txtFANARTTVApiKey.TextChanged
-        RaiseEvent ModuleSettingsChanged()
     End Sub
 
 #End Region 'Methods

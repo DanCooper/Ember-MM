@@ -19,13 +19,14 @@
 ' ################################################################################
 
 Imports System.IO
+
 Imports EmberAPI
-Imports RestSharp
-Imports WatTmdb
-Imports EmberScraperModule.FANARTTVs
 
-
-Public Class FanartTV_Poster
+''' <summary>
+''' Native Scraper
+''' </summary>
+''' <remarks></remarks>
+Public Class IMDB_Poster
     Implements Interfaces.EmberMovieScraperModule_Poster
 
 
@@ -35,15 +36,11 @@ Public Class FanartTV_Poster
     Public Shared ConfigScrapeModifier As New Structures.ScrapeModifier
     Public Shared _AssemblyName As String
 
-    ''' <summary>
-    ''' Scraping Here
-    ''' </summary>
-    ''' <remarks></remarks>
-    Private _MySettings As New sMySettings
-    Private _Name As String = "FanartTV_Poster"
+    Private MySettings As New _MySettings
+    Private _Name As String = "IMDB_Poster"
     Private _ScraperEnabled As Boolean = False
-    Private _setup As frmFanartTVMediaSettingsHolder
-    Private _fanartTV As FANARTTVs.Scraper
+    Private _setup As frmIMDBMediaSettingsHolder
+    Private IMDB As IMDBg.Scraper
 
 #End Region 'Fields
 
@@ -61,6 +58,7 @@ Public Class FanartTV_Poster
 
     Public Event ProgressUpdated(ByVal iPercent As Integer) Implements Interfaces.EmberMovieScraperModule_Poster.ProgressUpdated
 
+
 #End Region 'Events
 
 #Region "Properties"
@@ -73,7 +71,7 @@ Public Class FanartTV_Poster
 
     ReadOnly Property ModuleVersion() As String Implements Interfaces.EmberMovieScraperModule_Poster.ModuleVersion
         Get
-            Return System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
+            Return FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileVersion.ToString
         End Get
     End Property
 
@@ -89,10 +87,14 @@ Public Class FanartTV_Poster
 #End Region 'Properties
 
 #Region "Methods"
-    Function QueryPostScraperCapabilities(ByVal cap As Enums.PostScraperCapabilities) As Boolean Implements Interfaces.EmberMovieScraperModule_Poster.QueryScraperCapabilities
+    Function QueryScraperCapabilities(ByVal cap As Enums.PostScraperCapabilities) As Boolean Implements Interfaces.EmberMovieScraperModule_Poster.QueryScraperCapabilities
         Select Case cap
             Case Enums.PostScraperCapabilities.Fanart
-                Return ConfigScrapeModifier.Fanart
+                Return False
+            Case Enums.PostScraperCapabilities.Poster
+                Return True
+            Case Enums.PostScraperCapabilities.Trailer
+                Return False
         End Select
         Return False
     End Function
@@ -105,72 +107,65 @@ Public Class FanartTV_Poster
         RaiseEvent ModuleSettingsChanged()
     End Sub
 
-    Private Sub Handle_SetupNeedsRestart()
-        RaiseEvent SetupNeedsRestart()
-    End Sub
-
     Private Sub Handle_SetupScraperChanged(ByVal state As Boolean, ByVal difforder As Integer)
         ScraperEnabled = state
         RaiseEvent SetupScraperChanged(String.Concat(Me._Name, "Scraper"), state, difforder)
     End Sub
 
+    Private Sub Handle_SetupNeedsRestart()
+        RaiseEvent SetupNeedsRestart()
+    End Sub
+
     Sub Init(ByVal sAssemblyName As String) Implements Interfaces.EmberMovieScraperModule_Poster.Init
         _AssemblyName = sAssemblyName
         LoadSettings()
-        'Must be after Load settings to retrieve the correct API key
-        _fanartTV = New FANARTTVs.Scraper(_MySettings)
     End Sub
 
     Function InjectSetupScraper() As Containers.SettingsPanel Implements Interfaces.EmberMovieScraperModule_Poster.InjectSetupScraper
-        Dim Spanel As New Containers.SettingsPanel
-        _setup = New frmFanartTVMediaSettingsHolder
+        Dim SPanel As New Containers.SettingsPanel
+        _setup = New frmIMDBMediaSettingsHolder
         LoadSettings()
         _setup.cbEnabled.Checked = _ScraperEnabled
-        If String.IsNullOrEmpty(_MySettings.FANARTTVApiKey) Then
-            _MySettings.FANARTTVApiKey = Master.eLang.GetString(123, "Get your API Key from fanart.tv")
-        End If
-        _setup.txtFANARTTVApiKey.Text = _MySettings.FANARTTVApiKey
-
         _setup.orderChanged()
-        Spanel.Name = String.Concat(Me._Name, "PostScraper")
-        Spanel.Text = Master.eLang.GetString(104, "Fanart.tv Scraper")
-        Spanel.Prefix = "FanartTVMovieMedia_"
-        Spanel.Order = 110
-        Spanel.Parent = "pnlMovieMedia"
-        Spanel.Type = Master.eLang.GetString(36, "Movies", True)
-        Spanel.ImageIndex = If(Me._ScraperEnabled, 9, 10)
-        Spanel.Panel = Me._setup.pnlSettings
-
+        SPanel.Name = String.Concat(Me._Name, "Scraper")
+        SPanel.Text = Master.eLang.GetString(104, "IMDB Poster")
+        SPanel.Prefix = "IMDBMovieMedia_"
+        SPanel.Order = 110
+        SPanel.Parent = "pnlMovieMedia"
+        SPanel.Type = Master.eLang.GetString(36, "Movies", True)
+        SPanel.ImageIndex = If(_ScraperEnabled, 9, 10)
+        SPanel.Panel = _setup.pnlSettings
         AddHandler _setup.SetupScraperChanged, AddressOf Handle_SetupScraperChanged
-        AddHandler _setup.ModuleSettingsChanged, AddressOf Handle_PostModuleSettingsChanged
-        AddHandler _setup.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
-        Return Spanel
+        AddHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+        Return SPanel
     End Function
 
     Sub LoadSettings()
-        _MySettings.FANARTTVApiKey = AdvancedSettings.GetSetting("FANARTTVApiKey", "Get your API Key from http://fanart.tv")
         ConfigScrapeModifier.DoSearch = True
         ConfigScrapeModifier.Meta = True
         ConfigScrapeModifier.NFO = True
         ConfigScrapeModifier.Extra = True
         ConfigScrapeModifier.Actors = True
 
-        ConfigScrapeModifier.Poster = False
-        ConfigScrapeModifier.Fanart = AdvancedSettings.GetBooleanSetting("DoFanart", True)
-        ConfigScrapeModifier.Trailer = False
+        ConfigScrapeModifier.Poster = AdvancedSettings.GetBooleanSetting("DoPoster", True)
+        ConfigScrapeModifier.Fanart = AdvancedSettings.GetBooleanSetting("DoFanart", False)
+        ConfigScrapeModifier.Trailer = AdvancedSettings.GetBooleanSetting("DoTrailer", False)
     End Sub
 
+    Function Scraper(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.PostScraperCapabilities, ByRef ImageList As List(Of MediaContainers.Image)) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule_Poster.Scraper
+
+        LoadSettings()
+
+        ImageList = IMDB.GetIMDBPosters(DBMovie.Movie.TMDBID)
+
+        Return New Interfaces.ModuleResult With {.breakChain = False}
+    End Function
+
     Sub SaveSettings()
-        AdvancedSettings.SetBooleanSetting("DoFanart", ConfigScrapeModifier.Fanart)
-        AdvancedSettings.SetSetting("FANARTTVApiKey", _MySettings.FANARTTVApiKey)
+        AdvancedSettings.SetBooleanSetting("DoPoster", ConfigScrapeModifier.Poster)
     End Sub
 
     Sub SaveSetupScraper(ByVal DoDispose As Boolean) Implements Interfaces.EmberMovieScraperModule_Poster.SaveSetupScraper
-        If Not String.IsNullOrEmpty(_setup.txtFANARTTVApiKey.Text) Then
-            _MySettings.FANARTTVApiKey = _setup.txtFANARTTVApiKey.Text
-        Else
-            _MySettings.FANARTTVApiKey = Master.eLang.GetString(123, "Get your API Key from fanart.tv")
-        End If
         SaveSettings()
         'ModulesManager.Instance.SaveSettings()
         If DoDispose Then
@@ -181,17 +176,6 @@ Public Class FanartTV_Poster
         End If
     End Sub
 
-    Function Scraper(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.PostScraperCapabilities, ByRef ImageList As List(Of MediaContainers.Image)) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule_Poster.Scraper
-        'LoadSettings()
-        Dim Poster As New Images
-
-        LoadSettings()
-
-        ImageList = _fanartTV.GetFANARTTVImages(DBMovie.Movie.ID)
-
-        Return New Interfaces.ModuleResult With {.breakChain = False}
-    End Function
-
     Public Sub ScraperOrderChanged() Implements EmberAPI.Interfaces.EmberMovieScraperModule_Poster.ScraperOrderChanged
         _setup.orderChanged()
     End Sub
@@ -200,10 +184,26 @@ Public Class FanartTV_Poster
 
 #Region "Nested Types"
 
-    Structure sMySettings
+    Structure _MySettings
 
 #Region "Fields"
-        Dim FANARTTVApiKey As String
+
+        Dim DownloadTrailers As Boolean
+        Dim IMDBURL As String
+        Dim UseOFDBGenre As Boolean
+        Dim UseOFDBOutline As Boolean
+        Dim UseOFDBPlot As Boolean
+        Dim UseOFDBTitle As Boolean
+        Dim TrailerTimeout As Integer
+        Dim UseTMDB As Boolean
+        Dim UseIMPA As Boolean
+        Dim UseMPDB As Boolean
+        Dim UseTMDBTrailer As Boolean
+        Dim UseIMDBTrailer As Boolean
+        Dim UseTMDBTrailerXBMC As Boolean
+        Dim ManualETSize As String
+        Dim ActorThumbsSize As String
+        Dim UseTMDBTrailerPref As String
 #End Region 'Fields
 
     End Structure

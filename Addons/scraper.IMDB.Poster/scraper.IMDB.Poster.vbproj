@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6A5A835E-D798-4A21-963C-C8E7A5F99D57}</ProjectGuid>
+    <ProjectGuid>{33F99994-12CA-4FAB-B62D-741F7AE35F4B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>EmberScraperModule</RootNamespace>
     <AssemblyName>scraper.IMDB.Poster</AssemblyName>
@@ -37,14 +37,6 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -78,12 +70,6 @@
     <CodeAnalysisRuleDirectories>;D:\Applications\Development\Microsoft Visual Studio 2010\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\..\packages\RestSharp.104.1\lib\net35\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -101,6 +87,7 @@
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
+    <Import Include="System.Diagnostics" />
     <Import Include="System.Drawing" />
     <Import Include="System.Linq" />
     <Import Include="System.Web" />
@@ -108,44 +95,10 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Scraper\clsScrapeIMPA.vb" />
-    <Compile Include="Scraper\clsScrapeMPDB.vb" />
-    <Compile Include="Scraper\clsScrapeOFDB.vb" />
-    <Compile Include="Scraper\clsScrapeTMDB.vb" />
-    <Compile Include="Scraper\clsScrapeTrailers.vb" />
-    <Compile Include="Scraper\clsScrapeImages.vb" />
-    <Compile Include="Scraper\clsScrapeTMDBg.vb" />
-    <Compile Include="Scraper\clsScrapeYouTube.vb" />
-    <Compile Include="Scraper\clsScrapeIMDB.vb" />
-    <Compile Include="Scraper\clsScrapeFANARTTV.vb" />
-    <Compile Include="Scraper\dlgTMDBSearchResults.Designer.vb">
-      <DependentUpon>dlgTMDBSearchResults.vb</DependentUpon>
+    <Compile Include="frmIMDBMediaSettingsHolder.Designer.vb">
+      <DependentUpon>frmIMDBMediaSettingsHolder.vb</DependentUpon>
     </Compile>
-    <Compile Include="Scraper\dlgTMDBSearchResults.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scraper\dlgImgSelect.Designer.vb">
-      <DependentUpon>dlgImgSelect.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Scraper\dlgImgSelect.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scraper\dlgTrailer.Designer.vb">
-      <DependentUpon>dlgTrailer.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Scraper\dlgTrailer.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scraper\dlgTrailerFormat.Designer.vb">
-      <DependentUpon>dlgTrailerFormat.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Scraper\dlgTrailerFormat.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmTMDBMediaSettingsHolder.Designer.vb">
-      <DependentUpon>frmTMDBMediaSettingsHolder.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmTMDBMediaSettingsHolder.vb">
+    <Compile Include="frmIMDBMediaSettingsHolder.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -163,37 +116,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="frmTMDBInfoSettingsHolder.Designer.vb">
-      <DependentUpon>frmTMDBInfoSettingsHolder.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmTMDBInfoSettingsHolder.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="scraperMovieTMDBModule.vb" />
+    <Compile Include="IMDB_Poster.vb" />
+    <Compile Include="Scraper\clsScrapeIMDB.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scraper\dlgTMDBSearchResults.resx">
-      <DependentUpon>dlgTMDBSearchResults.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scraper\dlgImgSelect.resx">
-      <DependentUpon>dlgImgSelect.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scraper\dlgTrailer.resx">
-      <DependentUpon>dlgTrailer.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scraper\dlgTrailerFormat.resx">
-      <DependentUpon>dlgTrailerFormat.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmTMDBMediaSettingsHolder.resx">
-      <DependentUpon>frmTMDBMediaSettingsHolder.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmTMDBInfoSettingsHolder.resx">
-      <DependentUpon>frmTMDBInfoSettingsHolder.vb</DependentUpon>
+    <EmbeddedResource Include="frmIMDBMediaSettingsHolder.resx">
+      <DependentUpon>frmIMDBMediaSettingsHolder.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -213,7 +141,6 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -238,39 +165,30 @@
       <Name>EmberAPI</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\FanartTVAPI\FanartTVAPI.csproj">
-      <Project>{70F651C6-6BB4-4E4D-AD6C-25C36CA1E9E6}</Project>
-      <Name>FanartTVAPI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\WatTmdb\WatTmdb.csproj">
-      <Project>{EFC11645-FAB4-4C30-A498-29F5ECDF77E8}</Project>
-      <Name>WatTmdb</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Langs\scraper.EmberCore.TMDB.Debug_%28db_DB%29.xml">
+    <Content Include="Langs\scraper.EmberCore.Debug_%28db_DB%29.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Langs\scraper.EmberCore.TMDB.English_%28en_US%29-Help.xml">
+    <Content Include="Langs\scraper.EmberCore.English_%28en_US%29-Help.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Langs\scraper.EmberCore.TMDB.English_%28en_US%29.xml">
+    <Content Include="Langs\scraper.EmberCore.English_%28en_US%29.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Langs\scraper.EmberCore.TMDB.German_%28de_DE%29-Help.xml">
+    <Content Include="Langs\scraper.EmberCore.German_%28de_DE%29-Help.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Langs\scraper.EmberCore.TMDB.German_%28de_DE%29.xml">
+    <Content Include="Langs\scraper.EmberCore.German_%28de_DE%29.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Langs\scraper.EmberCore.TMDB.Norwegian_%28no_NO%29-Help.xml">
+    <Content Include="Langs\scraper.EmberCore.Norwegian_%28no_NO%29-Help.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Langs\scraper.EmberCore.TMDB.Norwegian_%28no_NO%29.xml">
+    <Content Include="Langs\scraper.EmberCore.Norwegian_%28no_NO%29.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
