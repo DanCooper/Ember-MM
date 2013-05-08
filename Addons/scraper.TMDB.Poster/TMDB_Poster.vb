@@ -47,7 +47,7 @@ Public Class EmberTMDBScraperModule
 	''' </summary>
 	''' <remarks></remarks>
 	Private _MySettings As New sMySettings
-    Private _Name As String = "Ember TMDB Movie Scrapers"
+    Private _Name As String = "TMDB_Poster"
     Private _ScraperEnabled As Boolean = False
     Private _setup As frmTMDBMediaSettingsHolder
 	Private _TMDBConf As V3.TmdbConfiguration

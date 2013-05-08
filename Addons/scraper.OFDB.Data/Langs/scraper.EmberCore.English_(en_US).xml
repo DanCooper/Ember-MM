@@ -1,9 +1,9 @@
 <strings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <string id="0">Ember Native TV Scrapers</string>
-  <string id="1">Use OFDB Genre</string>
-  <string id="2">Use OFDB Plot</string>
-  <string id="3">Use OFDB Outline</string>
-  <string id="4">Use OFDB Title</string>
+  <string id="1">Genre</string>
+  <string id="2">Plot</string>
+  <string id="3">Outline</string>
+  <string id="4">Title</string>
   <string id="5">IMDB Mirror:</string>
   <string id="6">Scraper Fields - Scraper specific</string>
   <string id="7">Timeout:</string>
@@ -103,7 +103,7 @@
   <string id="101">Get Posters</string>
   <string id="102">Get Fanart</string>
   <string id="103">These settings are specific to this module.{0}Please refer to the global settings for more options.</string>
-  <string id="104">Ember Native Movie Scrapers</string>
+  <string id="104">OFDB Scrapers</string>
   <string id="105"/>
   <string id="106">IMDB</string>
   <string id="107">OFDB (German)</string>
