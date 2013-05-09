@@ -733,51 +733,53 @@ Public Class Database
             Using SQLcommand As SQLite.SQLiteCommand = _mediaDBConn.CreateCommand()
                 SQLcommand.CommandText = String.Concat("SELECT * FROM movies WHERE id = ", MovieID, ";")
                 Using SQLreader As SQLite.SQLiteDataReader = SQLcommand.ExecuteReader()
-                    If Not DBNull.Value.Equals(SQLreader("DateAdd")) Then _movieDB.DateAdd = Convert.ToInt64(SQLreader("DateAdd"))
-                    If Not DBNull.Value.Equals(SQLreader("ListTitle")) Then _movieDB.ListTitle = SQLreader("ListTitle").ToString
-                    If Not DBNull.Value.Equals(SQLreader("MoviePath")) Then _movieDB.Filename = SQLreader("MoviePath").ToString
-                    _movieDB.isSingle = Convert.ToBoolean(SQLreader("type"))
-                    If Not DBNull.Value.Equals(SQLreader("FanartPath")) Then _movieDB.FanartPath = SQLreader("FanartPath").ToString
-                    If Not DBNull.Value.Equals(SQLreader("PosterPath")) Then _movieDB.PosterPath = SQLreader("PosterPath").ToString
-                    If Not DBNull.Value.Equals(SQLreader("TrailerPath")) Then _movieDB.TrailerPath = SQLreader("TrailerPath").ToString
-                    If Not DBNull.Value.Equals(SQLreader("NfoPath")) Then _movieDB.NfoPath = SQLreader("NfoPath").ToString
-                    If Not DBNull.Value.Equals(SQLreader("SubPath")) Then _movieDB.SubPath = SQLreader("SubPath").ToString
-                    If Not DBNull.Value.Equals(SQLreader("ExtraPath")) Then _movieDB.ExtraPath = SQLreader("ExtraPath").ToString
-                    If Not DBNull.Value.Equals(SQLreader("source")) Then _movieDB.Source = SQLreader("source").ToString
-                    _movieDB.IsMark = Convert.ToBoolean(SQLreader("mark"))
-                    _movieDB.IsLock = Convert.ToBoolean(SQLreader("lock"))
-                    _movieDB.UseFolder = Convert.ToBoolean(SQLreader("UseFolder"))
-                    _movieDB.OutOfTolerance = Convert.ToBoolean(SQLreader("OutOfTolerance"))
-                    _movieDB.NeedsSave = Convert.ToBoolean(SQLreader("NeedsSave"))
-                    If Not DBNull.Value.Equals(SQLreader("FileSource")) Then _movieDB.FileSource = SQLreader("FileSource").ToString
-                    _movieDB.Movie = New MediaContainers.Movie
-                    With _movieDB.Movie
-                        If Not DBNull.Value.Equals(SQLreader("IMDB")) Then .ID = SQLreader("IMDB").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Title")) Then .Title = SQLreader("Title").ToString
-                        If Not DBNull.Value.Equals(SQLreader("OriginalTitle")) Then .OriginalTitle = SQLreader("OriginalTitle").ToString
-                        If Not DBNull.Value.Equals(SQLreader("SortTitle")) Then .SortTitle = SQLreader("SortTitle").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Year")) Then .Year = SQLreader("Year").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Rating")) Then .Rating = SQLreader("Rating").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Votes")) Then .Votes = SQLreader("Votes").ToString
-                        If Not DBNull.Value.Equals(SQLreader("MPAA")) Then .MPAA = SQLreader("MPAA").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Top250")) Then .Top250 = SQLreader("Top250").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Country")) Then .Country = SQLreader("Country").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Outline")) Then .Outline = SQLreader("Outline").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Plot")) Then .Plot = SQLreader("Plot").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Tagline")) Then .Tagline = SQLreader("Tagline").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Trailer")) Then .Trailer = SQLreader("Trailer").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Certification")) Then .Certification = SQLreader("Certification").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Genre")) Then .Genre = SQLreader("Genre").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Runtime")) Then .Runtime = SQLreader("Runtime").ToString
-                        If Not DBNull.Value.Equals(SQLreader("ReleaseDate")) Then .ReleaseDate = SQLreader("ReleaseDate").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Studio")) Then .Studio = SQLreader("Studio").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Director")) Then .Director = SQLreader("Director").ToString
-                        If Not DBNull.Value.Equals(SQLreader("Credits")) Then .OldCredits = SQLreader("Credits").ToString
-                        If Not DBNull.Value.Equals(SQLreader("PlayCount")) Then .PlayCount = SQLreader("PlayCount").ToString
-                        'If Not DBNull.Value.Equals(SQLreader("Watched")) Then .Watched = SQLreader("Watched").ToString
-                        If Not DBNull.Value.Equals(SQLreader("FanartURL")) AndAlso Not Master.eSettings.NoSaveImagesToNfo Then .Fanart.URL = SQLreader("FanartURL").ToString
-                    End With
-
+                    If SQLreader.HasRows Then
+                        SQLreader.Read()
+                        If Not DBNull.Value.Equals(SQLreader("DateAdd")) Then _movieDB.DateAdd = Convert.ToInt64(SQLreader("DateAdd"))
+                        If Not DBNull.Value.Equals(SQLreader("ListTitle")) Then _movieDB.ListTitle = SQLreader("ListTitle").ToString
+                        If Not DBNull.Value.Equals(SQLreader("MoviePath")) Then _movieDB.Filename = SQLreader("MoviePath").ToString
+                        _movieDB.isSingle = Convert.ToBoolean(SQLreader("type"))
+                        If Not DBNull.Value.Equals(SQLreader("FanartPath")) Then _movieDB.FanartPath = SQLreader("FanartPath").ToString
+                        If Not DBNull.Value.Equals(SQLreader("PosterPath")) Then _movieDB.PosterPath = SQLreader("PosterPath").ToString
+                        If Not DBNull.Value.Equals(SQLreader("TrailerPath")) Then _movieDB.TrailerPath = SQLreader("TrailerPath").ToString
+                        If Not DBNull.Value.Equals(SQLreader("NfoPath")) Then _movieDB.NfoPath = SQLreader("NfoPath").ToString
+                        If Not DBNull.Value.Equals(SQLreader("SubPath")) Then _movieDB.SubPath = SQLreader("SubPath").ToString
+                        If Not DBNull.Value.Equals(SQLreader("ExtraPath")) Then _movieDB.ExtraPath = SQLreader("ExtraPath").ToString
+                        If Not DBNull.Value.Equals(SQLreader("source")) Then _movieDB.Source = SQLreader("source").ToString
+                        _movieDB.IsMark = Convert.ToBoolean(SQLreader("mark"))
+                        _movieDB.IsLock = Convert.ToBoolean(SQLreader("lock"))
+                        _movieDB.UseFolder = Convert.ToBoolean(SQLreader("UseFolder"))
+                        _movieDB.OutOfTolerance = Convert.ToBoolean(SQLreader("OutOfTolerance"))
+                        _movieDB.NeedsSave = Convert.ToBoolean(SQLreader("NeedsSave"))
+                        If Not DBNull.Value.Equals(SQLreader("FileSource")) Then _movieDB.FileSource = SQLreader("FileSource").ToString
+                        _movieDB.Movie = New MediaContainers.Movie
+                        With _movieDB.Movie
+                            If Not DBNull.Value.Equals(SQLreader("IMDB")) Then .ID = SQLreader("IMDB").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Title")) Then .Title = SQLreader("Title").ToString
+                            If Not DBNull.Value.Equals(SQLreader("OriginalTitle")) Then .OriginalTitle = SQLreader("OriginalTitle").ToString
+                            If Not DBNull.Value.Equals(SQLreader("SortTitle")) Then .SortTitle = SQLreader("SortTitle").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Year")) Then .Year = SQLreader("Year").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Rating")) Then .Rating = SQLreader("Rating").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Votes")) Then .Votes = SQLreader("Votes").ToString
+                            If Not DBNull.Value.Equals(SQLreader("MPAA")) Then .MPAA = SQLreader("MPAA").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Top250")) Then .Top250 = SQLreader("Top250").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Country")) Then .Country = SQLreader("Country").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Outline")) Then .Outline = SQLreader("Outline").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Plot")) Then .Plot = SQLreader("Plot").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Tagline")) Then .Tagline = SQLreader("Tagline").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Trailer")) Then .Trailer = SQLreader("Trailer").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Certification")) Then .Certification = SQLreader("Certification").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Genre")) Then .Genre = SQLreader("Genre").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Runtime")) Then .Runtime = SQLreader("Runtime").ToString
+                            If Not DBNull.Value.Equals(SQLreader("ReleaseDate")) Then .ReleaseDate = SQLreader("ReleaseDate").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Studio")) Then .Studio = SQLreader("Studio").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Director")) Then .Director = SQLreader("Director").ToString
+                            If Not DBNull.Value.Equals(SQLreader("Credits")) Then .OldCredits = SQLreader("Credits").ToString
+                            If Not DBNull.Value.Equals(SQLreader("PlayCount")) Then .PlayCount = SQLreader("PlayCount").ToString
+                            'If Not DBNull.Value.Equals(SQLreader("Watched")) Then .Watched = SQLreader("Watched").ToString
+                            If Not DBNull.Value.Equals(SQLreader("FanartURL")) AndAlso Not Master.eSettings.NoSaveImagesToNfo Then .Fanart.URL = SQLreader("FanartURL").ToString
+                        End With
+                    End If
                 End Using
             End Using
 
@@ -1669,6 +1671,7 @@ Public Class Database
 
                     Using SQLreader As SQLite.SQLiteDataReader = SQLpathcommand.ExecuteReader
                         If SQLreader.HasRows Then
+                            SQLreader.Read()
                             PathID = Convert.ToInt64(SQLreader("ID"))
                         Else
                             Using SQLpcommand As SQLite.SQLiteCommand = _mediaDBConn.CreateCommand()
