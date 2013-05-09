@@ -291,17 +291,19 @@ Public Class Interfaces
 
 #Region "Events"
 
-		Event ModuleSettingsChanged()
+        Event ModuleSettingsChanged()
 
 		Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
 
 		Event TVScraperEvent(ByVal eType As Enums.TVScraperEventType, ByVal iProgress As Integer, ByVal Parameter As Object)
 
-#End Region	'Events
+        Event SetupNeedsRestart()
+
+#End Region 'Events
 
 #Region "Properties"
 
-		ReadOnly Property IsBusy() As Boolean
+        ReadOnly Property IsBusy() As Boolean
 
 		ReadOnly Property ModuleName() As String
 
@@ -317,9 +319,13 @@ Public Class Interfaces
 
 		Sub CancelAsync()
 
-		Function GetSingleEpisode(ByVal ShowID As Integer, ByVal TVDBID As String, ByVal Season As Integer, ByVal Episode As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal Options As Structures.TVScrapeOptions, ByRef epDetails As MediaContainers.EpisodeDetails) As ModuleResult
+        Function ChangeEpisode(ShowID As Integer, TVDBID As String, Lang As String, ByRef epDet As MediaContainers.EpisodeDetails) As ModuleResult
 
-		Sub Init(ByVal sAssemblyName As String)
+        Function GetSingleEpisode(ByVal ShowID As Integer, ByVal TVDBID As String, ByVal Season As Integer, ByVal Episode As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal Options As Structures.TVScrapeOptions, ByRef epDetails As MediaContainers.EpisodeDetails) As ModuleResult
+
+        Function GetLangs(sMirror As String, ByRef Langs As List(Of Containers.TVLanguage)) As ModuleResult
+
+        Sub Init(ByVal sAssemblyName As String)
 
 		Function InjectSetupScraper() As Containers.SettingsPanel
 

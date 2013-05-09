@@ -41,15 +41,26 @@ Public Class frmTMDBInfoSettingsHolder
 #End Region 'Fields
 
 #Region "Methods"
+    Private Sub PictureBox2_Click(sender As System.Object, e As System.EventArgs) Handles pbTMDB.Click
+        If Master.isWindows Then
+            Process.Start("http://docs.themoviedb.apiary.io/")
+        Else
+            Using Explorer As New Process
+                Explorer.StartInfo.FileName = "xdg-open"
+                Explorer.StartInfo.Arguments = "http://docs.themoviedb.apiary.io/"
+                Explorer.Start()
+            End Using
+        End If
+    End Sub
 
 	Private Sub btnDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDown.Click
         Dim order As Integer = ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Data._AssemblyName).ScraperOrder
-        'If order < ModulesManager.Instance.externalScrapersModules.Where(Function(y) y.ProcessorModule.IsScraper).Count - 1 Then
-        '	ModulesManager.Instance.externalScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order + 1).ScraperOrder = order
-        '	ModulesManager.Instance.externalScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberTMDBScraperModule._AssemblyName).ScraperOrder = order + 1
-        '	RaiseEvent SetupScraperChanged(cbEnabled.Checked, 1)
-        '	orderChanged()
-        'End If
+        If order < ModulesManager.Instance.externalDataScrapersModules.Count - 1 Then
+            ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order + 1).ScraperOrder = order
+            ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Data._AssemblyName).ScraperOrder = order + 1
+            RaiseEvent SetupScraperChanged(cbEnabled.Checked, 1)
+            orderChanged()
+        End If
     End Sub
 
     Private Sub btnUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnUp.Click
@@ -188,15 +199,4 @@ Public Class frmTMDBInfoSettingsHolder
 
 #End Region	'Methods
 
-	Private Sub PictureBox2_Click(sender As System.Object, e As System.EventArgs) Handles pbTMDB.Click
-		If Master.isWindows Then
-			Process.Start("http://docs.themoviedb.apiary.io/")
-		Else
-			Using Explorer As New Process
-				Explorer.StartInfo.FileName = "xdg-open"
-				Explorer.StartInfo.Arguments = "http://docs.themoviedb.apiary.io/"
-				Explorer.Start()
-			End Using
-		End If
-    End Sub
 End Class
