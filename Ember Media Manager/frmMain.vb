@@ -7939,7 +7939,9 @@ doCancel:
                 Using SQLNewcommand As SQLite.SQLiteCommand = Master.DB.MediaDBConn.CreateCommand()
                     SQLNewcommand.CommandText = String.Concat("SELECT COUNT(id) AS mcount FROM movies WHERE mark = 1;")
                     Using SQLcount As SQLite.SQLiteDataReader = SQLNewcommand.ExecuteReader()
-                        If Convert.ToInt32(SQLcount("mcount")) > 0 Then
+                        Debug.Print(SQLcount.HasRows.ToString())
+                        SQLcount.Read()
+                        If SQLcount.HasRows AndAlso Convert.ToInt32(SQLcount("mcount")) > 0 Then
                             Me.btnMarkAll.Text = Master.eLang.GetString(105, "Unmark All")
                         Else
                             Me.btnMarkAll.Text = Master.eLang.GetString(35, "Mark All")

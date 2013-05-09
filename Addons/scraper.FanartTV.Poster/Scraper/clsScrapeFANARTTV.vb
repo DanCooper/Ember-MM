@@ -67,7 +67,7 @@ Namespace FANARTTVs
             Dim Result As FanartTV.V1.FanartTVMovie = _FanartTV.GetMovieInfo(New FanartTV.V1.FanartTVRequest("1", "JSON", "all", 1, 1))
             If IsNothing(Result) Then
                 If Not IsNothing(_FanartTV.Error) Then
-                    Master.eLog.WriteToErrorLog(_FanartTV.Error, "", "Error")
+                    'Master.eLog.WriteToErrorLog(_FanartTV.Error, "", "Error")
                     _APIInvalid = True
                 End If
             End If
