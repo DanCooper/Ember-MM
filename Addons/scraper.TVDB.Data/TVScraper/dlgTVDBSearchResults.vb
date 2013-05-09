@@ -24,6 +24,8 @@ Public Class dlgTVDBSearchResults
 
 #Region "Fields"
 
+    Private _MySettings As TVDB_Data.sMySettings
+
     Friend WithEvents bwDownloadPic As New System.ComponentModel.BackgroundWorker
 
     Private lvResultsSorter As New ListViewColumnSorter
@@ -36,7 +38,7 @@ Public Class dlgTVDBSearchResults
 
 #Region "Methods"
 
-    Public Overloads Function ShowDialog(ByVal _sInfo As Structures.ScrapeInfo) As Windows.Forms.DialogResult
+    Public Overloads Function ShowDialog(ByVal _sInfo As Structures.ScrapeInfo, tMySettings As TVDB_Data.sMySettings) As Windows.Forms.DialogResult
         Me.sInfo = _sInfo
         Me.Text = String.Concat(Master.eLang.GetString(85, "TV Search Results"), " - ", sInfo.ShowTitle)
         Scraper.sObject.GetSearchResultsAsync(Me.sInfo)
@@ -81,7 +83,7 @@ Public Class dlgTVDBSearchResults
             Me.pnlLoading.Visible = True
             Application.DoEvents()
 
-            Dim forceXML As String = sHTTP.DownloadData(String.Format("http://{0}/api/{1}/series/{2}/{3}.xml", Master.eSettings.TVDBMirror, Scraper.APIKey, Me.txtTVDBID.Text, Master.eSettings.TVDBLanguage))
+            Dim forceXML As String = sHTTP.DownloadData(String.Format("http://{0}/api/{1}/series/{2}/{3}.xml", Master.eSettings.TVDBMirror, TVDB_Data.sMySettings, Me.txtTVDBID.Text, Master.eSettings.TVDBLanguage))
 
             If Not String.IsNullOrEmpty(forceXML) Then
                 Try

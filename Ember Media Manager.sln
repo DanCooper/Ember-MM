@@ -86,7 +86,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "scraper.TMDB.Poster", "Addo
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "scraper.TVDB.Data", "Addons\scraper.TVDB.Data\scraper.TVDB.Data.vbproj", "{F642E719-61E2-4847-AB55-DB47C0F38649}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "scraper.TVDB.Poster", "Addons\scraper.TVDB.Poster\scraper.TVDB.Poster.vbproj", "{3FAF50AA-AD5F-455A-8711-6D791C457F0F}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "scraper.TVDB", "Addons\scraper.TVDB.Poster\scraper.TVDB.vbproj", "{3FAF50AA-AD5F-455A-8711-6D791C457F0F}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "scraper.YouTube.Trailer", "Addons\scraper.YouTube.Trailer\scraper.YouTube.Trailer.vbproj", "{194445BE-3721-4270-984D-FA978D5F34A0}"
 EndProject

@@ -21,10 +21,7 @@
 Imports System.IO
 Imports EmberAPI
 
-''' <summary>
-''' Native Scraper
-''' </summary>
-''' <remarks></remarks>
+
 Public Class EmberNativeTVScraperModule
     Implements Interfaces.EmberTVScraperModule
 

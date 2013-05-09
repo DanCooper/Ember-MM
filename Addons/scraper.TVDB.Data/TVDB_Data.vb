@@ -26,7 +26,7 @@ Public Class TVDB_Data
 
 #Region "Fields"
 
-    Public Shared TVScraper As New Scraper
+    Public Shared TVScraper As Scraper
     Public Shared _AssemblyName As String
 
     Private _Name As String = "TVDB Scraper"
@@ -110,7 +110,9 @@ Public Class TVDB_Data
 
     Public Sub Init(ByVal sAssemblyName As String) Implements Interfaces.EmberTVScraperModule_Data.Init
         _AssemblyName = sAssemblyName
+        LoadSettings()
         AddHandler TVScraper.ScraperEvent, AddressOf Handler_ScraperEvent
+        TVScraper = New Scraper(_MySettings)
     End Sub
 
     Public Function InjectSetupScraper() As Containers.SettingsPanel Implements Interfaces.EmberTVScraperModule_Data.InjectSetupScraper

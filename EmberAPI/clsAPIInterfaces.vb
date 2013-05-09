@@ -287,17 +287,17 @@ Public Class Interfaces
 
 	End Interface
 
-	Public Interface EmberTVScraperModule_Data
+    Public Interface EmberTVScraperModule
 
 #Region "Events"
 
         Event ModuleSettingsChanged()
 
-		Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
+        Event SetupPostScraperChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
 
-		Event TVScraperEvent(ByVal eType As Enums.TVScraperEventType, ByVal iProgress As Integer, ByVal Parameter As Object)
+        Event SetupScraperChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
 
-        Event SetupNeedsRestart()
+        Event TVScraperEvent(ByVal eType As Enums.TVScraperEventType, ByVal iProgress As Integer, ByVal Parameter As Object)
 
 #End Region 'Events
 
@@ -305,91 +305,159 @@ Public Class Interfaces
 
         ReadOnly Property IsBusy() As Boolean
 
-		ReadOnly Property ModuleName() As String
+        ReadOnly Property IsPostScraper() As Boolean
 
-		ReadOnly Property ModuleVersion() As String
+        ReadOnly Property IsScraper() As Boolean
 
-		Property ScraperEnabled() As Boolean
+        ReadOnly Property ModuleName() As String
 
-#End Region	'Properties
+        ReadOnly Property ModuleVersion() As String
+
+        Property PostScraperEnabled() As Boolean
+
+        Property ScraperEnabled() As Boolean
+
+#End Region 'Properties
 
 #Region "Methods"
 
-		Sub ScraperOrderChanged()
+        Sub CancelAsync()
 
-		Sub CancelAsync()
+        Function ChangeEpisode(ByVal ShowID As Integer, ByVal TVDBID As String, ByVal Lang As String, ByRef epDet As MediaContainers.EpisodeDetails) As ModuleResult
 
-        Function ChangeEpisode(ShowID As Integer, TVDBID As String, Lang As String, ByRef epDet As MediaContainers.EpisodeDetails) As ModuleResult
+        Function GetLangs(ByVal sMirror As String, ByRef Langs As List(Of Containers.TVLanguage)) As ModuleResult
 
         Function GetSingleEpisode(ByVal ShowID As Integer, ByVal TVDBID As String, ByVal Season As Integer, ByVal Episode As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal Options As Structures.TVScrapeOptions, ByRef epDetails As MediaContainers.EpisodeDetails) As ModuleResult
 
-        Function GetLangs(sMirror As String, ByRef Langs As List(Of Containers.TVLanguage)) As ModuleResult
+        Function GetSingleImage(ByVal Title As String, ByVal ShowID As Integer, ByVal TVDBID As String, ByVal Type As Enums.TVImageType, ByVal Season As Integer, ByVal Episode As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal CurrentImage As Image, ByRef Image As Image) As ModuleResult
 
         Sub Init(ByVal sAssemblyName As String)
 
-		Function InjectSetupScraper() As Containers.SettingsPanel
+        Function InjectSetupPostScraper() As Containers.SettingsPanel
 
-		Sub SaveSetupScraper(ByVal DoDispose As Boolean)
+        Function InjectSetupScraper() As Containers.SettingsPanel
 
-		Function ScrapeEpisode(ByVal ShowID As Integer, ByVal ShowTitle As String, ByVal TVDBID As String, ByVal iEpisode As Integer, ByVal iSeason As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal Options As Structures.TVScrapeOptions) As ModuleResult
+        Function PostScraper(ByRef DBTV As Structures.DBTV, ByVal ScrapeType As Enums.ScrapeType) As ModuleResult
 
-		Function Scraper(ByVal ShowID As Integer, ByVal ShowTitle As String, ByVal TVDBID As String, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal Options As Structures.TVScrapeOptions, ByVal ScrapeType As Enums.ScrapeType, ByVal WithCurrent As Boolean) As ModuleResult
+        Function SaveImages() As ModuleResult
 
-		Function ScrapeSeason(ByVal ShowID As Integer, ByVal ShowTitle As String, ByVal TVDBID As String, ByVal iSeason As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal Options As Structures.TVScrapeOptions) As ModuleResult
+        Sub SaveSetupPostScraper(ByVal DoDispose As Boolean)
 
-#End Region	'Methods
+        Sub SaveSetupScraper(ByVal DoDispose As Boolean)
 
-	End Interface
+        Function ScrapeEpisode(ByVal ShowID As Integer, ByVal ShowTitle As String, ByVal TVDBID As String, ByVal iEpisode As Integer, ByVal iSeason As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal Options As Structures.TVScrapeOptions) As ModuleResult
 
-	Public Interface EmberTVScraperModule_Poster
+        Function Scraper(ByVal ShowID As Integer, ByVal ShowTitle As String, ByVal TVDBID As String, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal Options As Structures.TVScrapeOptions, ByVal ScrapeType As Enums.ScrapeType, ByVal WithCurrent As Boolean) As ModuleResult
 
-#Region "Events"
+        Function ScrapeSeason(ByVal ShowID As Integer, ByVal ShowTitle As String, ByVal TVDBID As String, ByVal iSeason As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal Options As Structures.TVScrapeOptions) As ModuleResult
 
-		Event ModuleSettingsChanged()
+#End Region 'Methods
 
-		Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
+    End Interface
 
-		Event TVScraperEvent(ByVal eType As Enums.TVScraperEventType, ByVal iProgress As Integer, ByVal Parameter As Object)
+    '	Public Interface EmberTVScraperModule_Data
 
-#End Region	'Events
+    '#Region "Events"
 
-#Region "Properties"
+    '        Event ModuleSettingsChanged()
 
-		ReadOnly Property IsBusy() As Boolean
+    '		Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
 
-		ReadOnly Property ModuleName() As String
+    '		Event TVScraperEvent(ByVal eType As Enums.TVScraperEventType, ByVal iProgress As Integer, ByVal Parameter As Object)
 
-		ReadOnly Property ModuleVersion() As String
+    '        Event SetupNeedsRestart()
 
-		Property ScraperEnabled() As Boolean
+    '#End Region 'Events
 
-#End Region	'Properties
+    '#Region "Properties"
 
-#Region "Methods"
+    '        ReadOnly Property IsBusy() As Boolean
 
-		Sub ScraperOrderChanged()
+    '		ReadOnly Property ModuleName() As String
 
-		Sub CancelAsync()
+    '		ReadOnly Property ModuleVersion() As String
 
-		Function ChangeEpisode(ByVal ShowID As Integer, ByVal TVDBID As String, ByVal Lang As String, ByRef epDet As MediaContainers.EpisodeDetails) As ModuleResult
+    '		Property ScraperEnabled() As Boolean
 
-		Function GetLangs(ByVal sMirror As String, ByRef Langs As List(Of Containers.TVLanguage)) As ModuleResult
+    '#End Region	'Properties
 
-		Function GetSingleImage(ByVal Title As String, ByVal ShowID As Integer, ByVal TVDBID As String, ByVal Type As Enums.TVImageType, ByVal Season As Integer, ByVal Episode As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal CurrentImage As Images, ByRef Image As Images) As ModuleResult
+    '#Region "Methods"
 
-		Sub Init(ByVal sAssemblyName As String)
+    '		Sub ScraperOrderChanged()
 
-		Function InjectSetupScraper() As Containers.SettingsPanel
+    '		Sub CancelAsync()
 
-		Function Scraper(ByRef DBTV As Structures.DBTV, ByVal ScrapeType As Enums.ScrapeType) As ModuleResult
+    '        Function ChangeEpisode(ShowID As Integer, TVDBID As String, Lang As String, ByRef epDet As MediaContainers.EpisodeDetails) As ModuleResult
 
-		Function SaveImages() As ModuleResult
+    '        Function GetSingleEpisode(ByVal ShowID As Integer, ByVal TVDBID As String, ByVal Season As Integer, ByVal Episode As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal Options As Structures.TVScrapeOptions, ByRef epDetails As MediaContainers.EpisodeDetails) As ModuleResult
 
-		Sub SaveSetupScraper(ByVal DoDispose As Boolean)
+    '        Function GetLangs(sMirror As String, ByRef Langs As List(Of Containers.TVLanguage)) As ModuleResult
 
-#End Region	'Methods
+    '        Sub Init(ByVal sAssemblyName As String)
 
-	End Interface
+    '		Function InjectSetupScraper() As Containers.SettingsPanel
+
+    '		Sub SaveSetupScraper(ByVal DoDispose As Boolean)
+
+    '		Function ScrapeEpisode(ByVal ShowID As Integer, ByVal ShowTitle As String, ByVal TVDBID As String, ByVal iEpisode As Integer, ByVal iSeason As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal Options As Structures.TVScrapeOptions) As ModuleResult
+
+    '		Function Scraper(ByVal ShowID As Integer, ByVal ShowTitle As String, ByVal TVDBID As String, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal Options As Structures.TVScrapeOptions, ByVal ScrapeType As Enums.ScrapeType, ByVal WithCurrent As Boolean) As ModuleResult
+
+    '		Function ScrapeSeason(ByVal ShowID As Integer, ByVal ShowTitle As String, ByVal TVDBID As String, ByVal iSeason As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal Options As Structures.TVScrapeOptions) As ModuleResult
+
+    '#End Region	'Methods
+
+    '	End Interface
+
+    '	Public Interface EmberTVScraperModule_Poster
+
+    '#Region "Events"
+
+    '		Event ModuleSettingsChanged()
+
+    '		Event ScraperSetupChanged(ByVal name As String, ByVal State As Boolean, ByVal difforder As Integer)
+
+    '		Event TVScraperEvent(ByVal eType As Enums.TVScraperEventType, ByVal iProgress As Integer, ByVal Parameter As Object)
+
+    '#End Region	'Events
+
+    '#Region "Properties"
+
+    '		ReadOnly Property IsBusy() As Boolean
+
+    '		ReadOnly Property ModuleName() As String
+
+    '		ReadOnly Property ModuleVersion() As String
+
+    '		Property ScraperEnabled() As Boolean
+
+    '#End Region	'Properties
+
+    '#Region "Methods"
+
+    '		Sub ScraperOrderChanged()
+
+    '		Sub CancelAsync()
+
+    '		Function ChangeEpisode(ByVal ShowID As Integer, ByVal TVDBID As String, ByVal Lang As String, ByRef epDet As MediaContainers.EpisodeDetails) As ModuleResult
+
+    '		Function GetLangs(ByVal sMirror As String, ByRef Langs As List(Of Containers.TVLanguage)) As ModuleResult
+
+    '		Function GetSingleImage(ByVal Title As String, ByVal ShowID As Integer, ByVal TVDBID As String, ByVal Type As Enums.TVImageType, ByVal Season As Integer, ByVal Episode As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal CurrentImage As Images, ByRef Image As Images) As ModuleResult
+
+    '		Sub Init(ByVal sAssemblyName As String)
+
+    '		Function InjectSetupScraper() As Containers.SettingsPanel
+
+    '		Function Scraper(ByRef DBTV As Structures.DBTV, ByVal ScrapeType As Enums.ScrapeType) As ModuleResult
+
+    '		Function SaveImages() As ModuleResult
+
+    '		Sub SaveSetupScraper(ByVal DoDispose As Boolean)
+
+    '#End Region	'Methods
+
+    '	End Interface
 
 #End Region	'Nested Interfaces
 
