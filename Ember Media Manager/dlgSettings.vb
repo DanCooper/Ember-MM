@@ -276,22 +276,22 @@ Public Class dlgSettings
             Me.AddHelpHandlers(tPanel.Panel, tPanel.Prefix)
         Next
         ModuleCounter = 1
-        For Each s As ModulesManager._externalTVScraperModuleClass_Data In ModulesManager.Instance.externalTVDataScrapersModules.OrderBy(Function(x) x.ScraperOrder)
+        For Each s As ModulesManager._externalTVScraperModuleClass In ModulesManager.Instance.externalTVScrapersModules.Where(Function(y) y.ProcessorModule.IsScraper).OrderBy(Function(x) x.ScraperOrder)
             tPanel = s.ProcessorModule.InjectSetupScraper
             tPanel.Order += ModuleCounter
             Me.SettingsPanels.Add(tPanel)
             ModuleCounter += 1
-            AddHandler s.ProcessorModule.ScraperSetupChanged, AddressOf Handle_ModuleSetupChanged
+            AddHandler s.ProcessorModule.SetupScraperChanged, AddressOf Handle_ModuleSetupChanged
             AddHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
             Me.AddHelpHandlers(tPanel.Panel, tPanel.Prefix)
         Next
         ModuleCounter = 1
-        For Each s As ModulesManager._externalTVScraperModuleClass_Poster In ModulesManager.Instance.externalTVPosterScrapersModules.OrderBy(Function(x) x.ScraperOrder)
-            tPanel = s.ProcessorModule.InjectSetupScraper
+        For Each s As ModulesManager._externalTVScraperModuleClass In ModulesManager.Instance.externalTVScrapersModules.Where(Function(y) y.ProcessorModule.IsPostScraper).OrderBy(Function(x) x.PostScraperOrder)
+            tPanel = s.ProcessorModule.InjectSetupPostScraper
             tPanel.Order += ModuleCounter
             Me.SettingsPanels.Add(tPanel)
             ModuleCounter += 1
-            AddHandler s.ProcessorModule.ScraperSetupChanged, AddressOf Handle_ModuleSetupChanged
+            AddHandler s.ProcessorModule.SetupPostScraperChanged, AddressOf Handle_ModuleSetupChanged
             AddHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
             Me.AddHelpHandlers(tPanel.Panel, tPanel.Prefix)
         Next
@@ -329,13 +329,11 @@ Public Class dlgSettings
             RemoveHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
             RemoveHandler s.ProcessorModule.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
         Next
-        For Each s As ModulesManager._externalTVScraperModuleClass_Data In ModulesManager.Instance.externalTVDataScrapersModules.OrderBy(Function(x) x.ScraperOrder)
+		For Each s As ModulesManager._externalTVScraperModuleClass In ModulesManager.Instance.externalTVScrapersModules.Where(Function(y) y.ProcessorModule.IsPostScraper).OrderBy(Function(x) x.PostScraperOrder)
+            RemoveHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
             RemoveHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
         Next
-        For Each s As ModulesManager._externalTVScraperModuleClass_Poster In ModulesManager.Instance.externalTVPosterScrapersModules.OrderBy(Function(x) x.ScraperOrder)
-            RemoveHandler s.ProcessorModule.ScraperSetupChanged, AddressOf Handle_ModuleSetupChanged
-            RemoveHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
-        Next
+
         For Each s As ModulesManager._externalGenericModuleClass In ModulesManager.Instance.externalProcessorModules
             RemoveHandler s.ProcessorModule.ModuleSetupChanged, AddressOf Handle_ModuleSetupChanged
             RemoveHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
@@ -2671,13 +2669,12 @@ Public Class dlgSettings
                 For Each s As ModulesManager._externalScraperModuleClass_Trailer In (ModulesManager.Instance.externalTrailerScrapersModules.Where(Function(y) y.AssemblyName <> Name))
                     s.ProcessorModule.ScraperOrderChanged()
                 Next
-                For Each s As ModulesManager._externalTVScraperModuleClass_Data In (ModulesManager.Instance.externalTVDataScrapersModules.Where(Function(y) y.AssemblyName <> Name))
-                    s.ProcessorModule.ScraperOrderChanged()
+                For Each s As ModulesManager._externalTVScraperModuleClass In ModulesManager.Instance.externalTVScrapersModules.Where(Function(y) y.ProcessorModule.IsPostScraper).OrderBy(Function(x) x.ScraperOrder)
+                    RemoveHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
                 Next
-                For Each s As ModulesManager._externalTVScraperModuleClass_Poster In (ModulesManager.Instance.externalTVPosterScrapersModules.Where(Function(y) y.AssemblyName <> Name))
-                    s.ProcessorModule.ScraperOrderChanged()
+                For Each s As ModulesManager._externalTVScraperModuleClass In ModulesManager.Instance.externalTVScrapersModules.Where(Function(y) y.ProcessorModule.IsPostScraper).OrderBy(Function(x) x.PostScraperOrder)
+                    RemoveHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
                 Next
-
             Catch ex As Exception
                 Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
             End Try
@@ -3687,20 +3684,15 @@ Public Class dlgSettings
                     Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
                 End Try
             Next
-            For Each s As ModulesManager._externalTVScraperModuleClass_Data In ModulesManager.Instance.externalTVDataScrapersModules
+            For Each s As ModulesManager._externalTVScraperModuleClass In ModulesManager.Instance.externalTVScrapersModules
                 Try
-                    s.ProcessorModule.SaveSetupScraper(Not isApply)
+                    If s.ProcessorModule.IsScraper Then s.ProcessorModule.SaveSetupScraper(Not isApply)
+                    If s.ProcessorModule.IsPostScraper Then s.ProcessorModule.SaveSetupPostScraper(Not isApply)
                 Catch ex As Exception
                     Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
                 End Try
             Next
-            For Each s As ModulesManager._externalTVScraperModuleClass_Poster In ModulesManager.Instance.externalTVPosterScrapersModules
-                Try
-                    s.ProcessorModule.SaveSetupScraper(Not isApply)
-                Catch ex As Exception
-                    Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-                End Try
-            Next
+
             For Each s As ModulesManager._externalGenericModuleClass In ModulesManager.Instance.externalProcessorModules
                 Try
                     s.ProcessorModule.SaveSetup(Not isApply)
