@@ -58,9 +58,9 @@ Partial Class frmOFDBInfoSettingsHolder
         Me.gbOptions.Controls.Add(Me.chkOFDBOutline)
         Me.gbOptions.Controls.Add(Me.chkOFDBTitle)
         Me.gbOptions.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.gbOptions.Location = New System.Drawing.Point(3, 31)
+        Me.gbOptions.Location = New System.Drawing.Point(11, 31)
         Me.gbOptions.Name = "gbOptions"
-        Me.gbOptions.Size = New System.Drawing.Size(213, 87)
+        Me.gbOptions.Size = New System.Drawing.Size(213, 92)
         Me.gbOptions.TabIndex = 2
         Me.gbOptions.TabStop = False
         Me.gbOptions.Text = "OFDB (German)"
@@ -68,7 +68,7 @@ Partial Class frmOFDBInfoSettingsHolder
         'chkOFDBGenre
         '
         Me.chkOFDBGenre.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkOFDBGenre.Location = New System.Drawing.Point(6, 65)
+        Me.chkOFDBGenre.Location = New System.Drawing.Point(6, 70)
         Me.chkOFDBGenre.Name = "chkOFDBGenre"
         Me.chkOFDBGenre.Size = New System.Drawing.Size(194, 17)
         Me.chkOFDBGenre.TabIndex = 3
@@ -78,7 +78,7 @@ Partial Class frmOFDBInfoSettingsHolder
         'chkOFDBPlot
         '
         Me.chkOFDBPlot.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkOFDBPlot.Location = New System.Drawing.Point(6, 49)
+        Me.chkOFDBPlot.Location = New System.Drawing.Point(6, 53)
         Me.chkOFDBPlot.Name = "chkOFDBPlot"
         Me.chkOFDBPlot.Size = New System.Drawing.Size(194, 17)
         Me.chkOFDBPlot.TabIndex = 2
@@ -88,7 +88,7 @@ Partial Class frmOFDBInfoSettingsHolder
         'chkOFDBOutline
         '
         Me.chkOFDBOutline.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkOFDBOutline.Location = New System.Drawing.Point(6, 33)
+        Me.chkOFDBOutline.Location = New System.Drawing.Point(6, 36)
         Me.chkOFDBOutline.Name = "chkOFDBOutline"
         Me.chkOFDBOutline.Size = New System.Drawing.Size(194, 17)
         Me.chkOFDBOutline.TabIndex = 1
@@ -98,7 +98,7 @@ Partial Class frmOFDBInfoSettingsHolder
         'chkOFDBTitle
         '
         Me.chkOFDBTitle.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkOFDBTitle.Location = New System.Drawing.Point(6, 17)
+        Me.chkOFDBTitle.Location = New System.Drawing.Point(6, 19)
         Me.chkOFDBTitle.Name = "chkOFDBTitle"
         Me.chkOFDBTitle.Size = New System.Drawing.Size(194, 17)
         Me.chkOFDBTitle.TabIndex = 0
@@ -166,7 +166,7 @@ Partial Class frmOFDBInfoSettingsHolder
         Me.pnlSettings.Controls.Add(Me.PictureBox1)
         Me.pnlSettings.Controls.Add(Me.Panel1)
         Me.pnlSettings.Controls.Add(Me.gbOptions)
-        Me.pnlSettings.Location = New System.Drawing.Point(12, 1)
+        Me.pnlSettings.Location = New System.Drawing.Point(12, 4)
         Me.pnlSettings.Name = "pnlSettings"
         Me.pnlSettings.Size = New System.Drawing.Size(617, 369)
         Me.pnlSettings.TabIndex = 0

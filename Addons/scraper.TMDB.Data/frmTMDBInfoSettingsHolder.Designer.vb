@@ -80,7 +80,7 @@ Partial Class frmTMDBInfoSettingsHolder
         Me.GroupBox30.Controls.Add(Me.Label18)
         Me.GroupBox30.Controls.Add(Me.txtTMDBApiKey)
         Me.GroupBox30.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
-        Me.GroupBox30.Location = New System.Drawing.Point(8, 40)
+        Me.GroupBox30.Location = New System.Drawing.Point(11, 31)
         Me.GroupBox30.Name = "GroupBox30"
         Me.GroupBox30.Size = New System.Drawing.Size(513, 102)
         Me.GroupBox30.TabIndex = 1
@@ -208,7 +208,7 @@ Partial Class frmTMDBInfoSettingsHolder
         Me.pnlSettings.Controls.Add(Me.Panel1)
         Me.pnlSettings.Controls.Add(Me.GroupBox30)
         Me.pnlSettings.Controls.Add(Me.gbOptions)
-        Me.pnlSettings.Location = New System.Drawing.Point(12, 1)
+        Me.pnlSettings.Location = New System.Drawing.Point(12, 4)
         Me.pnlSettings.Name = "pnlSettings"
         Me.pnlSettings.Size = New System.Drawing.Size(617, 369)
         Me.pnlSettings.TabIndex = 0
@@ -255,7 +255,7 @@ Partial Class frmTMDBInfoSettingsHolder
         Me.gbOptions.Controls.Add(Me.chkYear)
         Me.gbOptions.Controls.Add(Me.chkTitle)
         Me.gbOptions.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gbOptions.Location = New System.Drawing.Point(8, 148)
+        Me.gbOptions.Location = New System.Drawing.Point(11, 139)
         Me.gbOptions.Name = "gbOptions"
         Me.gbOptions.Size = New System.Drawing.Size(400, 150)
         Me.gbOptions.TabIndex = 3

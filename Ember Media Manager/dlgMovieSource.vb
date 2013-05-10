@@ -76,8 +76,9 @@ Public Class dlgMovieSource
             Else
                 Using SQLcommand As SQLite.SQLiteCommand = Master.DB.MediaDBConn.CreateCommand()
                     SQLcommand.CommandText = String.Concat("SELECT ID FROM Sources WHERE Name LIKE """, Me.txtSourceName.Text.Trim, """ AND ID != ", Me._id, ";")
+                    Debug.Print(SQLcommand.CommandText)
                     Using SQLreader As SQLite.SQLiteDataReader = SQLcommand.ExecuteReader()
-                        If Not String.IsNullOrEmpty(SQLreader("ID").ToString) Then
+                        If SQLreader.HasRows AndAlso Not String.IsNullOrEmpty(SQLreader("ID").ToString) Then
                             pbValid.Image = My.Resources.invalid
                         Else
                             pbValid.Image = My.Resources.valid

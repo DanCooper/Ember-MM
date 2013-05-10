@@ -44,7 +44,7 @@ Public Class IMDB_Data
     Private _Name As String = "IMDB_Data"
     Private _PostScraperEnabled As Boolean = False
     Private _ScraperEnabled As Boolean = False
-    Private _setup As frmInfoSettingsHolder
+    Private _setup As frmIMDBInfoSettingsHolder
 
 #End Region 'Fields
 
@@ -114,7 +114,7 @@ Public Class IMDB_Data
 
     Function InjectSetupScraper() As Containers.SettingsPanel Implements Interfaces.EmberMovieScraperModule_Data.InjectSetupScraper
         Dim SPanel As New Containers.SettingsPanel
-        _setup = New frmInfoSettingsHolder
+        _setup = New frmIMDBInfoSettingsHolder
         LoadSettings()
         _setup.cbEnabled.Checked = _ScraperEnabled
         _setup.chkTitle.Checked = ConfigOptions.bTitle
@@ -144,7 +144,7 @@ Public Class IMDB_Data
 
         _setup.orderChanged()
         SPanel.Name = String.Concat(Me._Name, "Scraper")
-        SPanel.Text = Master.eLang.GetString(104, "IMDB Scraper")
+        SPanel.Text = Master.eLang.GetString(104, "IMDB")
         SPanel.Prefix = "IMDBMovieInfo_"
         SPanel.Order = 110
         SPanel.Parent = "pnlMovieData"

@@ -61,7 +61,7 @@ Namespace TMDBg
 		Private _TMDBConfE As V3.TmdbConfiguration
 		Private _TMDBApi As V3.Tmdb
 		Private _TMDBApiE As V3.Tmdb
-		Private _MySettings As EmberTMDBScraperModule.sMySettings
+        Private _MySettings As TMDB_Data.sMySettings
 
 		Friend WithEvents bwTMDBg As New System.ComponentModel.BackgroundWorker
 

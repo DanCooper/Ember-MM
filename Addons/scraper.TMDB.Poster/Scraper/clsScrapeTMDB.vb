@@ -33,21 +33,21 @@ Namespace TMDB
 		Private _TMDBConfE As V3.TmdbConfiguration
 		Private _TMDBApi As V3.Tmdb
 		Private _TMDBApiE As V3.Tmdb
-		Private _MySettings As EmberTMDBScraperModule.sMySettings
+        Private _MySettings As TMDB_Poster.sMySettings
 
         'Friend WithEvents bwTMDB As New System.ComponentModel.BackgroundWorker
 
-#End Region	'Fields
+#End Region 'Fields
 
 #Region "Methods"
 
-		Public Sub New(ByRef tTMDBConf As V3.TmdbConfiguration, ByRef tTMDBConfE As V3.TmdbConfiguration, ByRef tTMDBApi As V3.Tmdb, ByRef tTMDBApiE As V3.Tmdb, ByRef tMySettings As EmberTMDBScraperModule.sMySettings)
-			_TMDBConf = tTMDBConf
-			_TMDBConfE = tTMDBConfE
-			_TMDBApi = tTMDBApi
-			_TMDBApiE = tTMDBApiE
-			_MySettings = tMySettings
-			' v3 does not have description anymore
+        Public Sub New(ByRef tTMDBConf As V3.TmdbConfiguration, ByRef tTMDBConfE As V3.TmdbConfiguration, ByRef tTMDBApi As V3.Tmdb, ByRef tTMDBApiE As V3.Tmdb, ByRef tMySettings As TMDB_Poster.sMySettings)
+            _TMDBConf = tTMDBConf
+            _TMDBConfE = tTMDBConfE
+            _TMDBApi = tTMDBApi
+            _TMDBApiE = tTMDBApiE
+            _MySettings = tMySettings
+            ' v3 does not have description anymore
         End Sub
 
         'Public Sub Cancel()
@@ -168,7 +168,7 @@ Namespace TMDB
         '	End If
         'End Sub
 
-#End Region	'Methods
+#End Region 'Methods
 
 #Region "Nested Types"
 

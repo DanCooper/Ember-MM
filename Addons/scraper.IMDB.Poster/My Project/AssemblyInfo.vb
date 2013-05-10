@@ -8,17 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("scraper.IMDB.Data")> 
+<Assembly: AssemblyTitle("scraper.EmberCore")> 
 <Assembly: AssemblyDescription("http://forum.xbmc.org/showthread.php?tid=116941")> 
 <Assembly: AssemblyCompany("Ember Media Manager")>
-<Assembly: AssemblyProduct("scraper.IMDB.Data")> 
+<Assembly: AssemblyProduct("scraper.IMDB.Poster")> 
 <Assembly: AssemblyCopyright("Copyright © 2013")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("BBC33869-C704-4202-B725-7107619E3683")> 
+<Assembly: Guid("EC7033B9-751E-418C-9ECC-41F24441C99B")> 
 
 ' Version information for an assembly consists of the following four values:
 '

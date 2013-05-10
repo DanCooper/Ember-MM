@@ -25,13 +25,13 @@ Public Class frmTMDBMediaSettingsHolder
 
 #Region "Events"
 
-	Public Event ModuleSettingsChanged()
+    Public Event ModuleSettingsChanged()
 
-	Public Event SetupPostScraperChanged(ByVal state As Boolean, ByVal difforder As Integer)
+    Public Event SetupScraperChanged(ByVal state As Boolean, ByVal difforder As Integer)
 
     Public Event SetupNeedsRestart()
 
-#End Region	'Events
+#End Region 'Events
 
 #Region "Fields"
 
@@ -47,49 +47,50 @@ Public Class frmTMDBMediaSettingsHolder
 	End Sub
 
 	Private Sub btnDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDown.Click
-        Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberTMDBScraperModule._AssemblyName).ScraperOrder
+        Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Poster._AssemblyName).ScraperOrder
         If order < ModulesManager.Instance.externalPosterScrapersModules.Count - 1 Then
             ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order + 1).ScraperOrder = order
-            ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberTMDBScraperModule._AssemblyName).ScraperOrder = order + 1
-            RaiseEvent SetupPostScraperChanged(cbEnabled.Checked, 1)
+            ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Poster._AssemblyName).ScraperOrder = order + 1
+            RaiseEvent SetupScraperChanged(cbEnabled.Checked, 1)
             orderChanged()
         End If
-	End Sub
+    End Sub
 
-	Private Sub btnUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnUp.Click
-        Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberTMDBScraperModule._AssemblyName).ScraperOrder
-		If order > 0 Then
+    Private Sub btnUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnUp.Click
+        Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Poster._AssemblyName).ScraperOrder
+        If order > 0 Then
             ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order - 1).ScraperOrder = order
-            ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberTMDBScraperModule._AssemblyName).ScraperOrder = order - 1
-			RaiseEvent SetupPostScraperChanged(cbEnabled.Checked, -1)
-			orderChanged()
-		End If
-	End Sub
+            ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Poster._AssemblyName).ScraperOrder = order - 1
+            RaiseEvent SetupScraperChanged(cbEnabled.Checked, -1)
+            orderChanged()
+        End If
+    End Sub
 
-	Private Sub cbEnabled_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbEnabled.CheckedChanged
-		RaiseEvent SetupPostScraperChanged(cbEnabled.Checked, 0)
-	End Sub
+    Private Sub cbEnabled_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbEnabled.CheckedChanged
+        RaiseEvent SetupScraperChanged(cbEnabled.Checked, 0)
+    End Sub
 
     Private Sub chkScrapePoster_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkScrapePoster.CheckedChanged
         RaiseEvent ModuleSettingsChanged()
     End Sub
 
-	Sub orderChanged()
-        Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberTMDBScraperModule._AssemblyName).ScraperOrder
+    Sub orderChanged()
+        Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Poster._AssemblyName).ScraperOrder
         btnDown.Enabled = (order < ModulesManager.Instance.externalPosterScrapersModules.Count - 1)
-		btnUp.Enabled = (order > 1)
-	End Sub
+        btnUp.Enabled = (order > 1)
+    End Sub
 
 	Sub SetUp()
-        Me.grpSaveFanart.Text = Master.eLang.GetString(8001, "Save Fanart In:")
         Me.Label3.Text = Master.eLang.GetString(168, "Scrape Order", True)
 		Me.cbEnabled.Text = Master.eLang.GetString(774, "Enabled", True)
 		Me.chkScrapePoster.Text = Master.eLang.GetString(101, "Get Posters")
 		Me.chkScrapeFanart.Text = Master.eLang.GetString(102, "Get Fanart")
 		Me.Label1.Text = String.Format(Master.eLang.GetString(103, "These settings are specific to this module.{0}Please refer to the global settings for more options."), vbCrLf)
-        Me.Label18.Text = Master.eLang.GetString(854, "TMDB API Key:", True)
+        Me.Label18.Text = Master.eLang.GetString(870, "TMDB API Key", True)
+        Me.GroupBox30.Text = Master.eLang.GetString(124, "TMDB")
+        Me.GroupBox3.Text = Master.eLang.GetString(125, "Images")
         Me.chkFallBackEng.Text = Master.eLang.GetString(114, "Fall back on english")
-        Me.Label3.Text = Master.eLang.GetString(115, "Preferred Language:")
+        Me.Label2.Text = Master.eLang.GetString(115, "Preferred Language:")
     End Sub
 
     Private Sub txtTMDBApiKey_TextEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTMDBApiKey.Enter
@@ -110,17 +111,17 @@ Public Class frmTMDBMediaSettingsHolder
         RaiseEvent ModuleSettingsChanged()
     End Sub
 
-	Private Sub optFanartFolderExtraFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles optFanartFolderExtraFanart.CheckedChanged
-		RaiseEvent ModuleSettingsChanged()
-	End Sub
+    Private Sub optFanartFolderExtraFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        RaiseEvent ModuleSettingsChanged()
+    End Sub
 
-	Private Sub optFanartFolderExtraThumbs_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles optFanartFolderExtraThumbs.CheckedChanged
-		RaiseEvent ModuleSettingsChanged()
-	End Sub
+    Private Sub optFanartFolderExtraThumbs_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs)
+        RaiseEvent ModuleSettingsChanged()
+    End Sub
 
-	Private Sub cbManualETSize_SelectedIndexChanged(ByVal sender As System.Object, e As System.EventArgs) Handles cbManualETSize.SelectedIndexChanged
-		RaiseEvent ModuleSettingsChanged()
-	End Sub
+    Private Sub cbManualETSize_SelectedIndexChanged(ByVal sender As System.Object, e As System.EventArgs)
+        RaiseEvent ModuleSettingsChanged()
+    End Sub
 
     Private Sub cbTrailerTMDBPref_SelectedIndexChanged(ByVal sender As System.Object, e As System.EventArgs)
         RaiseEvent ModuleSettingsChanged()

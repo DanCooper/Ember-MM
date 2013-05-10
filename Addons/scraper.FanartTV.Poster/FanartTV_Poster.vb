@@ -24,11 +24,8 @@ Imports RestSharp
 Imports WatTmdb
 Imports EmberScraperModule.FANARTTVs
 
-''' <summary>
-''' Native Scraper
-''' </summary>
-''' <remarks></remarks>
-Public Class EmberFanartTVScraperModule
+
+Public Class FanartTV_Poster
     Implements Interfaces.EmberMovieScraperModule_Poster
 
 
@@ -95,7 +92,7 @@ Public Class EmberFanartTVScraperModule
     Function QueryPostScraperCapabilities(ByVal cap As Enums.PostScraperCapabilities) As Boolean Implements Interfaces.EmberMovieScraperModule_Poster.QueryScraperCapabilities
         Select Case cap
             Case Enums.PostScraperCapabilities.Fanart
-                Return ConfigScrapeModifier.Fanart
+                Return True
         End Select
         Return False
     End Function
@@ -135,8 +132,8 @@ Public Class EmberFanartTVScraperModule
         _setup.txtFANARTTVApiKey.Text = _MySettings.FANARTTVApiKey
 
         _setup.orderChanged()
-        Spanel.Name = String.Concat(Me._Name, "PostScraper")
-        Spanel.Text = Master.eLang.GetString(104, "Fanart.tv Scraper")
+        Spanel.Name = String.Concat(Me._Name, "Scraper")
+        Spanel.Text = Master.eLang.GetString(104, "FanartTV")
         Spanel.Prefix = "FanartTVMovieMedia_"
         Spanel.Order = 110
         Spanel.Parent = "pnlMovieMedia"

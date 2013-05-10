@@ -78,10 +78,7 @@
     <CodeAnalysisRuleDirectories>;D:\Applications\Development\Microsoft Visual Studio 2010\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp">
+    <Reference Include="RestSharp, Version=104.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\RestSharp.104.1\lib\net35\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -199,25 +196,25 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Langs\scraper.EmberCore.TMDB.Debug_%28db_DB%29.xml">
+    <Content Include="Langs\scraper.TMDB.Data.Debug_%28db_DB%29.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Langs\scraper.EmberCore.TMDB.English_%28en_US%29-Help.xml">
+    <Content Include="Langs\scraper.TMDB.Data.English_%28en_US%29-Help.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Langs\scraper.EmberCore.TMDB.English_%28en_US%29.xml">
+    <Content Include="Langs\scraper.TMDB.Data.English_%28en_US%29.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Langs\scraper.EmberCore.TMDB.German_%28de_DE%29-Help.xml">
+    <Content Include="Langs\scraper.TMDB.Data.German_%28de_DE%29-Help.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Langs\scraper.EmberCore.TMDB.German_%28de_DE%29.xml">
+    <Content Include="Langs\scraper.TMDB.Data.German_%28de_DE%29.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Langs\scraper.EmberCore.TMDB.Norwegian_%28no_NO%29-Help.xml">
+    <Content Include="Langs\scraper.TMDB.Data.Norwegian_%28no_NO%29-Help.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Langs\scraper.EmberCore.TMDB.Norwegian_%28no_NO%29.xml">
+    <Content Include="Langs\scraper.TMDB.Data.Norwegian_%28no_NO%29.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

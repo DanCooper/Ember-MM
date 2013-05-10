@@ -25,150 +25,86 @@ Imports System.Text
 Imports System.Text.RegularExpressions
 Imports EmberAPI
 
-Namespace IMDBimg
+Namespace IMDBg
 
-	Public Class Scraper
+    Public Class Scraper
 
 #Region "Fields"
 
-
-
-		Friend WithEvents bwIMDBimg As New System.ComponentModel.BackgroundWorker
-
-#End Region	'Fields
+#End Region 'Fields
 
 #Region "Events"
 
-		Public Event PostersDownloaded(ByVal Posters As List(Of MediaContainers.Image))
 
-		Public Event ProgressUpdated(ByVal iPercent As Integer)
-
-#End Region	'Events
+#End Region 'Events
 
 #Region "Methods"
 
-		Public Sub Cancel()
-			If Me.bwIMDBimg.IsBusy Then Me.bwIMDBimg.CancelAsync()
+        Public Function GetIMDBPosters(ByVal imdbID As String) As List(Of MediaContainers.Image)
+            Dim alPoster As New List(Of MediaContainers.Image)
 
-			While Me.bwIMDBimg.IsBusy
-				Application.DoEvents()
-				Threading.Thread.Sleep(50)
-			End While
-		End Sub
+            Try
+                Dim sHTTP As New HTTP
+                Dim HTML As String = sHTTP.DownloadData(String.Concat("http://www.imdb.com/title/tt", imdbID, ""))
+                sHTTP = Nothing
 
-		Public Sub GetImagesAsync(ByVal sURL As String)
-			Try
-				If Not bwIMDBimg.IsBusy Then
-					bwIMDBimg.WorkerSupportsCancellation = True
-					bwIMDBimg.WorkerReportsProgress = True
-					bwIMDBimg.RunWorkerAsync(New Arguments With {.Parameter = sURL})
-				End If
-			Catch ex As Exception
-				Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-			End Try
-		End Sub
+                ' check existence of a line like this
+                '      <a href="/media/rm2995297536/tt0089218?ref_=tt_ov_i" > <img height="317"
+                ' and then return this one
+                '      src = "http://ia.media-imdb.com/images/M/MV5BMTY1Mzk3MTg0M15BMl5BanBnXkFtZTcwOTQzODYyMQ@@._V1_SY317_CR3,0,214,317_.jpg"
+                Dim mcIMDB As MatchCollection = Regex.Matches(HTML, String.Concat("/media/[a-zA-Z0-9]{3,12}/tt", imdbID, "\?ref_=tt_ov_i"), RegexOptions.IgnoreCase)
+                If mcIMDB.Count > 0 Then
+                    Debug.Print("GetIMDBPoster 1 - {0}", mcIMDB(0).Value)
+                    'Dim sUrl1 As String = sHTTP.DownloadData(mcIMDB(0).Value)
+                    mcIMDB = Regex.Matches(HTML, "http://ia.media-imdb.com/images/.{3,80}?.jpg")
+                    If mcIMDB.Count > 0 Then
+                        'just use the first one if more are found
+                        Debug.Print("GetIMDBPoster 2 - {0}", mcIMDB(0).Value)
+                        alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(0).description, .URL = mcIMDB(0).Value})
+                    End If
 
-		Public Function GetIMDBPosters(ByVal imdbID As String) As List(Of MediaContainers.Image)
-			Dim alPoster As New List(Of MediaContainers.Image)
+                    Dim aSP As String() = Regex.Split(mcIMDB(0).Value, "._V\d+?_SY\d+?_CR\d+?,\d+?,\d+?,\d+?_")
+                    Dim sUrl1 = aSP(0) + aSP(1)
+                    Debug.Print("GetIMDBPoster 3 - {0}", sUrl1)
+                    alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(5).description, .URL = sUrl1})
+                End If
 
-			Try
-				If bwIMDBimg.CancellationPending Then Return Nothing
-				Dim sHTTP As New HTTP
-				Dim HTML As String = sHTTP.DownloadData(String.Concat("http://www.imdb.com/title/tt", imdbID, ""))
-				sHTTP = Nothing
+            Catch ex As Exception
+                Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
+            End Try
 
-				If bwIMDBimg.WorkerReportsProgress Then
-					bwIMDBimg.ReportProgress(1)
-				End If
+            Return alPoster
+        End Function
 
-
-				' check existence of a line like this
-				'      <a href="/media/rm2995297536/tt0089218?ref_=tt_ov_i" > <img height="317"
-				' and then return this one
-				'      src = "http://ia.media-imdb.com/images/M/MV5BMTY1Mzk3MTg0M15BMl5BanBnXkFtZTcwOTQzODYyMQ@@._V1_SY317_CR3,0,214,317_.jpg"
-				Dim mcIMDB As MatchCollection = Regex.Matches(HTML, String.Concat("/media/[a-zA-Z0-9]{3,12}/tt", imdbID, "\?ref_=tt_ov_i"), RegexOptions.IgnoreCase)
-				If mcIMDB.Count > 0 Then
-					debug.print("GetIMDBPoster 1 - {0}", mcIMDB(0).Value)
-					'Dim sUrl1 As String = sHTTP.DownloadData(mcIMDB(0).Value)
-					mcIMDB = Regex.Matches(HTML, "http://ia.media-imdb.com/images/.{3,80}?.jpg")
-					If mcIMDB.Count > 0 Then
-						'just use the first one if more are found
-						Debug.Print("GetIMDBPoster 2 - {0}", mcIMDB(0).Value)
-						alPoster.Add(New MediaContainers.Image With {.Description = "cover", .URL = mcIMDB(0).Value})
-					End If
-
-					If bwIMDBimg.WorkerReportsProgress Then
-						bwIMDBimg.ReportProgress(2)
-					End If
-
-					Dim aSP As String() = Regex.Split(mcIMDB(0).Value, "._V\d+?_SY\d+?_CR\d+?,\d+?,\d+?,\d+?_")
-					Dim sUrl1 = aSP(0) + aSP(1)
-					Debug.Print("GetIMDBPoster 3 - {0}", sUrl1)
-					alPoster.Add(New MediaContainers.Image With {.Description = "poster", .URL = sUrl1})
-				End If
-
-				If bwIMDBimg.WorkerReportsProgress Then
-					bwIMDBimg.ReportProgress(3)
-				End If
-			Catch ex As Exception
-				Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-			End Try
-
-			Return alPoster
-		End Function
-
-		Private Sub bwIMDBimg_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bwIMDBimg.DoWork
-			Dim Args As Arguments = DirectCast(e.Argument, Arguments)
-			Try
-				e.Result = GetIMDBPosters(Args.Parameter)
-			Catch ex As Exception
-				Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-				e.Result = Nothing
-			End Try
-		End Sub
-
-		Private Sub bwIMDBimg_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles bwIMDBimg.ProgressChanged
-			If Not bwIMDBimg.CancellationPending Then
-				RaiseEvent ProgressUpdated(e.ProgressPercentage)
-			End If
-		End Sub
-
-		Private Sub bwIMDBimg_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bwIMDBimg.RunWorkerCompleted
-			If Not IsNothing(e.Result) Then
-				RaiseEvent PostersDownloaded(DirectCast(e.Result, List(Of MediaContainers.Image)))
-			End If
-		End Sub
-
-
-#End Region	'Methods
+#End Region 'Methods
 
 #Region "Nested Types"
 
-		Private Structure Arguments
+        Private Structure Arguments
 
 #Region "Fields"
 
-			Dim Parameter As String
-			Dim sType As String
+            Dim Parameter As String
+            Dim sType As String
 
-#End Region	'Fields
+#End Region 'Fields
 
-		End Structure
+        End Structure
 
-		Private Structure Results
+        Private Structure Results
 
 #Region "Fields"
 
-			Dim Result As Object
-			Dim ResultList As List(Of MediaContainers.Image)
+            Dim Result As Object
+            Dim ResultList As List(Of MediaContainers.Image)
 
-#End Region	'Fields
+#End Region 'Fields
 
-		End Structure
+        End Structure
 
-#End Region	'Nested Types
+#End Region 'Nested Types
 
-	End Class
+    End Class
 
 End Namespace
 
