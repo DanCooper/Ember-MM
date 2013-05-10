@@ -129,7 +129,7 @@ Public Class MPDB_Poster
         _setup.cbEnabled.Checked = _ScraperEnabled
 
         SPanel.Name = String.Concat(Me._Name, "Scraper")
-        SPanel.Text = Master.eLang.GetString(104, "MPDB Poster")
+        SPanel.Text = Master.eLang.GetString(104, "MPDB")
         SPanel.Prefix = "MPDBMovieMedia_"
         SPanel.Order = 110
         SPanel.Parent = "pnlMovieMedia"

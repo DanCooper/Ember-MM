@@ -124,7 +124,7 @@ Public Class IMPA_Poster
         _setup.cbEnabled.Checked = _ScraperEnabled
 
         SPanel.Name = String.Concat(Me._Name, "Scraper")
-        SPanel.Text = Master.eLang.GetString(104, "IMPA Poster")
+        SPanel.Text = Master.eLang.GetString(104, "IMPA")
         SPanel.Prefix = "IMPAMovieMedia_"
         SPanel.Order = 110
         SPanel.Parent = "pnlMovieMedia"

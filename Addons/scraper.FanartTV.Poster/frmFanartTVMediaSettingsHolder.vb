@@ -71,8 +71,8 @@ Public Class frmFanartTVMediaSettingsHolder
     End Sub
 
     Sub SetUp()
-        Me.Label3.Text = Master.eLang.GetString(124, "Fanart.tv API Key:")
-        Me.Label5.Text = Master.eLang.GetString(168, "Scrape Order", True)
+        Me.Label5.Text = Master.eLang.GetString(124, "Fanart.tv API Key:")
+        Me.Label3.Text = Master.eLang.GetString(168, "Scrape Order", True)
         Me.GroupBox1.Text = Master.eLang.GetString(125, "Fanart.tv")
         Me.cbEnabled.Text = Master.eLang.GetString(774, "Enabled", True)
         Me.Label1.Text = String.Format(Master.eLang.GetString(103, "These settings are specific to this module.{0}Please refer to the global settings for more options."), vbCrLf)

@@ -171,7 +171,7 @@ Public Class frmTMDBInfoSettingsHolder
     End Sub
 
 	Private Sub SetUp()
-        Me.Label18.Text = Master.eLang.GetString(854, "TMDB API Key:", True)
+        Me.Label18.Text = Master.eLang.GetString(870, "TMDB API Key", True)
 		Me.gbOptions.Text = Master.eLang.GetString(6, "Scraper Fields - Scraper specific")
 		Me.chkStudio.Text = Master.eLang.GetString(395, "Studio", True)
 		Me.chkRuntime.Text = Master.eLang.GetString(396, "Runtime", True)

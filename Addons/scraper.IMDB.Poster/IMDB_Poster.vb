@@ -126,7 +126,7 @@ Public Class IMDB_Poster
         _setup.cbEnabled.Checked = _ScraperEnabled
         _setup.orderChanged()
         SPanel.Name = String.Concat(Me._Name, "Scraper")
-        SPanel.Text = Master.eLang.GetString(104, "IMDB Poster")
+        SPanel.Text = Master.eLang.GetString(104, "IMDB")
         SPanel.Prefix = "IMDBMovieMedia_"
         SPanel.Order = 110
         SPanel.Parent = "pnlMovieMedia"

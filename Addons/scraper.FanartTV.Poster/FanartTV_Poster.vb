@@ -133,7 +133,7 @@ Public Class FanartTV_Poster
 
         _setup.orderChanged()
         Spanel.Name = String.Concat(Me._Name, "PostScraper")
-        Spanel.Text = Master.eLang.GetString(104, "Fanart.tv Scraper")
+        Spanel.Text = Master.eLang.GetString(104, "FanartTV")
         Spanel.Prefix = "FanartTVMovieMedia_"
         Spanel.Order = 110
         Spanel.Parent = "pnlMovieMedia"

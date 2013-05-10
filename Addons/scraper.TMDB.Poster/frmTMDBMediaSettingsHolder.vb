@@ -86,7 +86,7 @@ Public Class frmTMDBMediaSettingsHolder
 		Me.chkScrapePoster.Text = Master.eLang.GetString(101, "Get Posters")
 		Me.chkScrapeFanart.Text = Master.eLang.GetString(102, "Get Fanart")
 		Me.Label1.Text = String.Format(Master.eLang.GetString(103, "These settings are specific to this module.{0}Please refer to the global settings for more options."), vbCrLf)
-        Me.Label18.Text = Master.eLang.GetString(854, "TMDB API Key:", True)
+        Me.Label18.Text = Master.eLang.GetString(870, "TMDB API Key", True)
         Me.GroupBox30.Text = Master.eLang.GetString(124, "TMDB")
         Me.GroupBox3.Text = Master.eLang.GetString(125, "Images")
         Me.chkFallBackEng.Text = Master.eLang.GetString(114, "Fall back on english")
