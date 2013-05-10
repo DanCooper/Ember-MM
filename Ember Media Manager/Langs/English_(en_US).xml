@@ -895,4 +895,13 @@
   <string id="894">Performing Preliminary Tasks...</string>
   <string id="895">Downloading Selected Image...</string>
   <string id="896">Multiple</string>
+  <string id="897">Original</string>
+  <string id="898">Cover</string>
+  <string id="899">Medium</string>
+  <string id="900">Small</string>
+  <string id="901">Original ({0}x{1})</string>
+  <string id="902">Cover ({0}x{1})</string>
+  <string id="903">Medium ({0}x{1})</string>
+  <string id="904">Small ({0}x{1})</string>
+  <string id="905">Large ({0}x{1})</string>
 </strings>

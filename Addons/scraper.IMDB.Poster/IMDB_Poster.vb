@@ -87,12 +87,8 @@ Public Class IMDB_Poster
 #Region "Methods"
     Function QueryScraperCapabilities(ByVal cap As Enums.PostScraperCapabilities) As Boolean Implements Interfaces.EmberMovieScraperModule_Poster.QueryScraperCapabilities
         Select Case cap
-            Case Enums.PostScraperCapabilities.Fanart
-                Return False
             Case Enums.PostScraperCapabilities.Poster
                 Return True
-            Case Enums.PostScraperCapabilities.Trailer
-                Return False
         End Select
         Return False
     End Function

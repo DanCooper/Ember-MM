@@ -916,77 +916,92 @@ Public Class dlgImgSelect
         Try
             rbXLarge.Checked = False
             rbXLarge.Enabled = False
-            rbXLarge.Text = Master.eLang.GetString(897, "Original")
             rbLarge.Checked = False
             rbLarge.Enabled = False
             rbMedium.Checked = False
             rbSmall.Checked = False
             rbSmall.Enabled = False
-            If Me.DLType = Enums.ImageType.Fanart Then
-                rbLarge.Text = Master.eSize.backdrop_names(2).description
-                rbMedium.Text = Master.eSize.backdrop_names(1).description
-                rbSmall.Text = Master.eSize.backdrop_names(0).description
-            Else
-                rbLarge.Text = Master.eLang.GetString(898, "Cover")
-                rbMedium.Text = Master.eLang.GetString(899, "Medium")
-                rbSmall.Text = Master.eLang.GetString(900, "Small")
-            End If
+            'If Me.DLType = Enums.ImageType.Fanart Then
+            '    rbLarge.Text = Master.eSize.backdrop_names(2).description
+            '    rbMedium.Text = Master.eSize.backdrop_names(1).description
+            '    rbSmall.Text = Master.eSize.backdrop_names(0).description
+            'Else
+            rbXLarge.Text = Master.eLang.GetString(897, "Original")
+            rbLarge.Text = Master.eLang.GetString(898, "Cover")
+            rbMedium.Text = Master.eLang.GetString(899, "Medium")
+            rbSmall.Text = Master.eLang.GetString(900, "Small")
+            'End If
 
             For Each TMDBPoster As MediaContainers.Image In _ImageList.Where(Function(f) f.ParentID = ParentID)
-                Select Case TMDBPoster.Description
-                    Case Master.eSize.poster_names(5).description
-                        ' xlarge
-                        If Not IsNothing(TMDBPoster.WebImage.Image) Then
+                If Me.DLType = Enums.ImageType.Posters Then
+                    Select Case TMDBPoster.Description
+                        Case Master.eSize.poster_names(5).description
+                            ' xlarge
                             rbXLarge.Enabled = True
                             rbXLarge.Tag = TMDBPoster.URL
                             'If Master.eSettings.UseImgCache Then Me.rbXLarge.Text = String.Format(Master.eLang.GetString(51, "Original ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)
                             rbXLarge.Text = String.Format(Master.eLang.GetString(901, "Original ({0}x{1})"), TMDBPoster.Width, TMDBPoster.Height)
-                        End If
-                    Case Master.eSize.poster_names(2).description
-                        ' large
-                        If Not IsNothing(TMDBPoster.WebImage.Image) Then
+                        Case Master.eSize.poster_names(4).description
+                            ' large
                             rbLarge.Enabled = True
                             rbLarge.Tag = TMDBPoster.URL
                             'If Master.eSettings.UseImgCache Then Me.rbLarge.Text = String.Format(Master.eLang.GetString(52, "Cover ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)
                             rbLarge.Text = String.Format(Master.eLang.GetString(902, "Cover ({0}x{1})"), TMDBPoster.Width, TMDBPoster.Height)
-                        End If
-                    Case Master.eSize.backdrop_names(2).description
-                        ' large
-                        If Not IsNothing(TMDBPoster.WebImage.Image) Then
-                            rbLarge.Enabled = True
-                            rbLarge.Tag = TMDBPoster.URL
-                            'If Master.eSettings.UseImgCache Then Me.rbLarge.Text = String.Format(Master.eLang.GetString(52, "Cover ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)
-                            rbLarge.Text = String.Format(Master.eLang.GetString(905, "w1280 ({0}x{1})"), TMDBPoster.Width, TMDBPoster.Height)
-                        End If
-                    Case Master.eSize.poster_names(0).description
-                        ' small                        
-                        If Not IsNothing(TMDBPoster.WebImage.Image) Then
+                        Case Master.eSize.poster_names(2).description
+                            rbMedium.Enabled = True
+                            rbMedium.Tag = TMDBPoster.URL
+                            rbMedium.Text = String.Format(Master.eLang.GetString(903, "Medium ({0}x{1})"), TMDBPoster.Width, TMDBPoster.Height)
+                            'If Master.eSettings.UseImgCache Then Me.rbMedium.Text = String.Format(Master.eLang.GetString(54, "Medium ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)
+                        Case Master.eSize.poster_names(0).description
+                            ' small                        
                             rbSmall.Enabled = True
                             rbSmall.Tag = TMDBPoster.URL
                             'If Master.eSettings.UseImgCache Then Me.rbSmall.Text = String.Format(Master.eLang.GetString(53, "Small ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)
-                            rbSmall.Text = String.Format(Master.eLang.GetString(903, "Small ({0}x{1})"), TMDBPoster.Width, TMDBPoster.Height)
-                        End If
-                    Case Master.eSize.poster_names(4).description
-                        'If Master.eSettings.UseImgCache Then Me.rbMedium.Text = String.Format(Master.eLang.GetString(54, "Medium ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)
-                        rbMedium.Text = String.Format(Master.eLang.GetString(904, "Medium ({0}x{1})"), TMDBPoster.Width, TMDBPoster.Height)
-                        rbMedium.Tag = TMDBPoster.URL
-                    Case Master.eSize.backdrop_names(1).description
-                        'If Master.eSettings.UseImgCache Then Me.rbMedium.Text = String.Format(Master.eLang.GetString(54, "Medium ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)
-                        rbMedium.Text = String.Format(Master.eLang.GetString(906, "Poster ({0}x{1})"), TMDBPoster.Width, TMDBPoster.Height)
-                        rbMedium.Tag = TMDBPoster.URL
-                End Select
+                            rbSmall.Text = String.Format(Master.eLang.GetString(904, "Small ({0}x{1})"), TMDBPoster.Width, TMDBPoster.Height)
+                    End Select
+                Else
+                    Select Case TMDBPoster.Description
+                        Case Master.eSize.backdrop_names(3).description
+                            ' xlarge
+                            rbXLarge.Enabled = True
+                            rbXLarge.Tag = TMDBPoster.URL
+                            'If Master.eSettings.UseImgCache Then Me.rbXLarge.Text = String.Format(Master.eLang.GetString(51, "Original ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)
+                            rbXLarge.Text = String.Format(Master.eLang.GetString(901, "Original ({0}x{1})"), TMDBPoster.Width, TMDBPoster.Height)
+                        Case Master.eSize.backdrop_names(2).description
+                            ' large
+                            rbLarge.Enabled = True
+                            rbLarge.Tag = TMDBPoster.URL
+                            'If Master.eSettings.UseImgCache Then Me.rbLarge.Text = String.Format(Master.eLang.GetString(52, "Cover ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)
+                            rbLarge.Text = String.Format(Master.eLang.GetString(905, "Large ({0}x{1})"), TMDBPoster.Width, TMDBPoster.Height)
+                        Case Master.eSize.backdrop_names(1).description
+                            ' small                        
+                            rbMedium.Enabled = True
+                            rbMedium.Tag = TMDBPoster.URL
+                            'If Master.eSettings.UseImgCache Then Me.rbSmall.Text = String.Format(Master.eLang.GetString(53, "Small ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)
+                            rbMedium.Text = String.Format(Master.eLang.GetString(903, "Small ({0}x{1})"), TMDBPoster.Width, TMDBPoster.Height)
+                        Case Master.eSize.backdrop_names(0).description
+                            'If Master.eSettings.UseImgCache Then Me.rbMedium.Text = String.Format(Master.eLang.GetString(54, "Medium ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)
+                            rbSmall.Enabled = True
+                            rbSmall.Tag = TMDBPoster.URL
+                            'If Master.eSettings.UseImgCache Then Me.rbSmall.Text = String.Format(Master.eLang.GetString(53, "Small ({0}x{1})"), Me.TMDBPosters.Item(i).WebImage.Image.Width, Me.TMDBPosters.Item(i).WebImage.Image.Height)
+                            rbSmall.Text = String.Format(Master.eLang.GetString(904, "Small ({0}x{1})"), TMDBPoster.Width, TMDBPoster.Height)
+                    End Select
+                End If
             Next
 
-            Select Case Master.eSettings.PreferredPosterSize
-                Case Enums.PosterSize.Small
-                    rbSmall.Checked = rbSmall.Enabled
-                Case Enums.PosterSize.Mid
-                    rbMedium.Checked = rbMedium.Enabled
-                Case Enums.PosterSize.Lrg
-                    rbLarge.Checked = rbLarge.Enabled
-                Case Enums.PosterSize.Xlrg
-                    rbXLarge.Checked = rbXLarge.Enabled
-            End Select
+            If Me.DLType = Enums.ImageType.Fanart Then
+            Else
+                Select Case Master.eSettings.PreferredPosterSize
+                    Case Enums.PosterSize.Small
+                        rbSmall.Checked = rbSmall.Enabled
+                    Case Enums.PosterSize.Mid
+                        rbMedium.Checked = rbMedium.Enabled
+                    Case Enums.PosterSize.Lrg
+                        rbLarge.Checked = rbLarge.Enabled
+                    Case Enums.PosterSize.Xlrg
+                        rbXLarge.Checked = rbXLarge.Enabled
+                End Select
+            End If
 
             pnlSize.Visible = True
 

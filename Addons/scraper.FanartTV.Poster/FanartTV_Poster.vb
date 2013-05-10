@@ -92,7 +92,7 @@ Public Class FanartTV_Poster
     Function QueryPostScraperCapabilities(ByVal cap As Enums.PostScraperCapabilities) As Boolean Implements Interfaces.EmberMovieScraperModule_Poster.QueryScraperCapabilities
         Select Case cap
             Case Enums.PostScraperCapabilities.Fanart
-                Return ConfigScrapeModifier.Fanart
+                Return True
         End Select
         Return False
     End Function

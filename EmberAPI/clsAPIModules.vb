@@ -437,20 +437,22 @@ Public Class ModulesManager
         Dim ret As Interfaces.ModuleResult
         Dim aList As List(Of MediaContainers.Image)
         For Each _externalScraperModule As _externalScraperModuleClass_Poster In externalPosterScrapersModules.Where(Function(e) e.ProcessorModule.ScraperEnabled).OrderBy(Function(e) e.ScraperOrder)
-            AddHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
-            Try
-                Debug.Print("MovieScrapeImages" & vbTab & DBMovie.ID & vbTab & Type)
-                aList = New List(Of MediaContainers.Image)
-                ret = _externalScraperModule.ProcessorModule.Scraper(DBMovie, Type, aList)
-                If Not IsNothing(aList) AndAlso aList.Count > 0 Then
-                    For Each aIm In aList
-                        ImageList.Add(aIm)
-                    Next
-                End If
-            Catch ex As Exception
-            End Try
-            RemoveHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
-            If ret.breakChain Then Exit For
+            If _externalScraperModule.ProcessorModule.QueryScraperCapabilities(Type) Then
+                AddHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
+                Try
+                    Debug.Print("MovieScrapeImages" & vbTab & DBMovie.ID & vbTab & Type)
+                    aList = New List(Of MediaContainers.Image)
+                    ret = _externalScraperModule.ProcessorModule.Scraper(DBMovie, Type, aList)
+                    If Not IsNothing(aList) AndAlso aList.Count > 0 Then
+                        For Each aIm In aList
+                            ImageList.Add(aIm)
+                        Next
+                    End If
+                Catch ex As Exception
+                End Try
+                RemoveHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
+                If ret.breakChain Then Exit For
+            End If
         Next
         Return ret.Cancelled
     End Function

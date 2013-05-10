@@ -1252,6 +1252,7 @@ Public Class frmMain
 
                     If Master.GlobalScrapeMod.Poster Then
                         Poster.Clear()
+                        aList.Clear()
                         If Poster.WebImage.IsAllowedToDownload(DBScrapeMovie, Enums.ImageType.Posters) Then
                             If Not ModulesManager.Instance.MovieScrapeImages(DBScrapeMovie, Enums.PostScraperCapabilities.Poster, aList) Then
                                 If Images.GetPreferredPoster(aList, Poster) Then
