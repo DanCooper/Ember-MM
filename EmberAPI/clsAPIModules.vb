@@ -406,17 +406,17 @@ Public Class ModulesManager
     '    Return ret
     'End Function
 
-    Function ScraperSelectImageOfType(ByRef DBMovie As Structures.DBMovie, ByVal _DLType As Enums.ImageType, ByRef pResults As Containers.ImgResult, Optional ByVal _isEdit As Boolean = False, Optional ByVal preload As Boolean = False) As Boolean
-        Dim ret As Interfaces.ModuleResult
-        For Each _externalScraperModule As _externalScraperModuleClass_Poster In externalPosterScrapersModules.Where(Function(e) e.ProcessorModule.ScraperEnabled).OrderBy(Function(e) e.ScraperOrder)
-            Try
-                'ret = _externalScraperModule.ProcessorModule.SelectImageOfType(DBMovie, _DLType, pResults, _isEdit, preload)
-            Catch ex As Exception
-            End Try
-            If ret.breakChain Then Exit For
-        Next
-        Return ret.Cancelled
-    End Function
+    'Function ScraperSelectImageOfType(ByRef DBMovie As Structures.DBMovie, ByVal _DLType As Enums.ImageType, ByRef pResults As Containers.ImgResult, Optional ByVal _isEdit As Boolean = False, Optional ByVal preload As Boolean = False) As Boolean
+    '    Dim ret As Interfaces.ModuleResult
+    '    For Each _externalScraperModule As _externalScraperModuleClass_Poster In externalPosterScrapersModules.Where(Function(e) e.ProcessorModule.ScraperEnabled).OrderBy(Function(e) e.ScraperOrder)
+    '        Try
+    '            'ret = _externalScraperModule.ProcessorModule.SelectImageOfType(DBMovie, _DLType, pResults, _isEdit, preload)
+    '        Catch ex As Exception
+    '        End Try
+    '        If ret.breakChain Then Exit For
+    '    Next
+    '    Return ret.Cancelled
+    'End Function
 
     Public Function MovieScrapeOnly(ByRef DBMovie As Structures.DBMovie, ByVal ScrapeType As Enums.ScrapeType, ByVal Options As Structures.ScrapeOptions) As Boolean
         Dim ret As Interfaces.ModuleResult
@@ -698,10 +698,10 @@ Public Class ModulesManager
         Dim sStudio As New List(Of String)
         For Each _externalScraperModule As _externalScraperModuleClass_Poster In externalPosterScrapersModules.Where(Function(e) e.ProcessorModule.ScraperEnabled).OrderBy(Function(e) e.ScraperOrder)
             Try
-                ret = _externalScraperModule.ProcessorModule.QueryScraperCapabilities(cap)
+                ret = _externalScraperModule.ProcessorModule.QueryScraperCapabilities(cap) 'if a trailer scraper is enabled we can exit.
+                If ret Then Exit For
             Catch ex As Exception
             End Try
-            If ret Then Exit For
         Next
         Return ret
     End Function

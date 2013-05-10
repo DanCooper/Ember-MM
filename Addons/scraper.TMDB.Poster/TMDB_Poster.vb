@@ -155,7 +155,7 @@ Public Class TMDB_Poster
         _setup.chkFallBackEng.Checked = _MySettings.FallBackEng
 
         _setup.orderChanged()
-        Spanel.Name = String.Concat(Me._Name, "PostScraper")
+        Spanel.Name = String.Concat(Me._Name, "Scraper")
         Spanel.Text = Master.eLang.GetString(104, "TMDB")
         Spanel.Prefix = "TMDBMovieMedia_"
         Spanel.Order = 110

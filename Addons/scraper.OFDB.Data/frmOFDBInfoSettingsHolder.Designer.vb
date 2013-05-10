@@ -98,7 +98,7 @@ Partial Class frmOFDBInfoSettingsHolder
         'chkOFDBTitle
         '
         Me.chkOFDBTitle.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkOFDBTitle.Location = New System.Drawing.Point(6, 17)
+        Me.chkOFDBTitle.Location = New System.Drawing.Point(6, 19)
         Me.chkOFDBTitle.Name = "chkOFDBTitle"
         Me.chkOFDBTitle.Size = New System.Drawing.Size(194, 17)
         Me.chkOFDBTitle.TabIndex = 0

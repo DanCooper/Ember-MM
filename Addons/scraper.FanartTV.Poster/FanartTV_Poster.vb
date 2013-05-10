@@ -132,7 +132,7 @@ Public Class FanartTV_Poster
         _setup.txtFANARTTVApiKey.Text = _MySettings.FANARTTVApiKey
 
         _setup.orderChanged()
-        Spanel.Name = String.Concat(Me._Name, "PostScraper")
+        Spanel.Name = String.Concat(Me._Name, "Scraper")
         Spanel.Text = Master.eLang.GetString(104, "FanartTV")
         Spanel.Prefix = "FanartTVMovieMedia_"
         Spanel.Order = 110
