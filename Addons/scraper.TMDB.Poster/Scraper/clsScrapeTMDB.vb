@@ -106,9 +106,9 @@ Namespace TMDB
                         'If bwTMDB.CancellationPending Then Return Nothing
                         For Each aSize In Master.eSize.poster_names
                             Select Case aSize.size
-                                Case "original"
+                                Case Master.eSize.poster_names(5).description
                                     aW = tmdbI.width
-                                    aH = tmdbI.width
+                                    aH = tmdbI.height
                                 Case Else
                                     aW = aSize.width
                                     aH = CInt(aW / tmdbI.aspect_ratio)
@@ -122,9 +122,9 @@ Namespace TMDB
                         'If bwTMDB.CancellationPending Then Return Nothing
                         For Each aSize In Master.eSize.backdrop_names
                             Select Case aSize.size
-                                Case "original"
+                                Case Master.eSize.backdrop_names(3).description
                                     aW = tmdbI.width
-                                    aH = tmdbI.width
+                                    aH = tmdbI.height
                                 Case Else
                                     aW = aSize.width
                                     aH = CInt(aW / tmdbI.aspect_ratio)

@@ -22,6 +22,7 @@ Imports System.IO
 Imports System.Text
 Imports System.Text.RegularExpressions
 Imports System.Xml
+Imports System.Diagnostics
 Imports EmberAPI
 
 Namespace MPDB
@@ -46,19 +47,30 @@ Namespace MPDB
                 Dim sHTTP As New HTTP
                 Dim HTML As String = sHTTP.DownloadData(String.Concat("http://www.movieposterdb.com/movie/", imdbID))
                 sHTTP = Nothing
-
-                If Regex.IsMatch(HTML, String.Concat("http://", Master.eSettings.IMDBURL, "/title/tt", imdbID), RegexOptions.Singleline Or RegexOptions.IgnoreCase Or RegexOptions.Multiline) Then
+                ' is a string match so we have not to use the alias IMDB
+                If Regex.IsMatch(HTML, String.Concat("http://www.imdb.com/title/tt", imdbID), RegexOptions.Singleline Or RegexOptions.IgnoreCase Or RegexOptions.Multiline) Then
                     Dim mcPoster As MatchCollection = Regex.Matches(HTML, "http://www.movieposterdb.com/posters/[0-9_](.*?)/[0-9](.*?)/[0-9](.*?)/[a-z0-9_](.*?).jpg")
 
                     Dim PosterURL As String = String.Empty
-
+                    Dim ParentID As String = String.Empty
                     For Each mPoster As Match In mcPoster
-                        PosterURL = mPoster.Value.Remove(mPoster.Value.LastIndexOf("/") + 1, 1)
-                        PosterURL = PosterURL.Insert(mPoster.Value.LastIndexOf("/") + 1, "l")
-                        alPosters.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(5).description, .URL = PosterURL})
-                        PosterURL = mPoster.Value.Remove(mPoster.Value.LastIndexOf("/") + 1, 1)
-                        PosterURL = PosterURL.Insert(mPoster.Value.LastIndexOf("/") + 1, "t")
-                        alPosters.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(0).description, .URL = PosterURL})
+                        ParentID = mPoster.Value.Substring(mPoster.Value.LastIndexOf("/") + 3, mPoster.Value.LastIndexOf(".jpg") - (mPoster.Value.LastIndexOf("/") + 3))
+                        ' there are a lot of duplicates in the page.
+                        Dim x = From MI As MediaContainers.Image In alPosters Where (MI.ParentID = ParentID)
+                        If x.Count > 0 Then
+                            Debug.Print("Duplicate {0} ", PosterURL)
+                        Else
+                            Debug.Print(PosterURL)
+                            PosterURL = mPoster.Value.Remove(mPoster.Value.LastIndexOf("/") + 1, 1)
+                            PosterURL = PosterURL.Insert(mPoster.Value.LastIndexOf("/") + 1, "l")
+                            ' url are like> http://www.movieposterdb.com/posters/10_08/2009/499549/l_499549_43475538.jpg
+                            'the parent id is the part AFTER the l_
+                            ' all poster have the same size
+                            alPosters.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(5).description, .URL = PosterURL, .Width = "300", .Height = "444", .ParentID = ParentID})
+                            PosterURL = mPoster.Value.Remove(mPoster.Value.LastIndexOf("/") + 1, 1)
+                            PosterURL = PosterURL.Insert(mPoster.Value.LastIndexOf("/") + 1, "t")
+                            alPosters.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(0).description, .URL = PosterURL, .Width = "100", .Height = "148", .ParentID = ParentID})
+                        End If
                     Next
                 End If
 

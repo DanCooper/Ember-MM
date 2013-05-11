@@ -216,28 +216,30 @@ Public Class dlgImgSelect
     Private Sub PreviewImage()
         Try
             Dim tImage As New Images
+            Dim tImg As MediaContainers.Image = Nothing
             pnlDLStatus.Visible = False
 
             Application.DoEvents()
 
             Select Case True
                 Case rbXLarge.Checked
-                    tImage.FromWeb(Me.rbXLarge.Tag.ToString)
+                    tImg = CType(Me.rbXLarge.Tag, MediaContainers.Image)
                 Case rbLarge.Checked
-                    tImage.FromWeb(Me.rbLarge.Tag.ToString)
+                    tImg = CType(Me.rbLarge.Tag, MediaContainers.Image)
                 Case rbMedium.Checked
-                    tImage.FromWeb(Me.rbMedium.Tag.ToString)
+                    tImg = CType(Me.rbMedium.Tag, MediaContainers.Image)
                 Case rbSmall.Checked
-                    tImage.FromWeb(Me.rbSmall.Tag.ToString)
+                    tImg = CType(Me.rbSmall.Tag, MediaContainers.Image)
             End Select
 
-            If Not IsNothing(tImage.Image) Then
-
-                ModulesManager.Instance.RuntimeObjects.InvokeOpenImageViewer(tImage.Image)
-
+            If Not IsNothing(tImg.WebImage) AndAlso IsNothing(tImg.WebImage.Image) Then
+                tImg.WebImage.FromWeb(tImg.URL)
             End If
+            tImage = tImg.WebImage
 
-            tImage.Dispose()
+            ModulesManager.Instance.RuntimeObjects.InvokeOpenImageViewer(tImage.Image)
+
+            'tImage.Dispose()
             tImage = Nothing
 
         Catch ex As Exception
