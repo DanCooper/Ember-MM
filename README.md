@@ -13,7 +13,7 @@ To continue development of EmberMM, because its a great product, that in my opin
 
 ## Links
 - Main discussion : http://forum.xbmc.org/showthread.php?tid=116941
-- GitHub : https://github.com/DanCooper/Ember-MM (DanCooper is mainaining the most aligned version)
+- GitHub : https://github.com/DanCooper/Ember-MM-New (DanCooper is mainaining the most aligned version)
 
 ## Helping the development
 Any help is more than welcome. We do suggest everyone to participate in the forum to be aligned and updated.
