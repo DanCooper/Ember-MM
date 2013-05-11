@@ -148,17 +148,16 @@ Public Class TMDB_Data
         _setup.chkTrailer.Checked = ConfigOptions.bTrailer
         _setup.chkCountry.Checked = ConfigOptions.bCountry
         _setup.chkCrew.Checked = ConfigOptions.bFullCrew
-        _setup.chkFallBackEng.Checked = _MySettings.FallBackEng
-        _setup.cbTMDBPrefLanguage.Text = _MySettings.TMDBLanguage
-
-        '_setup.chkCertification.Checked = ConfigOptions.bCert
-
+        
         If String.IsNullOrEmpty(_MySettings.TMDBAPIKey) Then
             _MySettings.TMDBAPIKey = Master.eLang.GetString(122, "Get your API Key from www.themoviedb.org")
         End If
         _setup.txtTMDBApiKey.Text = _MySettings.TMDBAPIKey
         _setup.cbTMDBPrefLanguage.Text = _MySettings.TMDBLanguage
         _setup.chkFallBackEng.Checked = _MySettings.FallBackEng
+        _setup.Lang = _setup.cbTMDBPrefLanguage.Text
+        _setup.API = _setup.txtTMDBApiKey.Text
+
         _setup.orderChanged()
 
         SPanel.Name = String.Concat(Me._Name, "Scraper")

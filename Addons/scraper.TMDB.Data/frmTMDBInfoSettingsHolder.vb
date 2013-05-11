@@ -36,9 +36,35 @@ Public Class frmTMDBInfoSettingsHolder
 
 #Region "Fields"
 
-	Private Api1 As String
+    Private _api As String
+    Private _language As String
 
 #End Region 'Fields
+
+
+#Region "Properties"
+
+    Public Property API() As String
+        Get
+            Return Me._api
+        End Get
+        Set(ByVal value As String)
+            Me._api = value
+        End Set
+    End Property
+
+    Public Property Lang() As String
+        Get
+            Return Me._language
+        End Get
+        Set(ByVal value As String)
+            Me._language = value
+        End Set
+    End Property
+
+#End Region 'Properties
+
+
 
 #Region "Methods"
     Private Sub PictureBox2_Click(sender As System.Object, e As System.EventArgs) Handles pbTMDB.Click
@@ -53,7 +79,7 @@ Public Class frmTMDBInfoSettingsHolder
         End If
     End Sub
 
-	Private Sub btnDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDown.Click
+    Private Sub btnDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDown.Click
         Dim order As Integer = ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Data._AssemblyName).ScraperOrder
         If order < ModulesManager.Instance.externalDataScrapersModules.Count - 1 Then
             ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order + 1).ScraperOrder = order
@@ -142,11 +168,14 @@ Public Class frmTMDBInfoSettingsHolder
     End Sub
 
     Private Sub cbTMDBPrefLanguage_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cbTMDBPrefLanguage.SelectedIndexChanged
+        If Not (_language = cbTMDBPrefLanguage.Text) Then
+            RaiseEvent SetupNeedsRestart()
+        End If
         RaiseEvent ModuleSettingsChanged()
     End Sub
 
     Private Sub txtTMDBApiKey_TextEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTMDBApiKey.Enter
-        Api1 = txtTMDBApiKey.Text
+        _api = txtTMDBApiKey.Text
     End Sub
 
     Private Sub txtTMDBApiKey_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTMDBApiKey.TextChanged
@@ -154,12 +183,14 @@ Public Class frmTMDBInfoSettingsHolder
     End Sub
 
     Private Sub txtTMDBApiKey_TextValidated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTMDBApiKey.Validated
-        If Not (Api1 = txtTMDBApiKey.Text) Then
+        If Not (_api = txtTMDBApiKey.Text) Then
             RaiseEvent SetupNeedsRestart()
         End If
     End Sub
 
     Public Sub New()
+        _api = String.Empty
+        _language = String.Empty
         InitializeComponent()
         Me.SetUp()
     End Sub
@@ -170,33 +201,33 @@ Public Class frmTMDBInfoSettingsHolder
         btnUp.Enabled = (order > 1)
     End Sub
 
-	Private Sub SetUp()
+    Private Sub SetUp()
         Me.Label18.Text = Master.eLang.GetString(870, "TMDB API Key", True)
-		Me.gbOptions.Text = Master.eLang.GetString(6, "Scraper Fields - Scraper specific")
-		Me.chkStudio.Text = Master.eLang.GetString(395, "Studio", True)
-		Me.chkRuntime.Text = Master.eLang.GetString(396, "Runtime", True)
-		Me.chkOutline.Text = Master.eLang.GetString(64, "Plot Outline", True)
-		Me.chkGenre.Text = Master.eLang.GetString(20, "Genres", True)
-		Me.chkTagline.Text = Master.eLang.GetString(397, "Tagline", True)
+        Me.gbOptions.Text = Master.eLang.GetString(6, "Scraper Fields - Scraper specific")
+        Me.chkStudio.Text = Master.eLang.GetString(395, "Studio", True)
+        Me.chkRuntime.Text = Master.eLang.GetString(396, "Runtime", True)
+        Me.chkOutline.Text = Master.eLang.GetString(64, "Plot Outline", True)
+        Me.chkGenre.Text = Master.eLang.GetString(20, "Genres", True)
+        Me.chkTagline.Text = Master.eLang.GetString(397, "Tagline", True)
         Me.chkCast.Text = Master.eLang.GetString(63, "Cast", True)
         Me.chkCrew.Text = Master.eLang.GetString(1, "Crew")
-		Me.chkVotes.Text = Master.eLang.GetString(399, "Votes", True)
-		Me.chkTrailer.Text = Master.eLang.GetString(151, "Trailer", True)
-		Me.chkRating.Text = Master.eLang.GetString(400, "Rating", True)
-		Me.chkRelease.Text = Master.eLang.GetString(57, "Release Date", True)
+        Me.chkVotes.Text = Master.eLang.GetString(399, "Votes", True)
+        Me.chkTrailer.Text = Master.eLang.GetString(151, "Trailer", True)
+        Me.chkRating.Text = Master.eLang.GetString(400, "Rating", True)
+        Me.chkRelease.Text = Master.eLang.GetString(57, "Release Date", True)
         Me.chkMPAA.Text = Master.eLang.GetString(881, "MPAA & Certification", True)
-		Me.chkYear.Text = Master.eLang.GetString(278, "Year", True)
-		Me.chkTitle.Text = Master.eLang.GetString(21, "Title", True)
-		'Me.chkCertification.Text = Master.eLang.GetString(722, "Certification", True)
-		Me.Label2.Text = Master.eLang.GetString(168, "Scrape Order", True)
-		Me.cbEnabled.Text = Master.eLang.GetString(774, "Enabled", True)
-		Me.chkFallBackEng.Text = Master.eLang.GetString(114, "Fall back on english")
-		Me.Label3.Text = Master.eLang.GetString(115, "Preferred Language:")
+        Me.chkYear.Text = Master.eLang.GetString(278, "Year", True)
+        Me.chkTitle.Text = Master.eLang.GetString(21, "Title", True)
+        'Me.chkCertification.Text = Master.eLang.GetString(722, "Certification", True)
+        Me.Label2.Text = Master.eLang.GetString(168, "Scrape Order", True)
+        Me.cbEnabled.Text = Master.eLang.GetString(774, "Enabled", True)
+        Me.chkFallBackEng.Text = Master.eLang.GetString(114, "Fall back on english")
+        Me.Label3.Text = Master.eLang.GetString(115, "Preferred Language:")
 
-		Me.Label1.Text = String.Format(Master.eLang.GetString(103, "These settings are specific to this module.{0}Please refer to the global settings for more options."), vbCrLf)
-	End Sub
+        Me.Label1.Text = String.Format(Master.eLang.GetString(103, "These settings are specific to this module.{0}Please refer to the global settings for more options."), vbCrLf)
+    End Sub
 
 
-#End Region	'Methods
+#End Region 'Methods
 
 End Class

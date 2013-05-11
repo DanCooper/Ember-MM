@@ -98,9 +98,9 @@ Public Class TMDB_Poster
     Function QueryScraperCapabilities(ByVal cap As Enums.PostScraperCapabilities) As Boolean Implements Interfaces.EmberMovieScraperModule_Poster.QueryScraperCapabilities
         Select Case cap
             Case Enums.PostScraperCapabilities.Fanart
-                Return True ' ConfigScrapeModifier.Fanart
+                Return ConfigScrapeModifier.Fanart 'True ' ConfigScrapeModifier.Fanart
             Case Enums.PostScraperCapabilities.Poster
-                Return True 'ConfigScrapeModifier.Poster
+                Return ConfigScrapeModifier.Poster 'True 'ConfigScrapeModifier.Poster
         End Select
         Return False
     End Function
@@ -144,8 +144,6 @@ Public Class TMDB_Poster
         _setup.cbEnabled.Checked = _ScraperEnabled
         _setup.chkScrapePoster.Checked = ConfigScrapeModifier.Poster
         _setup.chkScrapeFanart.Checked = ConfigScrapeModifier.Fanart
-        _setup.chkFallBackEng.Checked = _MySettings.FallBackEng
-        _setup.cbTMDBPrefLanguage.Text = _MySettings.TMDBLanguage
 
         If String.IsNullOrEmpty(_MySettings.TMDBAPIKey) Then
             _MySettings.TMDBAPIKey = Master.eLang.GetString(122, "Get your API Key from www.themoviedb.org")
@@ -153,8 +151,11 @@ Public Class TMDB_Poster
         _setup.txtTMDBApiKey.Text = _MySettings.TMDBAPIKey
         _setup.cbTMDBPrefLanguage.Text = _MySettings.TMDBLanguage
         _setup.chkFallBackEng.Checked = _MySettings.FallBackEng
+        _setup.Lang = _setup.cbTMDBPrefLanguage.Text
+        _setup.API = _setup.txtTMDBApiKey.Text
 
         _setup.orderChanged()
+
         Spanel.Name = String.Concat(Me._Name, "Scraper")
         Spanel.Text = Master.eLang.GetString(104, "TMDB")
         Spanel.Prefix = "TMDBMovieMedia_"

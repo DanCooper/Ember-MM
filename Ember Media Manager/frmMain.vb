@@ -1276,13 +1276,11 @@ Public Class frmMain
                                         If Not IsNothing(Poster) Then
                                             tURL = Poster.WebImage.SaveAsPoster(DBScrapeMovie)
                                             If Not String.IsNullOrEmpty(tURL) Then
-                                                If Not String.IsNullOrEmpty(tURL) Then
-                                                    DBScrapeMovie.PosterPath = tURL
-                                                    MovieScraperEvent(Enums.MovieScraperEventType.PosterItem, True)
-                                                    'If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
-                                                    '    DBScrapeMovie.Movie.Thumb = pResults.Posters
-                                                    'End If
-                                                End If
+                                                DBScrapeMovie.PosterPath = tURL
+                                                MovieScraperEvent(Enums.MovieScraperEventType.PosterItem, True)
+                                                'If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
+                                                '    DBScrapeMovie.Movie.Thumb = pResults.Posters
+                                                'End If
                                             End If
                                         End If
                                     End Using
@@ -1362,9 +1360,7 @@ Public Class frmMain
                         Next
                     End If
 
-
                     '-----
-
 
                     If bwMovieScraper.CancellationPending Then Exit For
 

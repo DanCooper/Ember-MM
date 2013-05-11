@@ -35,18 +35,41 @@ Public Class frmTMDBMediaSettingsHolder
 
 #Region "Fields"
 
-    Private Api1 As String
+    Private _api As String
+    Private _language As String
 
 #End Region 'Fields
 
+#Region "Properties"
+
+    Public Property API() As String
+        Get
+            Return Me._api
+        End Get
+        Set(ByVal value As String)
+            Me._api = value
+        End Set
+    End Property
+
+    Public Property Lang() As String
+        Get
+            Return Me._language
+        End Get
+        Set(ByVal value As String)
+            Me._language = value
+        End Set
+    End Property
+
+#End Region 'Properties
+
 #Region "Methods"
 
-	Public Sub New()
-		InitializeComponent()
-		Me.SetUp()
-	End Sub
+    Public Sub New()
+        InitializeComponent()
+        Me.SetUp()
+    End Sub
 
-	Private Sub btnDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDown.Click
+    Private Sub btnDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDown.Click
         Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Poster._AssemblyName).ScraperOrder
         If order < ModulesManager.Instance.externalPosterScrapersModules.Count - 1 Then
             ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order + 1).ScraperOrder = order
@@ -80,12 +103,12 @@ Public Class frmTMDBMediaSettingsHolder
         btnUp.Enabled = (order > 1)
     End Sub
 
-	Sub SetUp()
+    Sub SetUp()
         Me.Label3.Text = Master.eLang.GetString(168, "Scrape Order", True)
-		Me.cbEnabled.Text = Master.eLang.GetString(774, "Enabled", True)
-		Me.chkScrapePoster.Text = Master.eLang.GetString(101, "Get Posters")
-		Me.chkScrapeFanart.Text = Master.eLang.GetString(102, "Get Fanart")
-		Me.Label1.Text = String.Format(Master.eLang.GetString(103, "These settings are specific to this module.{0}Please refer to the global settings for more options."), vbCrLf)
+        Me.cbEnabled.Text = Master.eLang.GetString(774, "Enabled", True)
+        Me.chkScrapePoster.Text = Master.eLang.GetString(101, "Get Posters")
+        Me.chkScrapeFanart.Text = Master.eLang.GetString(102, "Get Fanart")
+        Me.Label1.Text = String.Format(Master.eLang.GetString(103, "These settings are specific to this module.{0}Please refer to the global settings for more options."), vbCrLf)
         Me.Label18.Text = Master.eLang.GetString(870, "TMDB API Key", True)
         Me.GroupBox30.Text = Master.eLang.GetString(124, "TMDB")
         Me.GroupBox3.Text = Master.eLang.GetString(125, "Images")
@@ -94,7 +117,7 @@ Public Class frmTMDBMediaSettingsHolder
     End Sub
 
     Private Sub txtTMDBApiKey_TextEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTMDBApiKey.Enter
-        Api1 = txtTMDBApiKey.Text
+        _api = txtTMDBApiKey.Text
     End Sub
 
     Private Sub txtTMDBApiKey_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTMDBApiKey.TextChanged
@@ -102,31 +125,22 @@ Public Class frmTMDBMediaSettingsHolder
     End Sub
 
     Private Sub txtTMDBApiKey_TextValidated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTMDBApiKey.Validated
-        If Not (Api1 = txtTMDBApiKey.Text) Then
+        If Not (_api = txtTMDBApiKey.Text) Then
             RaiseEvent SetupNeedsRestart()
         End If
     End Sub
 
-    Private Sub txtTimeout_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub cbTMDBPrefLanguage_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cbTMDBPrefLanguage.SelectedIndexChanged
+        If Not (_language = cbTMDBPrefLanguage.Text) Then
+            RaiseEvent SetupNeedsRestart()
+        End If
         RaiseEvent ModuleSettingsChanged()
     End Sub
 
-    Private Sub optFanartFolderExtraFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub chkFallBackEng_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkFallBackEng.CheckedChanged
         RaiseEvent ModuleSettingsChanged()
     End Sub
 
-    Private Sub optFanartFolderExtraThumbs_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs)
-        RaiseEvent ModuleSettingsChanged()
-    End Sub
-
-    Private Sub cbManualETSize_SelectedIndexChanged(ByVal sender As System.Object, e As System.EventArgs)
-        RaiseEvent ModuleSettingsChanged()
-    End Sub
-
-    Private Sub cbTrailerTMDBPref_SelectedIndexChanged(ByVal sender As System.Object, e As System.EventArgs)
-        RaiseEvent ModuleSettingsChanged()
-    End Sub
-
-#End Region	'Methods
+#End Region 'Methods
 
 End Class
