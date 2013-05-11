@@ -97,11 +97,13 @@ Public Class dlgUpdateMedia
         Using SQLNewcommand As SQLite.SQLiteCommand = Master.DB.MediaDBConn.CreateCommand()
             SQLNewcommand.CommandText = String.Concat("SELECT COUNT(id) AS ncount FROM movies WHERE new = 1;")
             Using SQLcount As SQLite.SQLiteDataReader = SQLNewcommand.ExecuteReader()
+                SQLcount.Read()
                 rbUpdateModifier_New.Enabled = Convert.ToInt32(SQLcount("ncount")) > 0
             End Using
 
             SQLNewcommand.CommandText = String.Concat("SELECT COUNT(id) AS mcount FROM movies WHERE mark = 1;")
             Using SQLcount As SQLite.SQLiteDataReader = SQLNewcommand.ExecuteReader()
+                SQLcount.Read()
                 rbUpdateModifier_Marked.Enabled = Convert.ToInt32(SQLcount("mcount")) > 0
             End Using
         End Using

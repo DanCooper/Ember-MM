@@ -42,9 +42,13 @@ Namespace IMDBg
 
         Public Function GetIMDBPosters(ByVal imdbID As String) As List(Of MediaContainers.Image)
             Dim alPoster As New List(Of MediaContainers.Image)
+            Dim aParentID As String = String.Empty
 
             Try
                 Dim sHTTP As New HTTP
+                Dim aStr As String = String.Empty
+                Dim aPar As String()
+                Dim aPar2 As String()
                 Dim HTML As String = sHTTP.DownloadData(String.Concat("http://www.imdb.com/title/tt", imdbID, ""))
                 sHTTP = Nothing
 
@@ -60,13 +64,17 @@ Namespace IMDBg
                     If mcIMDB.Count > 0 Then
                         'just use the first one if more are found
                         Debug.Print("GetIMDBPoster 2 - {0}", mcIMDB(0).Value)
-                        alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(0).description, .URL = mcIMDB(0).Value})
+                        aStr = mcIMDB(0).Value.Substring(mcIMDB(0).Value.LastIndexOf("/") + 1, mcIMDB(0).Value.Length - (mcIMDB(0).Value.LastIndexOf("/") + 1))
+                        aPar = Split(aStr, ",")
+                        aPar2 = Split(aPar(0), ".")
+                        aParentID = aPar2(0)
+                        aPar(3) = aPar(3).Substring(0, aPar(3).LastIndexOf("_"))
+                        alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(0).description, .URL = mcIMDB(0).Value, .Width = aPar(2), .Height = aPar(3), .ParentID = aParentID})
                     End If
-
                     Dim aSP As String() = Regex.Split(mcIMDB(0).Value, "._V\d+?_SY\d+?_CR\d+?,\d+?,\d+?,\d+?_")
                     Dim sUrl1 = aSP(0) + aSP(1)
                     Debug.Print("GetIMDBPoster 3 - {0}", sUrl1)
-                    alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(5).description, .URL = sUrl1})
+                    alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(5).description, .URL = sUrl1, .Width = "513", .Height = "755", .ParentID = aParentID})
                 End If
 
             Catch ex As Exception

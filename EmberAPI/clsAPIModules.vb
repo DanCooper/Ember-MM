@@ -440,7 +440,7 @@ Public Class ModulesManager
             If _externalScraperModule.ProcessorModule.QueryScraperCapabilities(Type) Then
                 AddHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
                 Try
-                    Debug.Print("MovieScrapeImages" & vbTab & DBMovie.ID & vbTab & Type)
+                    Debug.Print("MovieScrapeImages" & vbTab & _externalScraperModule.ProcessorModule.ModuleName)
                     aList = New List(Of MediaContainers.Image)
                     ret = _externalScraperModule.ProcessorModule.Scraper(DBMovie, Type, aList)
                     If Not IsNothing(aList) AndAlso aList.Count > 0 Then

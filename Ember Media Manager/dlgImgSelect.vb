@@ -305,17 +305,18 @@ Public Class dlgImgSelect
         Me.SuspendLayout()
 
         If Not e.Cancelled Then
-            Dim text As String
+            Dim text As String = String.Empty
+            Dim aParentID As String = String.Empty
             Dim i As Integer = 0
 
             For Each aImg In _ImageList.Where(Function(f) f.Description = aDes)
                 Try
-                    Dim x = From MI As MediaContainers.Image In _ImageList Where (MI.ParentID = aImg.ParentID)
-                    If x.Count > 2 Then
+                    aParentID = aImg.ParentID
+                    Dim x = From MI As MediaContainers.Image In _ImageList Where (MI.ParentID = aParentID)
+                    If x.Count > 1 Then
                         text = Master.eLang.GetString(896, "Multiple")
                     Else
-                        x = From MI As MediaContainers.Image In _ImageList Where ((MI.ParentID = aImg.ParentID) And Not (MI.Description = aDes))
-                        text = String.Format("{0}x{1} ({2})", x(0).WebImage.Image.Width.ToString, x(0).WebImage.Image.Height.ToString, x(0).Description)
+                        text = String.Format("{0}x{1} ({2})", x(0).Width.ToString, x(0).Height.ToString, x(0).Description)
                     End If
                     AddImage(aImg.Description, i, aImg.isChecked, aImg, text)
                     i = i + 1
@@ -419,7 +420,7 @@ Public Class dlgImgSelect
             Me.pnlSize.Visible = False
 
             Dim x = From MI As MediaContainers.Image In _ImageList Where (MI.ParentID = CType(Me.pbImage(iIndex).Tag, MediaContainers.Image).ParentID)
-            If x.Count > 2 Then
+            If x.Count > 1 Then
                 Me.SetupSizes(poster.ParentID)
                 If Not rbLarge.Checked AndAlso Not rbMedium.Checked AndAlso Not rbSmall.Checked AndAlso Not rbXLarge.Checked Then
                     Me.OK_Button.Enabled = False
@@ -883,6 +884,7 @@ Public Class dlgImgSelect
             rbLarge.Checked = False
             rbLarge.Enabled = False
             rbMedium.Checked = False
+            rbMedium.Enabled = False
             rbSmall.Checked = False
             rbSmall.Enabled = False
             'If Me.DLType = Enums.ImageType.Fanart Then
@@ -898,6 +900,7 @@ Public Class dlgImgSelect
 
             For Each TMDBPoster As MediaContainers.Image In _ImageList.Where(Function(f) f.ParentID = ParentID)
                 If Me.DLType = Enums.ImageType.Posters Then
+                    Debug.Print("{0}  {1} {2}", TMDBPoster.Description, TMDBPoster.URL, TMDBPoster.ParentID)
                     Select Case TMDBPoster.Description
                         Case Master.eSize.poster_names(5).description
                             ' xlarge
@@ -954,6 +957,16 @@ Public Class dlgImgSelect
             Next
 
             If Me.DLType = Enums.ImageType.Fanart Then
+                Select Case Master.eSettings.PreferredFanartSize
+                    Case Enums.FanartSize.Small
+                        rbSmall.Checked = rbSmall.Enabled
+                    Case Enums.FanartSize.Mid
+                        rbMedium.Checked = rbMedium.Enabled
+                    Case Enums.FanartSize.Lrg
+                        rbLarge.Checked = rbLarge.Enabled
+                    Case Enums.FanartSize.Xlrg
+                        rbXLarge.Checked = rbXLarge.Enabled
+                End Select
             Else
                 Select Case Master.eSettings.PreferredPosterSize
                     Case Enums.PosterSize.Small

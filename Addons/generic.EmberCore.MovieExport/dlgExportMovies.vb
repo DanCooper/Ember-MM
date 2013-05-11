@@ -439,6 +439,7 @@ Public Class dlgExportMovies
                 Dim iProg As Integer = 0
                 SQLNewcommand.CommandText = String.Concat("SELECT COUNT(id) AS mcount FROM movies;")
                 Using SQLcount As SQLite.SQLiteDataReader = SQLNewcommand.ExecuteReader()
+                    SQLcount.Read()
                     Me.bwLoadInfo.ReportProgress(-1, SQLcount("mcount")) ' set maximum
                 End Using
                 SQLNewcommand.CommandText = String.Concat("SELECT ID FROM movies ORDER BY SortTitle COLLATE NOCASE;")
