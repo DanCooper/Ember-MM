@@ -4076,7 +4076,7 @@ Public Class dlgSettings
         Me.cbPosterSize.Items.Clear()
         Me.cbPosterSize.Items.AddRange(New String() {Master.eLang.GetString(322, "X-Large"), Master.eLang.GetString(323, "Large"), Master.eLang.GetString(324, "Medium"), Master.eLang.GetString(325, "Small"), Master.eLang.GetString(558, "Wide")})
         Me.cbFanartSize.Items.Clear()
-        Me.cbFanartSize.Items.AddRange(New String() {Master.eLang.GetString(323, "Large"), Master.eLang.GetString(324, "Medium"), Master.eLang.GetString(325, "Small")})
+        Me.cbFanartSize.Items.AddRange(New String() {Master.eLang.GetString(322, "X-Large"), Master.eLang.GetString(323, "Large"), Master.eLang.GetString(324, "Medium"), Master.eLang.GetString(325, "Small")})
         Me.cbShowFanartSize.Items.Clear()
         Me.cbShowFanartSize.Items.AddRange(New String() {Master.eLang.GetString(323, "Large"), Master.eLang.GetString(324, "Medium"), Master.eLang.GetString(325, "Small")})
         Me.cbEpFanartSize.Items.Clear()

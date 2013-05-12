@@ -239,6 +239,7 @@ Public Class dlgDeleteConfirm
                                             SQLCommand.CommandText = String.Concat("SELECT TVEpPath FROM TVEpPaths WHERE ID = ", SQLDelReader("TVEpPathID"), ";")
                                             Using SQLReader As SQLite.SQLiteDataReader = SQLCommand.ExecuteReader
                                                 If SQLReader.HasRows Then
+                                                    SQLReader.Read()
                                                     If Functions.IsSeasonDirectory(IO.Directory.GetParent(SQLReader("TVEpPath").ToString).FullName) Then
                                                         Try
                                                             AddFolderNode(ItemParentNode, New IO.DirectoryInfo(IO.Directory.GetParent(SQLReader("TVEpPath").ToString).FullName))
@@ -299,6 +300,7 @@ Public Class dlgDeleteConfirm
                                 SQLCommand.CommandText = String.Concat("SELECT TVEpPath FROM TVEpPaths WHERE ID = ", Ep, ";")
                                 Using SQLReader As SQLite.SQLiteDataReader = SQLCommand.ExecuteReader
                                     If SQLReader.HasRows Then
+                                        SQLReader.Read()
                                         Try
                                             ePath = IO.Path.Combine(IO.Directory.GetParent(SQLReader("TVEpPath").ToString).FullName, IO.Path.GetFileNameWithoutExtension(SQLReader("TVEpPath").ToString))
                                             AddFileNode(ItemParentNode, New IO.FileInfo(SQLReader("TVEpPath").ToString))

@@ -934,6 +934,7 @@ Public Class Database
                 SQLcommandTVSeason.CommandText = String.Concat("SELECT * FROM TVSeason WHERE TVShowID = ", ShowID, " AND Season = 999;")
                 Using SQLReader As SQLite.SQLiteDataReader = SQLcommandTVSeason.ExecuteReader
                     If SQLReader.HasRows Then
+                        SQLReader.Read()
                         If Not DBNull.Value.Equals(SQLReader("PosterPath")) Then _TVDB.SeasonPosterPath = SQLReader("PosterPath").ToString
                     End If
                 End Using
@@ -961,6 +962,7 @@ Public Class Database
                 SQLcommand.CommandText = String.Concat("SELECT * FROM TVEps WHERE id = ", EpID, ";")
                 Using SQLreader As SQLite.SQLiteDataReader = SQLcommand.ExecuteReader()
                     If SQLreader.HasRows Then
+                        SQLreader.Read()
                         If Not DBNull.Value.Equals(SQLreader("PosterPath")) Then _TVDB.EpPosterPath = SQLreader("PosterPath").ToString
                         If Not DBNull.Value.Equals(SQLreader("FanartPath")) Then _TVDB.EpFanartPath = SQLreader("FanartPath").ToString
                         If Not DBNull.Value.Equals(SQLreader("NfoPath")) Then _TVDB.EpNfoPath = SQLreader("NfoPath").ToString
@@ -990,6 +992,7 @@ Public Class Database
                 SQLcommand.CommandText = String.Concat("SELECT TVEpPath FROM TVEpPaths WHERE ID = ", PathID, ";")
                 Using SQLreader As SQLite.SQLiteDataReader = SQLcommand.ExecuteReader
                     If SQLreader.HasRows Then
+                        SQLreader.Read()
                         If Not DBNull.Value.Equals(SQLreader("TVEpPath")) Then _TVDB.Filename = SQLreader("TVEpPath").ToString
                     End If
                 End Using
@@ -1130,6 +1133,7 @@ Public Class Database
                 SQLcommandTVSeason.CommandText = String.Concat("SELECT * FROM TVSeason WHERE TVShowID = ", ShowID, " AND Season = ", iSeason, ";")
                 Using SQLReader As SQLite.SQLiteDataReader = SQLcommandTVSeason.ExecuteReader
                     If SQLReader.HasRows Then
+                        SQLReader.Read()
                         If Not DBNull.Value.Equals(SQLReader("PosterPath")) Then _TVDB.SeasonPosterPath = SQLReader("PosterPath").ToString
                         If Not DBNull.Value.Equals(SQLReader("FanartPath")) Then _TVDB.SeasonFanartPath = SQLReader("FanartPath").ToString
                         _TVDB.IsLockSeason = Convert.ToBoolean(SQLReader("Lock"))
@@ -1157,6 +1161,7 @@ Public Class Database
                 SQLcommand.CommandText = String.Concat("SELECT * FROM TVShows WHERE id = ", ShowID, ";")
                 Using SQLreader As SQLite.SQLiteDataReader = SQLcommand.ExecuteReader()
                     If SQLreader.HasRows Then
+                        SQLreader.Read()
                         If Not DBNull.Value.Equals(SQLreader("TVShowPath")) Then _TVDB.ShowPath = SQLreader("TVShowPath").ToString
                         If Not DBNull.Value.Equals(SQLreader("PosterPath")) Then _TVDB.ShowPosterPath = SQLreader("PosterPath").ToString
                         If Not DBNull.Value.Equals(SQLreader("FanartPath")) Then _TVDB.ShowFanartPath = SQLreader("FanartPath").ToString

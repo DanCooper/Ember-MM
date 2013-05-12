@@ -140,6 +140,7 @@ Public Class dlgSetsManager
                 Dim iProg As Integer = 0
                 SQLcommand.CommandText = String.Concat("SELECT COUNT(id) AS mcount FROM movies;")
                 Using SQLcount As SQLite.SQLiteDataReader = SQLcommand.ExecuteReader()
+                    SQLcount.Read()
                     Me.bwLoadMovies.ReportProgress(-1, SQLcount("mcount"))
                 End Using
                 SQLcommand.CommandText = String.Concat("SELECT ID FROM movies ORDER BY ListTitle ASC;")

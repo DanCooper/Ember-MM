@@ -113,6 +113,7 @@ Public Class IMDB_Poster
     Sub Init(ByVal sAssemblyName As String) Implements Interfaces.EmberMovieScraperModule_Poster.Init
         _AssemblyName = sAssemblyName
         LoadSettings()
+        IMDB = New IMDBg.Scraper()
     End Sub
 
     Function InjectSetupScraper() As Containers.SettingsPanel Implements Interfaces.EmberMovieScraperModule_Poster.InjectSetupScraper
@@ -151,7 +152,7 @@ Public Class IMDB_Poster
 
         LoadSettings()
 
-        ImageList = IMDB.GetIMDBPosters(DBMovie.Movie.ID)
+        ImageList = IMDB.GetIMDBPosters(DBMovie.Movie.IMDBID)
 
         Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function

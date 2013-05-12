@@ -544,9 +544,10 @@ Public Class Enums
     End Enum
 
     Public Enum FanartSize As Integer
-        Lrg = 0
-        Mid = 1
-        Small = 2
+        Xlrg = 0
+        Lrg = 1
+        Mid = 2
+        Small = 3
     End Enum
 
     Public Enum ModType As Integer

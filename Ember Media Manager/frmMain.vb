@@ -361,6 +361,7 @@ Public Class frmMain
             Using SQLcommand As SQLite.SQLiteCommand = Master.DB.MediaDBConn.CreateCommand()
                 SQLcommand.CommandText = String.Concat("SELECT mark, SortTitle FROM movies WHERE id = ", iID, ";")
                 Using SQLreader As SQLite.SQLiteDataReader = SQLcommand.ExecuteReader()
+                    SQLreader.Read()
                     DirectCast(dRow(0), DataRow).Item(11) = Convert.ToBoolean(SQLreader("mark"))
                     If Not DBNull.Value.Equals(SQLreader("SortTitle")) Then DirectCast(dRow(0), DataRow).Item(47) = SQLreader("SortTitle").ToString
                 End Using
@@ -377,6 +378,7 @@ Public Class frmMain
             Using SQLcommand As SQLite.SQLiteCommand = Master.DB.MediaDBConn.CreateCommand()
                 SQLcommand.CommandText = String.Concat("SELECT Ordering FROM TVShows WHERE id = ", iID, ";")
                 Using SQLreader As SQLite.SQLiteDataReader = SQLcommand.ExecuteReader()
+                    SQLreader.Read()
                     DirectCast(dRow(0), DataRow).Item(23) = Convert.ToInt32(SQLreader("Ordering"))
                 End Using
             End Using
@@ -1276,13 +1278,11 @@ Public Class frmMain
                                         If Not IsNothing(Poster) Then
                                             tURL = Poster.WebImage.SaveAsPoster(DBScrapeMovie)
                                             If Not String.IsNullOrEmpty(tURL) Then
-                                                If Not String.IsNullOrEmpty(tURL) Then
-                                                    DBScrapeMovie.PosterPath = tURL
-                                                    MovieScraperEvent(Enums.MovieScraperEventType.PosterItem, True)
-                                                    'If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
-                                                    '    DBScrapeMovie.Movie.Thumb = pResults.Posters
-                                                    'End If
-                                                End If
+                                                DBScrapeMovie.PosterPath = tURL
+                                                MovieScraperEvent(Enums.MovieScraperEventType.PosterItem, True)
+                                                'If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
+                                                '    DBScrapeMovie.Movie.Thumb = pResults.Posters
+                                                'End If
                                             End If
                                         End If
                                     End Using
@@ -1362,9 +1362,7 @@ Public Class frmMain
                         Next
                     End If
 
-
                     '-----
-
 
                     If bwMovieScraper.CancellationPending Then Exit For
 
@@ -6526,13 +6524,13 @@ doCancel:
                     End If
 
                     If AllowFA Then
+                        aList.Clear()
                         Me.tslLoading.Text = Master.eLang.GetString(573, "Scraping Fanart:")
                         Application.DoEvents()
                         Dim pResults As New MediaContainers.Image
                         'Public Function MovieScrapeImages(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.PostScraperCapabilities, ByRef ImageList As List(Of MediaContainers.Image)) As Boolean
                         If Not ModulesManager.Instance.MovieScrapeImages(Master.currMovie, Enums.PostScraperCapabilities.Fanart, aList) Then
                             dlgImgS = New dlgImgSelect()
-
                             pResults = dlgImgS.ShowDialog(Master.currMovie, Enums.ImageType.Fanart, aList, True)
                         End If
                         If Not IsNothing(pResults) Then

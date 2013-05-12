@@ -72,11 +72,14 @@ Public Class dlgTVSource
                 Using SQLcommand As SQLite.SQLiteCommand = Master.DB.MediaDBConn.CreateCommand()
                     SQLcommand.CommandText = String.Concat("SELECT ID FROM TVSources WHERE Name LIKE """, Me.txtSourceName.Text.Trim, """ AND ID != ", Me._id, ";")
                     Using SQLreader As SQLite.SQLiteDataReader = SQLcommand.ExecuteReader()
-                        If SQLreader.HasRows AndAlso Not String.IsNullOrEmpty(SQLreader("ID").ToString) Then
-                            pbValid.Image = My.Resources.invalid
-                        Else
-                            pbValid.Image = My.Resources.valid
-                            isValid = True
+                        If SQLreader.HasRows Then
+                            SQLreader.Read()
+                            If String.IsNullOrEmpty(SQLreader("ID").ToString) Then
+                                pbValid.Image = My.Resources.invalid
+                            Else
+                                pbValid.Image = My.Resources.valid
+                                isValid = True
+                            End If
                         End If
                     End Using
                 End Using
@@ -97,9 +100,12 @@ Public Class dlgTVSource
                 Using SQLcommand As SQLite.SQLiteCommand = Master.DB.MediaDBConn.CreateCommand()
                     SQLcommand.CommandText = String.Concat("SELECT * FROM TVSources WHERE ID = ", Me._id, ";")
                     Using SQLreader As SQLite.SQLiteDataReader = SQLcommand.ExecuteReader()
-                        Me.txtSourceName.Text = SQLreader("Name").ToString
-                        Me.txtSourcePath.Text = SQLreader("Path").ToString
-                        Me.autoName = False
+                        If SQLreader.HasRows() Then
+                            SQLreader.Read()
+                            Me.txtSourceName.Text = SQLreader("Name").ToString
+                            Me.txtSourcePath.Text = SQLreader("Path").ToString
+                            Me.autoName = False
+                        End If
                     End Using
                 End Using
             End If

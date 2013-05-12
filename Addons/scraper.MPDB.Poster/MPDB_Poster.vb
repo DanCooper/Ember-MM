@@ -115,6 +115,7 @@ Public Class MPDB_Poster
         _AssemblyName = sAssemblyName
         LoadSettings()
         'Must be after Load settings to retrieve the correct API key
+        MPDB = New MPDB.Scraper()
     End Sub
 
     Function InjectSetupScraper() As Containers.SettingsPanel Implements Interfaces.EmberMovieScraperModule_Poster.InjectSetupScraper
@@ -146,15 +147,13 @@ Public Class MPDB_Poster
         ConfigScrapeModifier.Actors = True
 
         ConfigScrapeModifier.Poster = AdvancedSettings.GetBooleanSetting("DoPoster", True)
-        ConfigScrapeModifier.Fanart = AdvancedSettings.GetBooleanSetting("DoFanart", False)
-        ConfigScrapeModifier.Trailer = AdvancedSettings.GetBooleanSetting("DoTrailer", False)
     End Sub
 
     Function Scraper(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.PostScraperCapabilities, ByRef ImageList As List(Of MediaContainers.Image)) As Interfaces.ModuleResult Implements Interfaces.EmberMovieScraperModule_Poster.Scraper
 
         LoadSettings()
 
-        ImageList = MPDB.GetMPDBPosters(DBMovie.Movie.ID)
+        ImageList = MPDB.GetMPDBPosters(DBMovie.Movie.IMDBID)
 
         Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function
@@ -162,8 +161,6 @@ Public Class MPDB_Poster
 
     Sub SaveSettings()
         AdvancedSettings.SetBooleanSetting("DoPoster", ConfigScrapeModifier.Poster)
-        AdvancedSettings.SetBooleanSetting("DoFanart", ConfigScrapeModifier.Fanart)
-        AdvancedSettings.SetBooleanSetting("DoTrailer", ConfigScrapeModifier.Trailer)
     End Sub
 
     Sub SaveSetupScraper(ByVal DoDispose As Boolean) Implements Interfaces.EmberMovieScraperModule_Poster.SaveSetupScraper
