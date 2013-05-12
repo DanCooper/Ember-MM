@@ -267,21 +267,13 @@ Public Class Interfaces
 
 		Sub ScraperOrderChanged()
 
-		Function DownloadTrailer(ByRef DBMovie As Structures.DBMovie, ByRef sURL As String) As ModuleResult
-
-		Function GetMovieStudio(ByRef DBMovie As Structures.DBMovie, ByRef sStudio As List(Of String)) As ModuleResult
-
-		Sub Init(ByVal sAssemblyName As String)
+        Sub Init(ByVal sAssemblyName As String)
 
 		Function InjectSetupScraper() As Containers.SettingsPanel
 
-		Function QueryTrailerScraperCapabilities(ByVal cap As Enums.PostScraperCapabilities) As Boolean
-
-		Function TrailerScraper(ByRef DBMovie As Structures.DBMovie, ByVal ScrapeType As Enums.ScrapeType) As ModuleResult
+        Function Scraper(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.PostScraperCapabilities, ByRef URLList As List(Of String)) As Interfaces.ModuleResult
 
 		Sub SaveSetupScraper(ByVal DoDispose As Boolean)
-
-		Function ScraperTrailerList(ByRef DBMovie As Structures.DBMovie, ByVal _DLType As Enums.ImageType, ByRef pResults As Containers.ImgResult, Optional ByVal _isEdit As Boolean = False, Optional ByVal preload As Boolean = False) As ModuleResult
 
 #End Region	'Methods
 

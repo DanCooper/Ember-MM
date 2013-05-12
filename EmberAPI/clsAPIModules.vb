@@ -457,6 +457,28 @@ Public Class ModulesManager
         Return ret.Cancelled
     End Function
 
+    Public Function MovieScrapeTrailer(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.PostScraperCapabilities, ByRef URLList As List(Of String)) As Boolean
+        Dim ret As Interfaces.ModuleResult
+        Dim aList As List(Of String)
+        For Each _externalScraperModule As _externalScraperModuleClass_Trailer In externalTrailerScrapersModules.Where(Function(e) e.ProcessorModule.ScraperEnabled).OrderBy(Function(e) e.ScraperOrder)
+            AddHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
+            Try
+                Debug.Print("MovieScrapeTrailer" & vbTab & _externalScraperModule.ProcessorModule.ModuleName)
+                aList = New List(Of String)
+                ret = _externalScraperModule.ProcessorModule.Scraper(DBMovie, Type, aList)
+                If Not IsNothing(aList) AndAlso aList.Count > 0 Then
+                    For Each aIm In aList
+                        URLList.Add(aIm)
+                    Next
+                End If
+            Catch ex As Exception
+            End Try
+            RemoveHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
+            If ret.breakChain Then Exit For
+        Next
+        Return ret.Cancelled
+    End Function
+
     Public Function RunGeneric(ByVal mType As Enums.ModuleEventType, ByRef _params As List(Of Object), Optional ByVal _refparam As Object = Nothing, Optional ByVal RunOnlyOne As Boolean = False) As Boolean
         Dim ret As Interfaces.ModuleResult
         Try
@@ -734,18 +756,18 @@ Public Class ModulesManager
         Return sStudio
     End Function
 
-    Function ScraperDownloadTrailer(ByRef DBMovie As Structures.DBMovie) As String
-        Dim ret As Interfaces.ModuleResult
-        Dim sURL As String = String.Empty
-        For Each _externalScraperModule As _externalScraperModuleClass_Trailer In externalTrailerScrapersModules.Where(Function(e) e.ProcessorModule.ScraperEnabled).OrderBy(Function(e) e.ScraperOrder)
-            Try
-                ret = _externalScraperModule.ProcessorModule.DownloadTrailer(DBMovie, sURL)
-            Catch ex As Exception
-            End Try
-            If ret.breakChain Then Exit For
-        Next
-        Return sURL
-    End Function
+    'Function ScraperDownloadTrailer(ByRef DBMovie As Structures.DBMovie) As String
+    '    Dim ret As Interfaces.ModuleResult
+    '    Dim sURL As String = String.Empty
+    '    For Each _externalScraperModule As _externalScraperModuleClass_Trailer In externalTrailerScrapersModules.Where(Function(e) e.ProcessorModule.ScraperEnabled).OrderBy(Function(e) e.ScraperOrder)
+    '        Try
+    '            ret = _externalScraperModule.ProcessorModule.DownloadTrailer(DBMovie, sURL)
+    '        Catch ex As Exception
+    '        End Try
+    '        If ret.breakChain Then Exit For
+    '    Next
+    '    Return sURL
+    'End Function
 
     Sub TVSaveImages()
         Dim ret As Interfaces.ModuleResult

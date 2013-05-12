@@ -96,16 +96,16 @@ Public Class dlgEditMovie
     End Sub
 
     Private Sub btnDLTrailer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDLTrailer.Click
-        Dim tURL As String = ModulesManager.Instance.ScraperDownloadTrailer(Master.currMovie)
-        If Not String.IsNullOrEmpty(tURL) Then
-            Me.btnPlayTrailer.Enabled = True
-            If StringUtils.isValidURL(tURL) Then
-                Me.txtTrailer.Text = tURL
-            Else
-                Master.currMovie.TrailerPath = tURL
-                Me.lblLocalTrailer.Visible = True
-            End If
-        End If
+        'Dim tURL As String = ModulesManager.Instance.ScraperDownloadTrailer(Master.currMovie)
+        'If Not String.IsNullOrEmpty(tURL) Then
+        '    Me.btnPlayTrailer.Enabled = True
+        '    If StringUtils.isValidURL(tURL) Then
+        '        Me.txtTrailer.Text = tURL
+        '    Else
+        '        Master.currMovie.TrailerPath = tURL
+        '        Me.lblLocalTrailer.Visible = True
+        '    End If
+        'End If
     End Sub
 
     Private Sub btnDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDown.Click

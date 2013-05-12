@@ -4604,4 +4604,7 @@ Public Class dlgSettings
 
 #End Region 'Methods
 
+    Private Sub chkDownloadTrailer_CheckedChanged_1(sender As System.Object, e As System.EventArgs) Handles chkDownloadTrailer.CheckedChanged
+
+    End Sub
 End Class
