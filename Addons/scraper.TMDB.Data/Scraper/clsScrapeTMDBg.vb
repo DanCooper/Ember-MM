@@ -63,7 +63,7 @@ Namespace TMDBg
 		Private _TMDBApiE As V3.Tmdb
         Private _MySettings As TMDB_Data.sMySettings
 
-		Friend WithEvents bwTMDBg As New System.ComponentModel.BackgroundWorker
+        Friend WithEvents bwTMDBg As New System.ComponentModel.BackgroundWorker
 
         Private _sPoster As String
 
@@ -581,17 +581,17 @@ Namespace TMDBg
 		Private Sub BW_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bwTMDBg.RunWorkerCompleted
 			Dim Res As Results = DirectCast(e.Result, Results)
 
-			Try
-				Select Case Res.ResultType
-					Case SearchType.Movies
-						RaiseEvent SearchResultsDownloaded(DirectCast(Res.Result, MovieSearchResults))
-					Case SearchType.SearchDetails
-						Dim movieInfo As MovieSearchResults = DirectCast(Res.Result, MovieSearchResults)
-						RaiseEvent SearchMovieInfoDownloaded(_sPoster, Res.Success)
-				End Select
-			Catch ex As Exception
-				Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-			End Try
+            Try
+                Select Case Res.ResultType
+                    Case SearchType.Movies
+                        RaiseEvent SearchResultsDownloaded(DirectCast(Res.Result, MovieSearchResults))
+                    Case SearchType.SearchDetails
+                        Dim movieInfo As MovieSearchResults = DirectCast(Res.Result, MovieSearchResults)
+                        RaiseEvent SearchMovieInfoDownloaded(_sPoster, Res.Success)
+                End Select
+            Catch ex As Exception
+                Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
+            End Try
 		End Sub
 
 		Private Function CleanTitle(ByVal sString As String) As String

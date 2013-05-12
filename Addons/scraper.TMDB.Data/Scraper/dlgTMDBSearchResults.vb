@@ -142,6 +142,9 @@ Public Class dlgTMDBSearchResults
     End Sub
 
     Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
+        If TMDBg.bwTMDBg.IsBusy Then
+            TMDBg.CancelAsync()
+        End If
         Master.tmpMovie.Clear()
 
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
@@ -221,10 +224,10 @@ Public Class dlgTMDBSearchResults
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Try
-            If Me.chkManual.Checked AndAlso Me.btnVerify.Enabled Then
-                '' The rule is that if there is a tt is an IMDB otherwise is a TMDB
-                Master.tmpMovie.IMDBID = Me.txtTMDBID.Text
-            End If
+            'If Me.chkManual.Checked AndAlso Me.btnVerify.Enabled Then
+            '    '' The rule is that if there is a tt is an IMDB otherwise is a TMDB
+            '    Master.tmpMovie.IMDBID = Me.txtTMDBID.Text
+            'End If
             Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Catch ex As Exception
             Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")

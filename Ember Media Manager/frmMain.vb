@@ -6524,13 +6524,13 @@ doCancel:
                     End If
 
                     If AllowFA Then
+                        aList.Clear()
                         Me.tslLoading.Text = Master.eLang.GetString(573, "Scraping Fanart:")
                         Application.DoEvents()
                         Dim pResults As New MediaContainers.Image
                         'Public Function MovieScrapeImages(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.PostScraperCapabilities, ByRef ImageList As List(Of MediaContainers.Image)) As Boolean
                         If Not ModulesManager.Instance.MovieScrapeImages(Master.currMovie, Enums.PostScraperCapabilities.Fanart, aList) Then
                             dlgImgS = New dlgImgSelect()
-
                             pResults = dlgImgS.ShowDialog(Master.currMovie, Enums.ImageType.Fanart, aList, True)
                         End If
                         If Not IsNothing(pResults) Then

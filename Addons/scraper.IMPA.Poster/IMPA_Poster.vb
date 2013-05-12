@@ -32,7 +32,7 @@ Public Class IMPA_Poster
     Public Shared ConfigScrapeModifier As New Structures.ScrapeModifier
     Public Shared _AssemblyName As String
 
-    Private IMPA As IMPA.Scraper
+    Private IMPA As New IMPA.Scraper
     Private _Name As String = "IMPA_Poster"
     Private _ScraperEnabled As Boolean = False
     Private _setup As frmIMPAMediaSettingsHolder
@@ -149,7 +149,7 @@ Public Class IMPA_Poster
 
         LoadSettings()
 
-        ImageList = IMPA.GetIMPAPosters(DBMovie.Movie.ID)
+        ImageList = IMPA.GetIMPAPosters(DBMovie.Movie.IMDBID)
 
         Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function

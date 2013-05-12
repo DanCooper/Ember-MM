@@ -74,7 +74,7 @@ Namespace IMDBg
                     Dim aSP As String() = Regex.Split(mcIMDB(0).Value, "._V\d+?_SY\d+?_CR\d+?,\d+?,\d+?,\d+?_")
                     Dim sUrl1 = aSP(0) + aSP(1)
                     Debug.Print("GetIMDBPoster 3 - {0}", sUrl1)
-                    alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(5).description, .URL = sUrl1, .Width = "513", .Height = "755", .ParentID = aParentID})
+                    alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(5).description, .URL = sUrl1, .Width = "n/a", .Height = "n/a", .ParentID = aParentID})
                 End If
 
             Catch ex As Exception

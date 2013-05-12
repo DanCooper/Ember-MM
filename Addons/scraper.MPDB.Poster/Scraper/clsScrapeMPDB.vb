@@ -66,7 +66,7 @@ Namespace MPDB
                             ' url are like> http://www.movieposterdb.com/posters/10_08/2009/499549/l_499549_43475538.jpg
                             'the parent id is the part AFTER the l_
                             ' all poster have the same size
-                            alPosters.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(5).description, .URL = PosterURL, .Width = "300", .Height = "444", .ParentID = ParentID})
+                            alPosters.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(5).description, .URL = PosterURL, .Width = "n/a", .Height = "n/a", .ParentID = ParentID})
                             PosterURL = mPoster.Value.Remove(mPoster.Value.LastIndexOf("/") + 1, 1)
                             PosterURL = PosterURL.Insert(mPoster.Value.LastIndexOf("/") + 1, "t")
                             alPosters.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(0).description, .URL = PosterURL, .Width = "100", .Height = "148", .ParentID = ParentID})

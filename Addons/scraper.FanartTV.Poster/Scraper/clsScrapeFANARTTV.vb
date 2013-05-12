@@ -96,6 +96,7 @@ Namespace FANARTTVs
 
         Public Function GetFANARTTVImages(ByVal imdbID As String) As List(Of MediaContainers.Image)
             Dim alPoster As New List(Of MediaContainers.Image)
+            Dim ParentID As String
 
             If _APIInvalid Then
                 Return Nothing
@@ -106,8 +107,9 @@ Namespace FANARTTVs
                 If IsNothing(Result) Then Return alPoster
                 If IsNothing(Result.movieinfo.moviebackground) Then Return alPoster
                 For Each image In Result.movieinfo.moviebackground
-                    alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.backdrop_names(3).description, .URL = image.url})
-                    alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.backdrop_names(0).description, .URL = image.url & "/preview"})
+                    ParentID = image.url.Substring(image.url.LastIndexOf("/") + 1, image.url.Length - (image.url.LastIndexOf("/") + 1))
+                    alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.backdrop_names(3).description, .URL = image.url, .Width = "1920", .Height = "1080", .ParentID = image.url})
+                    alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.backdrop_names(0).description, .URL = image.url & "/preview", .Width = "200", .Height = "112", .ParentID = image.url})
                 Next
             Catch ex As Exception
                 Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")

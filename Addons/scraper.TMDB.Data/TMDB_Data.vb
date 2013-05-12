@@ -346,40 +346,39 @@ Public Class TMDB_Data
                     Return New Interfaces.ModuleResult With {.breakChain = False}
             End Select
             If ScrapeType = Enums.ScrapeType.SingleScrape Then
-                Using dSearch As New dlgTMDBSearchResults(_MySettings, Me._TMDBg)
-                    ''			dSearch.IMDBURL = MySettings.IMDBURL
-                    Dim tmpTitle As String = DBMovie.Movie.Title
-                    If String.IsNullOrEmpty(tmpTitle) Then
-                        If FileUtils.Common.isVideoTS(DBMovie.Filename) Then
-                            tmpTitle = StringUtils.FilterName(Directory.GetParent(Directory.GetParent(DBMovie.Filename).FullName).Name, False)
-                        ElseIf FileUtils.Common.isBDRip(DBMovie.Filename) Then
-                            tmpTitle = StringUtils.FilterName(Directory.GetParent(Directory.GetParent(Directory.GetParent(DBMovie.Filename).FullName).FullName).Name, False)
-                        Else
-                            tmpTitle = StringUtils.FilterName(If(DBMovie.isSingle, Directory.GetParent(DBMovie.Filename).Name, Path.GetFileNameWithoutExtension(DBMovie.Filename)))
-                        End If
-                    End If
-                    Dim filterOptions As Structures.ScrapeOptions = Functions.ScrapeOptionsAndAlso(Options, ConfigOptions)
-                    If dSearch.ShowDialog(tmpTitle, filterOptions) = Windows.Forms.DialogResult.OK Then
-                        If Not String.IsNullOrEmpty(Master.tmpMovie.IMDBID) Then
-                            ' if we changed the ID tipe we need to clear everything and rescrape
-                            If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) AndAlso Not (DBMovie.Movie.IMDBID = Master.tmpMovie.IMDBID) Then
-                                Master.currMovie.ClearExtras = True
-                                Master.currMovie.PosterPath = String.Empty
-                                Master.currMovie.FanartPath = String.Empty
-                                Master.currMovie.TrailerPath = String.Empty
-                                Master.currMovie.ExtraPath = String.Empty
-                                Master.currMovie.SubPath = String.Empty
-                                Master.currMovie.NfoPath = String.Empty
-                            End If
-                            DBMovie.Movie.IMDBID = Master.tmpMovie.IMDBID
-                        End If
-                        If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) AndAlso Master.GlobalScrapeMod.NFO Then
-                            _TMDBg.GetMovieInfo(DBMovie.Movie.ID, DBMovie.Movie, filterOptions.bFullCrew, filterOptions.bFullCast, False, filterOptions, False)
-                        End If
+                Dim dSearch As New dlgTMDBSearchResults(_MySettings, Me._TMDBg)
+                ''			dSearch.IMDBURL = MySettings.IMDBURL
+                Dim tmpTitle As String = DBMovie.Movie.Title
+                If String.IsNullOrEmpty(tmpTitle) Then
+                    If FileUtils.Common.isVideoTS(DBMovie.Filename) Then
+                        tmpTitle = StringUtils.FilterName(Directory.GetParent(Directory.GetParent(DBMovie.Filename).FullName).Name, False)
+                    ElseIf FileUtils.Common.isBDRip(DBMovie.Filename) Then
+                        tmpTitle = StringUtils.FilterName(Directory.GetParent(Directory.GetParent(Directory.GetParent(DBMovie.Filename).FullName).FullName).Name, False)
                     Else
-                        Return New Interfaces.ModuleResult With {.breakChain = False, .Cancelled = True}
+                        tmpTitle = StringUtils.FilterName(If(DBMovie.isSingle, Directory.GetParent(DBMovie.Filename).Name, Path.GetFileNameWithoutExtension(DBMovie.Filename)))
                     End If
-                End Using
+                End If
+                Dim filterOptions As Structures.ScrapeOptions = Functions.ScrapeOptionsAndAlso(Options, ConfigOptions)
+                If dSearch.ShowDialog(tmpTitle, filterOptions) = Windows.Forms.DialogResult.OK Then
+                    If Not String.IsNullOrEmpty(Master.tmpMovie.IMDBID) Then
+                        ' if we changed the ID tipe we need to clear everything and rescrape
+                        If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) AndAlso Not (DBMovie.Movie.IMDBID = Master.tmpMovie.IMDBID) Then
+                            Master.currMovie.ClearExtras = True
+                            Master.currMovie.PosterPath = String.Empty
+                            Master.currMovie.FanartPath = String.Empty
+                            Master.currMovie.TrailerPath = String.Empty
+                            Master.currMovie.ExtraPath = String.Empty
+                            Master.currMovie.SubPath = String.Empty
+                            Master.currMovie.NfoPath = String.Empty
+                        End If
+                        DBMovie.Movie.IMDBID = Master.tmpMovie.IMDBID
+                    End If
+                    If Not String.IsNullOrEmpty(DBMovie.Movie.IMDBID) AndAlso Master.GlobalScrapeMod.NFO Then
+                        _TMDBg.GetMovieInfo(DBMovie.Movie.ID, DBMovie.Movie, filterOptions.bFullCrew, filterOptions.bFullCast, False, filterOptions, False)
+                    End If
+                Else
+                    Return New Interfaces.ModuleResult With {.breakChain = False, .Cancelled = True}
+                End If
             End If
         End If
 

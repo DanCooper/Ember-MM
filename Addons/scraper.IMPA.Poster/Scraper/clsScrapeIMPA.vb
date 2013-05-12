@@ -40,6 +40,8 @@ Namespace IMPA
 
         Public Function GetIMPAPosters(ByVal imdbID As String) As List(Of MediaContainers.Image)
             Dim alPoster As New List(Of MediaContainers.Image)
+            Dim ParentID As String
+            Dim oV As String = String.Empty
 
             Try
                 Dim sURL As String = GetLink(imdbID)
@@ -56,12 +58,20 @@ Namespace IMPA
 
                     For Each mPoster As Match In mcPoster
 
-                        PosterURL = Strings.Replace(String.Format("{0}/{1}", sURL.Substring(0, sURL.LastIndexOf("/")), mPoster.Value.ToString()).Replace("thumbs", "posters"), "imp_", String.Empty)
+                        PosterURL = String.Format("{0}/{1}", sURL.Substring(0, sURL.LastIndexOf("/")), mPoster.Value.ToString())
+                        ParentID = mPoster.Value
+                        If Not ParentID = oV Then
+                            alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(0).description, .URL = PosterURL, .Height = "100", .Width = "68", .ParentID = ParentID})
 
-                        alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(0).description, .URL = PosterURL})
+                            PosterURL = Strings.Replace(String.Format("{0}/{1}", sURL.Substring(0, sURL.LastIndexOf("/")), mPoster.Value.ToString()).Replace("thumbs", "posters"), "imp_", String.Empty)
 
-                        PosterURL = PosterURL.Insert(PosterURL.LastIndexOf("."), "_xlg")
-                        alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(5).description, .URL = PosterURL})
+                            alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(2).description, .URL = PosterURL, .Height = "755", .Width = "511", .ParentID = ParentID})
+
+                            PosterURL = PosterURL.Insert(PosterURL.LastIndexOf("."), "_xlg")
+                            alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(5).description, .URL = PosterURL, .Height = "n/a", .Width = "n/a", .ParentID = ParentID})
+
+                            oV = ParentID
+                        End If
                     Next
                 End If
             Catch ex As Exception
