@@ -22,17 +22,17 @@ Imports EmberAPI
 Imports WatTmdb
 
 
-Namespace TMDB
+Namespace TMDBtrailer
 
-	Public Class Scraper
+    Public Class Scraper
 
 #Region "Fields"
 
-		Private _TMDBConf As V3.TmdbConfiguration
-		Private _TMDBConfE As V3.TmdbConfiguration
-		Private _TMDBApi As V3.Tmdb
-		Private _TMDBApiE As V3.Tmdb
-        Private _MySettings As TMDB_Poster.sMySettings
+        Private _TMDBConf As V3.TmdbConfiguration
+        Private _TMDBConfE As V3.TmdbConfiguration
+        Private _TMDBApi As V3.Tmdb
+        Private _TMDBApiE As V3.Tmdb
+        Private _MySettings As TMDB_Trailer.sMySettings
 
         'Friend WithEvents bwTMDB As New System.ComponentModel.BackgroundWorker
 
@@ -40,7 +40,7 @@ Namespace TMDB
 
 #Region "Methods"
 
-        Public Sub New(ByRef tTMDBConf As V3.TmdbConfiguration, ByRef tTMDBConfE As V3.TmdbConfiguration, ByRef tTMDBApi As V3.Tmdb, ByRef tTMDBApiE As V3.Tmdb, ByRef tMySettings As TMDB_Poster.sMySettings)
+        Public Sub New(ByRef tTMDBConf As V3.TmdbConfiguration, ByRef tTMDBConfE As V3.TmdbConfiguration, ByRef tTMDBApi As V3.Tmdb, ByRef tTMDBApiE As V3.Tmdb, ByRef tMySettings As TMDB_Trailer.sMySettings)
             _TMDBConf = tTMDBConf
             _TMDBConfE = tTMDBConfE
             _TMDBApi = tTMDBApi
@@ -70,79 +70,29 @@ Namespace TMDB
         '    End Try
         'End Sub
 
-        Public Function GetTMDBImages(ByVal TMDBID As String, ByVal Type As Enums.PostScraperCapabilities) As List(Of MediaContainers.Image)
-            Dim alPosters As New List(Of MediaContainers.Image)
-            Dim images As V3.TmdbMovieImages
-            Dim aW, aH As Integer
+        Public Function GetTMDBTrailers(ByVal TMDBID As String) As List(Of String)
+            Dim alTrailers As New List(Of String)
+            Dim trailers As V3.TmdbMovieTrailers
+            Dim tLink As String
 
-            ';If bwTMDB.CancellationPending Then Return Nothing
             Try
-                images = _TMDBApi.GetMovieImages(CInt(TMDBID), _MySettings.TMDBLanguage)
-                If Type = Enums.PostScraperCapabilities.Poster Then
-                    If IsNothing(images.posters) OrElse images.posters.Count = 0 Then
-                        images = _TMDBApiE.GetMovieImages(CInt(TMDBID))
-                        If IsNothing(images.posters) OrElse images.posters.Count = 0 Then
-                            Return alPosters
-                        End If
-                    End If
-                Else
-                    If IsNothing(images.backdrops) OrElse images.backdrops.Count = 0 Then
-                        images = _TMDBApiE.GetMovieImages(CInt(TMDBID))
-                        If IsNothing(images.backdrops) OrElse images.backdrops.Count = 0 Then
-                            Return alPosters
-                        End If
+                trailers = _TMDBApi.GetMovieTrailers(CInt(TMDBID), _MySettings.TMDBLanguage)
+                If IsNothing(trailers.youtube) OrElse trailers.youtube.Count = 0 Then
+                    trailers = _TMDBApiE.GetMovieTrailers(CInt(TMDBID))
+                    If IsNothing(trailers.youtube) OrElse trailers.youtube.Count = 0 Then
+                        Return alTrailers
                     End If
                 End If
-
-                'If bwTMDB.WorkerReportsProgress Then
-                '    bwTMDB.ReportProgress(1)
-                'End If
-
-                'If bwTMDB.CancellationPending Then Return Nothing
-
-                If Type = Enums.PostScraperCapabilities.Poster Then
-                    For Each tmdbI As V3.Poster In images.posters
-                        'If bwTMDB.CancellationPending Then Return Nothing
-                        For Each aSize In Master.eSize.poster_names
-                            Select Case aSize.size
-                                Case Master.eSize.poster_names(5).description
-                                    aW = tmdbI.width
-                                    aH = tmdbI.height
-                                Case Else
-                                    aW = aSize.width
-                                    aH = CInt(aW / tmdbI.aspect_ratio)
-                            End Select
-                            Dim tmpPoster As New MediaContainers.Image With {.URL = _TMDBConf.images.base_url & aSize.size & tmdbI.file_path, .Description = aSize.description, .Width = CStr(aW), .Height = CStr(aH), .ParentID = tmdbI.file_path}
-                            alPosters.Add(tmpPoster)
-                        Next
-                    Next
-                ElseIf Type = Enums.PostScraperCapabilities.Fanart Then
-                    For Each tmdbI As V3.Backdrop In images.backdrops
-                        'If bwTMDB.CancellationPending Then Return Nothing
-                        For Each aSize In Master.eSize.backdrop_names
-                            Select Case aSize.size
-                                Case Master.eSize.backdrop_names(3).description
-                                    aW = tmdbI.width
-                                    aH = tmdbI.height
-                                Case Else
-                                    aW = aSize.width
-                                    aH = CInt(aW / tmdbI.aspect_ratio)
-                            End Select
-                            Dim tmpPoster As New MediaContainers.Image With {.URL = _TMDBConf.images.base_url & aSize.size & tmdbI.file_path, .Description = aSize.description, .Width = CStr(aW), .Height = CStr(aH), .ParentID = tmdbI.file_path}
-                            alPosters.Add(tmpPoster)
-                        Next
-                    Next
-                End If
-
-                'If bwTMDB.WorkerReportsProgress Then
-                '    bwTMDB.ReportProgress(3)
-                'End If
+                For Each YTb As V3.Youtube In trailers.youtube
+                    tLink = String.Format("http://www.youtube.com/watch?v={0}", YTb.source)
+                    alTrailers.Add(tLink)
+                Next
 
             Catch ex As Exception
                 Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
             End Try
 
-            Return alPosters
+            Return alTrailers
         End Function
 
         '      Private Sub bwTMDB_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bwTMDB.DoWork
@@ -171,19 +121,19 @@ Namespace TMDB
 
 #Region "Nested Types"
 
-		Private Structure Arguments
+        Private Structure Arguments
 
 #Region "Fields"
 
-			Dim Parameter As String
+            Dim Parameter As String
             Dim Type As Enums.PostScraperCapabilities
 
-#End Region	'Fields
+#End Region 'Fields
 
-		End Structure
+        End Structure
 
-#End Region	'Nested Types
+#End Region 'Nested Types
 
-	End Class
+    End Class
 
 End Namespace

@@ -21,7 +21,36 @@
 Imports System.IO
 Imports EmberAPI
 
-Public Class frmMediaSettingsHolder
+Public Class frmTMDBTrailerSettingsHolder
+
+#Region "Fields"
+
+    Private _api As String
+    Private _language As String
+
+#End Region 'Fields
+
+#Region "Properties"
+
+    Public Property API() As String
+        Get
+            Return Me._api
+        End Get
+        Set(ByVal value As String)
+            Me._api = value
+        End Set
+    End Property
+
+    Public Property Lang() As String
+        Get
+            Return Me._language
+        End Get
+        Set(ByVal value As String)
+            Me._language = value
+        End Set
+    End Property
+
+#End Region 'Properties
 
 #Region "Events"
 
@@ -35,20 +64,20 @@ Public Class frmMediaSettingsHolder
 #Region "Methods"
 
     Private Sub btnDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDown.Click
-        Dim order As Integer = ModulesManager.Instance.externalTrailerScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = IMDB_trailer._AssemblyName).ScraperOrder
+        Dim order As Integer = ModulesManager.Instance.externalTrailerScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Trailer._AssemblyName).ScraperOrder
         If order < ModulesManager.Instance.externalTrailerScrapersModules.Count - 1 Then
             ModulesManager.Instance.externalTrailerScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order + 1).ScraperOrder = order
-            ModulesManager.Instance.externalTrailerScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = IMDB_trailer._AssemblyName).ScraperOrder = order + 1
+            ModulesManager.Instance.externalTrailerScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Trailer._AssemblyName).ScraperOrder = order + 1
             RaiseEvent SetupScraperChanged(cbEnabled.Checked, 1)
             orderChanged()
         End If
     End Sub
 
     Private Sub btnUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnUp.Click
-        Dim order As Integer = ModulesManager.Instance.externalTrailerScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = IMDB_Trailer._AssemblyName).ScraperOrder
+        Dim order As Integer = ModulesManager.Instance.externalTrailerScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Trailer._AssemblyName).ScraperOrder
         If order > 0 Then
             ModulesManager.Instance.externalTrailerScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order - 1).ScraperOrder = order
-            ModulesManager.Instance.externalTrailerScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = IMDB_Trailer._AssemblyName).ScraperOrder = order - 1
+            ModulesManager.Instance.externalTrailerScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Trailer._AssemblyName).ScraperOrder = order - 1
             RaiseEvent SetupScraperChanged(cbEnabled.Checked, -1)
             orderChanged()
         End If
@@ -64,22 +93,46 @@ Public Class frmMediaSettingsHolder
     End Sub
 
     Sub orderChanged()
-        Dim order As Integer = ModulesManager.Instance.externalTrailerScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = IMDB_Trailer._AssemblyName).ScraperOrder
+        Dim order As Integer = ModulesManager.Instance.externalTrailerScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Trailer._AssemblyName).ScraperOrder
         btnDown.Enabled = (order < ModulesManager.Instance.externalTrailerScrapersModules.Count - 1)
         btnUp.Enabled = (order > 1)
     End Sub
 
     Sub SetUp()
-        Me.txtTimeout.Text = Master.eSettings.TrailerTimeout.ToString
-        Me.Label23.Text = Master.eLang.GetString(7, "Timeout:")
         Me.Label3.Text = Master.eLang.GetString(168, "Scrape Order", True)
         Me.cbEnabled.Text = Master.eLang.GetString(774, "Enabled", True)
         Me.Label1.Text = String.Format(Master.eLang.GetString(103, "These settings are specific to this module.{0}Please refer to the global settings for more options."), vbCrLf)
+        Me.Label18.Text = Master.eLang.GetString(870, "TMDB API Key", True)
+        Me.GroupBox30.Text = Master.eLang.GetString(124, "TMDB")
+        Me.chkFallBackEng.Text = Master.eLang.GetString(114, "Fall back on english")
+        Me.Label2.Text = Master.eLang.GetString(115, "Preferred Language:")
     End Sub
 
-    Private Sub txtTimeout_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTimeout.TextChanged
+    Private Sub txtTMDBApiKey_TextEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTMDBApiKey.Enter
+        _api = txtTMDBApiKey.Text
+    End Sub
+
+    Private Sub txtTMDBApiKey_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTMDBApiKey.TextChanged
         RaiseEvent ModuleSettingsChanged()
     End Sub
+
+    Private Sub txtTMDBApiKey_TextValidated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTMDBApiKey.Validated
+        If Not (_api = txtTMDBApiKey.Text) Then
+            RaiseEvent SetupNeedsRestart()
+        End If
+    End Sub
+
+    Private Sub cbTMDBPrefLanguage_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles cbTMDBPrefLanguage.SelectedIndexChanged
+        If Not (_language = cbTMDBPrefLanguage.Text) Then
+            RaiseEvent SetupNeedsRestart()
+        End If
+        RaiseEvent ModuleSettingsChanged()
+    End Sub
+
+    Private Sub chkFallBackEng_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkFallBackEng.CheckedChanged
+        RaiseEvent ModuleSettingsChanged()
+    End Sub
+
 
 #End Region 'Methods
 

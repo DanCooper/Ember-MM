@@ -591,9 +591,6 @@ Partial Class dlgSettings
         Me.lblPreferredQuality = New System.Windows.Forms.Label()
         Me.chkDeleteAllTrailers = New System.Windows.Forms.CheckBox()
         Me.chkOverwriteTrailer = New System.Windows.Forms.CheckBox()
-        Me.chkNoDLTrailer = New System.Windows.Forms.CheckBox()
-        Me.chkSingleScrapeTrailer = New System.Windows.Forms.CheckBox()
-        Me.chkUpdaterTrailer = New System.Windows.Forms.CheckBox()
         Me.chkDownloadTrailer = New System.Windows.Forms.CheckBox()
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox29.SuspendLayout()
@@ -2183,7 +2180,7 @@ Partial Class dlgSettings
         Me.pnlTop.Dock = System.Windows.Forms.DockStyle.Top
         Me.pnlTop.Location = New System.Drawing.Point(0, 0)
         Me.pnlTop.Name = "pnlTop"
-        Me.pnlTop.Size = New System.Drawing.Size(1454, 64)
+        Me.pnlTop.Size = New System.Drawing.Size(892, 64)
         Me.pnlTop.TabIndex = 3
         '
         'Label2
@@ -6853,7 +6850,7 @@ Partial Class dlgSettings
         Me.ToolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 64)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(1454, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(892, 25)
         Me.ToolStrip1.Stretch = True
         Me.ToolStrip1.TabIndex = 4
         Me.ToolStrip1.Text = "ToolStrip1"
@@ -6914,7 +6911,7 @@ Partial Class dlgSettings
         Me.pnlTrailer.BackColor = System.Drawing.Color.White
         Me.pnlTrailer.Controls.Add(Me.GroupBox15)
         Me.pnlTrailer.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.pnlTrailer.Location = New System.Drawing.Point(752, 81)
+        Me.pnlTrailer.Location = New System.Drawing.Point(1260, 398)
         Me.pnlTrailer.Name = "pnlTrailer"
         Me.pnlTrailer.Size = New System.Drawing.Size(617, 408)
         Me.pnlTrailer.TabIndex = 21
@@ -6926,11 +6923,8 @@ Partial Class dlgSettings
         Me.GroupBox15.Controls.Add(Me.lblPreferredQuality)
         Me.GroupBox15.Controls.Add(Me.chkDeleteAllTrailers)
         Me.GroupBox15.Controls.Add(Me.chkOverwriteTrailer)
-        Me.GroupBox15.Controls.Add(Me.chkNoDLTrailer)
-        Me.GroupBox15.Controls.Add(Me.chkSingleScrapeTrailer)
-        Me.GroupBox15.Controls.Add(Me.chkUpdaterTrailer)
         Me.GroupBox15.Controls.Add(Me.chkDownloadTrailer)
-        Me.GroupBox15.Location = New System.Drawing.Point(3, 3)
+        Me.GroupBox15.Location = New System.Drawing.Point(12, 11)
         Me.GroupBox15.Name = "GroupBox15"
         Me.GroupBox15.Size = New System.Drawing.Size(183, 230)
         Me.GroupBox15.TabIndex = 1
@@ -6943,16 +6937,16 @@ Partial Class dlgSettings
         Me.cbTrailerQuality.Enabled = False
         Me.cbTrailerQuality.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(238, Byte))
         Me.cbTrailerQuality.FormattingEnabled = True
-        Me.cbTrailerQuality.Location = New System.Drawing.Point(33, 204)
+        Me.cbTrailerQuality.Location = New System.Drawing.Point(25, 94)
         Me.cbTrailerQuality.Name = "cbTrailerQuality"
-        Me.cbTrailerQuality.Size = New System.Drawing.Size(106, 21)
+        Me.cbTrailerQuality.Size = New System.Drawing.Size(125, 21)
         Me.cbTrailerQuality.TabIndex = 7
         '
         'lblPreferredQuality
         '
         Me.lblPreferredQuality.AutoSize = True
         Me.lblPreferredQuality.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPreferredQuality.Location = New System.Drawing.Point(31, 189)
+        Me.lblPreferredQuality.Location = New System.Drawing.Point(24, 78)
         Me.lblPreferredQuality.Name = "lblPreferredQuality"
         Me.lblPreferredQuality.Size = New System.Drawing.Size(96, 13)
         Me.lblPreferredQuality.TabIndex = 6
@@ -6963,7 +6957,7 @@ Partial Class dlgSettings
         Me.chkDeleteAllTrailers.CheckAlign = System.Drawing.ContentAlignment.TopLeft
         Me.chkDeleteAllTrailers.Enabled = False
         Me.chkDeleteAllTrailers.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkDeleteAllTrailers.Location = New System.Drawing.Point(25, 163)
+        Me.chkDeleteAllTrailers.Location = New System.Drawing.Point(25, 57)
         Me.chkDeleteAllTrailers.Name = "chkDeleteAllTrailers"
         Me.chkDeleteAllTrailers.Size = New System.Drawing.Size(152, 27)
         Me.chkDeleteAllTrailers.TabIndex = 5
@@ -6976,51 +6970,12 @@ Partial Class dlgSettings
         Me.chkOverwriteTrailer.AutoSize = True
         Me.chkOverwriteTrailer.Enabled = False
         Me.chkOverwriteTrailer.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkOverwriteTrailer.Location = New System.Drawing.Point(25, 143)
+        Me.chkOverwriteTrailer.Location = New System.Drawing.Point(25, 39)
         Me.chkOverwriteTrailer.Name = "chkOverwriteTrailer"
         Me.chkOverwriteTrailer.Size = New System.Drawing.Size(119, 17)
         Me.chkOverwriteTrailer.TabIndex = 4
         Me.chkOverwriteTrailer.Text = "Overwrite Existing"
         Me.chkOverwriteTrailer.UseVisualStyleBackColor = True
-        '
-        'chkNoDLTrailer
-        '
-        Me.chkNoDLTrailer.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.chkNoDLTrailer.Enabled = False
-        Me.chkNoDLTrailer.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkNoDLTrailer.Location = New System.Drawing.Point(25, 72)
-        Me.chkNoDLTrailer.Name = "chkNoDLTrailer"
-        Me.chkNoDLTrailer.Size = New System.Drawing.Size(151, 30)
-        Me.chkNoDLTrailer.TabIndex = 2
-        Me.chkNoDLTrailer.Text = "Only Get URLs When Scraping"
-        Me.chkNoDLTrailer.TextAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.chkNoDLTrailer.UseVisualStyleBackColor = True
-        '
-        'chkSingleScrapeTrailer
-        '
-        Me.chkSingleScrapeTrailer.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.chkSingleScrapeTrailer.Enabled = False
-        Me.chkSingleScrapeTrailer.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkSingleScrapeTrailer.Location = New System.Drawing.Point(25, 106)
-        Me.chkSingleScrapeTrailer.Name = "chkSingleScrapeTrailer"
-        Me.chkSingleScrapeTrailer.Size = New System.Drawing.Size(154, 34)
-        Me.chkSingleScrapeTrailer.TabIndex = 3
-        Me.chkSingleScrapeTrailer.Text = "Get During Single Scrape"
-        Me.chkSingleScrapeTrailer.TextAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.chkSingleScrapeTrailer.UseVisualStyleBackColor = True
-        '
-        'chkUpdaterTrailer
-        '
-        Me.chkUpdaterTrailer.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.chkUpdaterTrailer.Enabled = False
-        Me.chkUpdaterTrailer.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkUpdaterTrailer.Location = New System.Drawing.Point(25, 38)
-        Me.chkUpdaterTrailer.Name = "chkUpdaterTrailer"
-        Me.chkUpdaterTrailer.Size = New System.Drawing.Size(151, 33)
-        Me.chkUpdaterTrailer.TabIndex = 1
-        Me.chkUpdaterTrailer.Text = "Get During Automated Scrapers"
-        Me.chkUpdaterTrailer.TextAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.chkUpdaterTrailer.UseVisualStyleBackColor = True
         '
         'chkDownloadTrailer
         '
@@ -7039,7 +6994,7 @@ Partial Class dlgSettings
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.btnCancel
-        Me.ClientSize = New System.Drawing.Size(1454, 891)
+        Me.ClientSize = New System.Drawing.Size(892, 627)
         Me.Controls.Add(Me.pnlTrailer)
         Me.Controls.Add(Me.pnlSources)
         Me.Controls.Add(Me.pnlGeneral)
@@ -7801,8 +7756,5 @@ Partial Class dlgSettings
     Friend WithEvents lblPreferredQuality As System.Windows.Forms.Label
     Friend WithEvents chkDeleteAllTrailers As System.Windows.Forms.CheckBox
     Friend WithEvents chkOverwriteTrailer As System.Windows.Forms.CheckBox
-    Friend WithEvents chkNoDLTrailer As System.Windows.Forms.CheckBox
-    Friend WithEvents chkSingleScrapeTrailer As System.Windows.Forms.CheckBox
-    Friend WithEvents chkUpdaterTrailer As System.Windows.Forms.CheckBox
     Friend WithEvents chkDownloadTrailer As System.Windows.Forms.CheckBox
 End Class

@@ -41,7 +41,7 @@ Public Class IMDB_trailer
     Private MySettings As New _MySettings
     Private _Name As String = "IMDB_Trailer"
     Private _ScraperEnabled As Boolean = False
-    Private _setup As frmMediaSettingsHolder
+    Private _setup As frmIMDBTrailerSettingsHolder
 
 #End Region 'Fields
 
@@ -110,7 +110,7 @@ Public Class IMDB_trailer
 
     Function InjectSetupScraper() As Containers.SettingsPanel Implements Interfaces.EmberMovieScraperModule_Trailer.InjectSetupScraper
         Dim SPanel As New Containers.SettingsPanel
-        _setup = New frmMediaSettingsHolder
+        _setup = New frmIMDBTrailerSettingsHolder
         LoadSettings()
         _setup.cbEnabled.Checked = _ScraperEnabled
         _setup.txtTimeout.Text = MySettings.TrailerTimeout.ToString

@@ -30,7 +30,7 @@ Public Class dlgTrailerSelect
     Friend WithEvents bwCompileList As New System.ComponentModel.BackgroundWorker
     Friend WithEvents bwDownloadTrailer As New System.ComponentModel.BackgroundWorker
 
-    Private imdbID As String = String.Empty
+    Private tMovie As New Structures.DBMovie
     Private prePath As String = String.Empty
     Private _UrlList As List(Of String)
     Private tArray As New List(Of String)
@@ -49,8 +49,8 @@ Public Class dlgTrailerSelect
         Me.Activate()
     End Sub
 
-    Public Overloads Function ShowDialog(ByVal _imdbID As String, ByVal tURLList As List(Of String)) As String
-        Me.imdbID = _imdbID
+    Public Overloads Function ShowDialog(ByRef DBMovie As Structures.DBMovie, ByRef tURLList As List(Of String)) As String
+        Me.tMovie = DBMovie
         Me._UrlList = tURLList
 
         If MyBase.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
