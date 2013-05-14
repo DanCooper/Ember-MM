@@ -20,6 +20,7 @@
 
 Imports System.IO
 Imports EmberAPI
+Imports System.Diagnostics
 
 Public Class frmTMDBMediaSettingsHolder
 
@@ -99,8 +100,13 @@ Public Class frmTMDBMediaSettingsHolder
 
     Sub orderChanged()
         Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Poster._AssemblyName).ScraperOrder
-        btnDown.Enabled = (order < ModulesManager.Instance.externalPosterScrapersModules.Count - 1)
-        btnUp.Enabled = (order > 1)
+        If ModulesManager.Instance.externalPosterScrapersModules.Count > 0 Then
+            btnDown.Enabled = (order < ModulesManager.Instance.externalPosterScrapersModules.Count - 1)
+            btnUp.Enabled = (order > 1)
+        Else
+            btnDown.Enabled = False
+            btnUp.Enabled = False
+        End If
     End Sub
 
     Sub SetUp()
@@ -139,6 +145,18 @@ Public Class frmTMDBMediaSettingsHolder
 
     Private Sub chkFallBackEng_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles chkFallBackEng.CheckedChanged
         RaiseEvent ModuleSettingsChanged()
+    End Sub
+
+    Private Sub PictureBox2_Click(sender As System.Object, e As System.EventArgs) Handles pbTMDB.Click
+        If Master.isWindows Then
+            Process.Start("http://docs.themoviedb.apiary.io/")
+        Else
+            Using Explorer As New Process
+                Explorer.StartInfo.FileName = "xdg-open"
+                Explorer.StartInfo.Arguments = "http://docs.themoviedb.apiary.io/"
+                Explorer.Start()
+            End Using
+        End If
     End Sub
 
 #End Region 'Methods

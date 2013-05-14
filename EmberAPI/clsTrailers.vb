@@ -164,24 +164,25 @@ Public Class Trailers
         Dim WebPage As New HTTP
         Dim tURL As String = String.Empty
         AddHandler WebPage.ProgressUpdated, AddressOf DownloadProgressUpdated
-        If Master.eSettings.VideoTSParentXBMC AndAlso FileUtils.Common.isBDRip(sPath) Then
-            tURL = String.Concat(Directory.GetParent(Directory.GetParent(sPath).FullName).FullName, "\", "index", If(Master.eSettings.DashTrailer, "-trailer", "[trailer]"), Path.GetExtension(sURL))
-        ElseIf Master.eSettings.MovieNameNFOStack Then
-            Dim sPathStack As String = StringUtils.CleanStackingMarkers(Path.GetFileNameWithoutExtension(sPath))
-            tURL = Path.Combine(Directory.GetParent(sPath).FullName, String.Concat(Path.GetFileNameWithoutExtension(sPathStack), If(Master.eSettings.DashTrailer, "-trailer", "[trailer]"), Path.GetExtension(sURL)))
-        Else
-            tURL = Path.Combine(Directory.GetParent(sPath).FullName, String.Concat(Path.GetFileNameWithoutExtension(sPath), If(Master.eSettings.DashTrailer, "-trailer", "[trailer]"), Path.GetExtension(sURL)))
-        End If
-        If Not String.IsNullOrEmpty(sURL) Then
-            tURL = WebPage.DownloadFile(sURL, tURL, False, "trailer")
+        ' filename is managed in the DownloadFile
+        'If Master.eSettings.VideoTSParentXBMC AndAlso FileUtils.Common.isBDRip(sPath) Then
+        '    tURL = String.Concat(Directory.GetParent(Directory.GetParent(sPath).FullName).FullName, "\", "index", If(Master.eSettings.DashTrailer, "-trailer", "[trailer]"), Path.GetExtension(sURL))
+        'ElseIf Master.eSettings.MovieNameNFOStack Then
+        '    Dim sPathStack As String = StringUtils.CleanStackingMarkers(Path.GetFileNameWithoutExtension(sPath))
+        '    tURL = Path.Combine(Directory.GetParent(sPath).FullName, String.Concat(Path.GetFileNameWithoutExtension(sPathStack), If(Master.eSettings.DashTrailer, "-trailer", "[trailer]"), Path.GetExtension(sURL)))
+        'Else
+        '    tURL = Path.Combine(Directory.GetParent(sPath).FullName, String.Concat(Path.GetFileNameWithoutExtension(sPath), If(Master.eSettings.DashTrailer, "-trailer", "[trailer]"), Path.GetExtension(sURL)))
+        'End If
+        'If Not String.IsNullOrEmpty(sURL) Then
+        tURL = WebPage.DownloadFile(sURL, Path.GetFileNameWithoutExtension(sPath), True, "trailer")
 
-            If Not String.IsNullOrEmpty(tURL) Then
-                'delete any other trailer if enabled in settings and download successful
-                If Master.eSettings.DeleteAllTrailers Then
-                    DeleteTrailers(sPath, tURL)
-                End If
+        If Not String.IsNullOrEmpty(tURL) Then
+            'delete any other trailer if enabled in settings and download successful
+            If Master.eSettings.DeleteAllTrailers Then
+                DeleteTrailers(sPath, tURL)
             End If
         End If
+        'End If
         RemoveHandler WebPage.ProgressUpdated, AddressOf DownloadProgressUpdated
         Return tURL
     End Function

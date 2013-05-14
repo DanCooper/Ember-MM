@@ -22,6 +22,7 @@ Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.IO
 Imports EmberAPI
+Imports EmberScraperModule
 
 Public Class dlgOfflineHolder
 
@@ -34,6 +35,7 @@ Public Class dlgOfflineHolder
     Private def_pbPreview_h As Integer
     Private def_pbPreview_w As Integer
     Private destPath As String
+    Private _IMDBg As IMDBg.Scraper
 
     '    Private currTopText As String
     '    Private prevTopText As String = String.Empty
@@ -551,6 +553,8 @@ Public Class dlgOfflineHolder
     End Sub
 
     Private Sub GetIMDB_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GetIMDB_Button.Click
+        Dim Poster As New MediaContainers.Image
+        Dim tUrl As String = String.Empty
         Try
             tMovie.Movie.Clear()
             tMovie.Movie.Title = txtMovieName.Text
@@ -562,16 +566,38 @@ Public Class dlgOfflineHolder
                 Me.txtMovieName.Text = String.Format("{0} [OffLine]", tMovie.Movie.Title)
                 'Dim sPath As String = Path.Combine(Master.TempPath, "fanart.jpg")
                 Dim fResults As New Containers.ImgResult
-                ModulesManager.Instance.ScraperSelectImageOfType(tMovie, Enums.ImageType.Fanart, fResults, True)
-                If Not String.IsNullOrEmpty(fResults.ImagePath) Then
-                    tMovie.FanartPath = fResults.ImagePath
-                    If Not Master.eSettings.NoSaveImagesToNfo Then tMovie.Movie.Fanart = fResults.Fanart
+                Dim tList As New List(Of MediaContainers.Image)
+                If ModulesManager.Instance.MovieScrapeImages(tMovie, Enums.PostScraperCapabilities.Fanart, tList) Then
+                    Poster.Clear()
+                    If Images.GetPreferredFanart(tList, Poster) Then
+                        If IsNothing(Poster.WebImage.Image) Then
+                            Poster.WebImage.FromWeb(Poster.URL)
+                        End If
+                        If Not IsNothing(Poster.WebImage.Image) Then
+                            tUrl = Poster.WebImage.SaveAsFanart(tMovie)
+                            If Not String.IsNullOrEmpty(tUrl) Then
+                                tMovie.FanartPath = tUrl
+                                If Not Master.eSettings.NoSaveImagesToNfo Then
+                                    tMovie.Movie.Fanart.URL = Poster.URL
+                                End If
+                            End If
+                        End If
+                    End If
                 End If
-                'sPath = Path.Combine(Master.TempPath, "poster.jpg")
-                fResults = New Containers.ImgResult
-                ModulesManager.Instance.ScraperSelectImageOfType(tMovie, Enums.ImageType.Posters, fResults, True)
-                If Not String.IsNullOrEmpty(fResults.ImagePath) Then
-                    tMovie.PosterPath = fResults.ImagePath
+
+                If ModulesManager.Instance.MovieScrapeImages(tMovie, Enums.PostScraperCapabilities.Poster, tList) Then
+                    Poster.Clear()
+                    If Images.GetPreferredPoster(tList, Poster) Then
+                        If IsNothing(Poster.WebImage.Image) Then
+                            Poster.WebImage.FromWeb(Poster.URL)
+                        End If
+                        If Not IsNothing(Poster.WebImage.Image) Then
+                            tUrl = Poster.WebImage.SaveAsPoster(tMovie)
+                            If Not String.IsNullOrEmpty(tUrl) Then
+                                tMovie.PosterPath = tUrl
+                            End If
+                        End If
+                    End If
                 End If
             End If
             CheckConditions()

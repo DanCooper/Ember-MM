@@ -81,6 +81,7 @@ Namespace YouTube
 
             Try
                 Dim Html As String = sHTTP.DownloadData(url)
+
                 If Html.ToLower.Contains("page not found") Then
                     Html = String.Empty
                 End If

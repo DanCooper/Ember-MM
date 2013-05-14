@@ -20,6 +20,7 @@
 
 Imports System.IO
 Imports EmberAPI
+Imports System.Diagnostics
 
 Public Class frmFanartTVMediaSettingsHolder
 
@@ -66,8 +67,13 @@ Public Class frmFanartTVMediaSettingsHolder
 
     Sub orderChanged()
         Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = FanartTV_Poster._AssemblyName).ScraperOrder
-        btnDown.Enabled = (order < ModulesManager.Instance.externalPosterScrapersModules.Count - 1)
-        btnUp.Enabled = (order > 1)
+        If ModulesManager.Instance.externalPosterScrapersModules.Count > 0 Then
+            btnDown.Enabled = (order < ModulesManager.Instance.externalPosterScrapersModules.Count - 1)
+            btnUp.Enabled = (order > 1)
+        Else
+            btnDown.Enabled = False
+            btnUp.Enabled = False
+        End If
     End Sub
 
     Sub SetUp()
@@ -80,6 +86,18 @@ Public Class frmFanartTVMediaSettingsHolder
 
     Private Sub txtFANARTTVApiKey_TextChanged(sender As System.Object, e As System.EventArgs) Handles txtFANARTTVApiKey.TextChanged
         RaiseEvent ModuleSettingsChanged()
+    End Sub
+
+    Private Sub pbFANARTTV_Click(sender As System.Object, e As System.EventArgs) Handles pbFANARTTV.Click
+        If Master.isWindows Then
+            Process.Start("http://fanart.tv/get-an-api-key/")
+        Else
+            Using Explorer As New Process
+                Explorer.StartInfo.FileName = "xdg-open"
+                Explorer.StartInfo.Arguments = "http://fanart.tv/get-an-api-key/"
+                Explorer.Start()
+            End Using
+        End If
     End Sub
 
 #End Region 'Methods

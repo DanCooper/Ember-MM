@@ -31,12 +31,10 @@ Public Class dlgTrailerSelect
     Friend WithEvents bwDownloadTrailer As New System.ComponentModel.BackgroundWorker
 
     Private tMovie As New Structures.DBMovie
-    Private prePath As String = String.Empty
     Private _UrlList As List(Of String)
     Private tArray As New List(Of String)
     Private tURL As String = String.Empty
     Private sPath As String
-    Private cTrailer As EmberAPI.Trailers
 
 #End Region 'Fields
 
@@ -104,20 +102,7 @@ Public Class dlgTrailerSelect
         Me.pnlStatus.Visible = True
         Application.DoEvents()
 
-        If Not String.IsNullOrEmpty(Me.prePath) AndAlso File.Exists(Me.prePath) Then
-            If CloseDialog Then
-                Me.tURL = Path.Combine(Directory.GetParent(Me.sPath).FullName, Path.GetFileName(Me.prePath))
-                FileUtils.Common.MoveFileWithStream(Me.prePath, Me.tURL)
-
-                File.Delete(Me.prePath)
-
-                Me.DialogResult = System.Windows.Forms.DialogResult.OK
-                Me.Close()
-            Else
-                System.Diagnostics.Process.Start(String.Concat("""", Me.prePath, """"))
-                didCancel = True
-            End If
-        ElseIf Me.txtManual.Text.Length > 0 Then
+        If Me.txtManual.Text.Length > 0 Then
             Me.lblStatus.Text = Master.eLang.GetString(907, "Copying specified file to trailer...")
             If Master.eSettings.ValidExts.Contains(Path.GetExtension(Me.txtManual.Text)) AndAlso File.Exists(Me.txtManual.Text) Then
                 If CloseDialog Then
@@ -320,12 +305,8 @@ Public Class dlgTrailerSelect
         Dim Args As Arguments = DirectCast(e.Argument, Arguments)
         Try
 
-            If Args.bType Then
-                Me.tURL = Trailers.DownloadTrailer(Me.sPath, Args.Parameter)
-            Else
-                Me.prePath = Trailers.DownloadTrailer(Path.Combine(Master.TempPath, Path.GetFileName(Me.sPath)), Args.Parameter)
-            End If
-
+            Me.tURL = Trailers.DownloadTrailer(Me.sPath, Args.Parameter) ', Me.tMovie.Filename)
+            
         Catch
         End Try
 
@@ -338,6 +319,7 @@ Public Class dlgTrailerSelect
 
     Private Sub bwDownloadTrailer_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles bwDownloadTrailer.ProgressChanged
         pbStatus.Value = e.ProgressPercentage
+        Application.DoEvents()
     End Sub
 
     Private Sub bwDownloadTrailer_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bwDownloadTrailer.RunWorkerCompleted
@@ -352,7 +334,6 @@ Public Class dlgTrailerSelect
                 Me.txtManual.Enabled = True
                 Me.btnBrowse.Enabled = True
                 Me.SetEnabled(False)
-                If Not String.IsNullOrEmpty(Me.prePath) Then System.Diagnostics.Process.Start(String.Concat("""", prePath, """"))
             End If
         End If
     End Sub
@@ -384,11 +365,6 @@ Public Class dlgTrailerSelect
     End Sub
 
     Private Sub SetEnabled(ByVal DeletePre As Boolean)
-        If DeletePre AndAlso Not String.IsNullOrEmpty(Me.prePath) AndAlso File.Exists(Me.prePath) Then
-            File.Delete(Me.prePath)
-            Me.prePath = String.Empty
-        End If
-
         If StringUtils.isValidURL(Me.txtYouTube.Text) OrElse Me.lbTrailers.SelectedItems.Count > 0 OrElse Me.txtManual.Text.Length > 0 Then
             Me.OK_Button.Enabled = True
             Me.btnSetNfo.Enabled = True

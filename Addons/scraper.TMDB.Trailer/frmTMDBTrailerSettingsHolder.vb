@@ -94,8 +94,13 @@ Public Class frmTMDBTrailerSettingsHolder
 
     Sub orderChanged()
         Dim order As Integer = ModulesManager.Instance.externalTrailerScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Trailer._AssemblyName).ScraperOrder
-        btnDown.Enabled = (order < ModulesManager.Instance.externalTrailerScrapersModules.Count - 1)
-        btnUp.Enabled = (order > 1)
+        If ModulesManager.Instance.externalTrailerScrapersModules.Count > 0 Then
+            btnDown.Enabled = (order < ModulesManager.Instance.externalTrailerScrapersModules.Count - 1)
+            btnUp.Enabled = (order > 1)
+        Else
+            btnDown.Enabled = False
+            btnUp.Enabled = False
+        End If
     End Sub
 
     Sub SetUp()

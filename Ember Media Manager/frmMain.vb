@@ -1334,6 +1334,7 @@ Public Class frmMain
                                                 'End If
                                             End If
                                         End If
+
                                     End Using
                                 End If
                             End If
@@ -1346,7 +1347,7 @@ Public Class frmMain
                         If aUrlList.Count > 0 Then
                             If Not (Args.scrapeType = Enums.ScrapeType.SingleScrape) AndAlso Trailers.PreferredTrailer(tURL, aUrlList, DBScrapeMovie.Filename, (Args.scrapeType = Enums.ScrapeType.SingleScrape)) Then
                                 If Not String.IsNullOrEmpty(tURL) Then
-                                    tURL = Trailers.DownloadTrailer(tURL, DBScrapeMovie.Filename)
+                                    tURL = Trailers.DownloadTrailer(tURL, DBScrapeMovie.Filename) ', DBScrapeMovie.Filename)
                                     If Not String.IsNullOrEmpty(tURL) Then
                                         DBScrapeMovie.TrailerPath = tURL
                                         MovieScraperEvent(Enums.MovieScraperEventType.TrailerItem, True)
@@ -6512,7 +6513,6 @@ doCancel:
 
         Try
             If Not String.IsNullOrEmpty(Master.tmpMovie.Title) Then
-                'Master.currMovie.Movie = Master.tmpMovie
                 'If Master.eSettings.ScanMediaInfo Then
                 '    Me.tslLoading.Text = Master.eLang.GetString(140, "Scanning Meta Data:")
                 '    Me.tspbLoading.Value = Me.tspbLoading.Maximum
@@ -7992,7 +7992,7 @@ doCancel:
                 Using SQLNewcommand As SQLite.SQLiteCommand = Master.DB.MediaDBConn.CreateCommand()
                     SQLNewcommand.CommandText = String.Concat("SELECT COUNT(id) AS mcount FROM movies WHERE mark = 1;")
                     Using SQLcount As SQLite.SQLiteDataReader = SQLNewcommand.ExecuteReader()
-                        Debug.Print(SQLcount.HasRows.ToString())
+                        'Debug.Print(SQLcount.HasRows.ToString())
                         SQLcount.Read()
                         If SQLcount.HasRows AndAlso Convert.ToInt32(SQLcount("mcount")) > 0 Then
                             Me.btnMarkAll.Text = Master.eLang.GetString(105, "Unmark All")

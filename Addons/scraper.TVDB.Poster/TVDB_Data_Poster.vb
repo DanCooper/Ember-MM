@@ -22,18 +22,22 @@ Imports System.IO
 Imports EmberAPI
 
 
-Public Class EmberNativeTVScraperModule
+Public Class TVDB_Data_Poster
     Implements Interfaces.EmberTVScraperModule
 
 #Region "Fields"
 
-    Public Shared TVScraper As New Scraper
+    Public Shared _AssemblyName As String
 
-    Private _Name As String = "Ember Native TV Scrapers"
+    Public Shared TVScraper As Scraper
+
+    Private _Name As String = "TVDB Data Poster"
     Private _PostScraperEnabled As Boolean = False
     Private _ScraperEnabled As Boolean = False
     Private _setup As frmTVInfoSettingsHolder
     Private _setupPost As frmTVMediaSettingsHolder
+    Private _APIKey As String
+
 #End Region 'Fields
 
 #Region "Events"
@@ -121,32 +125,37 @@ Public Class EmberNativeTVScraperModule
         Return New Interfaces.ModuleResult With {.breakChain = False}
     End Function
 
-	Public Function GetSingleImage(ByVal Title As String, ByVal ShowID As Integer, ByVal TVDBID As String, ByVal Type As Enums.TVImageType, ByVal Season As Integer, ByVal Episode As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal CurrentImage As Images, ByRef Image As Images) As Interfaces.ModuleResult Implements Interfaces.EmberTVScraperModule.GetSingleImage
-		Image = TVScraper.GetSingleImage(Title, ShowID, TVDBID, Type, Season, Episode, Lang, Ordering, CurrentImage)
-		Return New Interfaces.ModuleResult With {.breakChain = True}
-	End Function
+    Public Function GetSingleImage(ByVal Title As String, ByVal ShowID As Integer, ByVal TVDBID As String, ByVal Type As Enums.TVImageType, ByVal Season As Integer, ByVal Episode As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal CurrentImage As Images, ByRef Image As Images) As Interfaces.ModuleResult Implements Interfaces.EmberTVScraperModule.GetSingleImage
+        Image = TVScraper.GetSingleImage(Title, ShowID, TVDBID, Type, Season, Episode, Lang, Ordering, CurrentImage)
+        Return New Interfaces.ModuleResult With {.breakChain = True}
+    End Function
 
     Public Sub Handler_ScraperEvent(ByVal eType As Enums.TVScraperEventType, ByVal iProgress As Integer, ByVal Parameter As Object)
         RaiseEvent TVScraperEvent(eType, iProgress, Parameter)
     End Sub
 
     Public Sub Init(ByVal sAssemblyName As String) Implements Interfaces.EmberTVScraperModule.Init
+        _AssemblyName = sAssemblyName
+        _APIKey = AdvancedSettings.GetSetting("TVDBPIKey", "Get your API Key from http://thetvdb.com/?tab=apiregister")
+        TVScraper = New Scraper(_APIKey)
         AddHandler TVScraper.ScraperEvent, AddressOf Handler_ScraperEvent
     End Sub
 
     Public Function InjectSetupPostScraper() As Containers.SettingsPanel Implements Interfaces.EmberTVScraperModule.InjectSetupPostScraper
         Dim SPanel As New Containers.SettingsPanel
         _setupPost = New frmTVMediaSettingsHolder
+        _setupPost.txtTVDBApiKey.Text = _APIKey
         _setupPost.cbEnabled.Checked = _PostScraperEnabled
         SPanel.Name = String.Concat(Me._Name, "PostScraper")
-        SPanel.Text = Master.eLang.GetString(0, "Ember Native TV Scrapers")
+        SPanel.Text = Master.eLang.GetString(0, "TVDB")
+        SPanel.Prefix = "TVDBData_"
         SPanel.Type = Master.eLang.GetString(698, "TV Shows", True)
         SPanel.ImageIndex = If(Me._ScraperEnabled, 9, 10)
         SPanel.Order = 100
         SPanel.Panel = Me._setupPost.pnlSettings
         SPanel.Parent = "pnlTVMedia"
         AddHandler _setupPost.SetupPostScraperChanged, AddressOf Handle_SetupPostScraperChanged
-        AddHandler _setupPost.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+        AddHandler _setupPost.ModuleSettingsChanged, AddressOf Handle_PostModuleSettingsChanged
         Return SPanel
     End Function
 
@@ -154,24 +163,30 @@ Public Class EmberNativeTVScraperModule
     Public Function InjectSetupScraper() As Containers.SettingsPanel Implements Interfaces.EmberTVScraperModule.InjectSetupScraper
         Dim SPanel As New Containers.SettingsPanel
         _setup = New frmTVInfoSettingsHolder
+        _setup.txtTVDBApiKey.Text = _APIKey
         _setup.cbEnabled.Checked = _ScraperEnabled
         SPanel.Name = String.Concat(Me._Name, "Scraper")
-        SPanel.Text = Master.eLang.GetString(0, "Ember Native TV Scrapers")
-        SPanel.Prefix = "NativeTV_"
+        SPanel.Text = Master.eLang.GetString(0, "TVDB")
+        SPanel.Prefix = "TVDBMedia_"
         SPanel.Type = Master.eLang.GetString(698, "TV Shows", True)
         SPanel.ImageIndex = If(Me._ScraperEnabled, 9, 10)
         SPanel.Order = 100
         SPanel.Panel = Me._setup.pnlSettings
         SPanel.Parent = "pnlTVData"
         AddHandler _setup.SetupScraperChanged, AddressOf Handle_SetupScraperChanged
-        AddHandler _setup.ModuleSettingsChanged, AddressOf Handle_PostModuleSettingsChanged
+        AddHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
         Return SPanel
     End Function
+
     Private Sub Handle_ModuleSettingsChanged()
+        _APIKey = _setup.txtTVDBApiKey.Text
+        _setupPost.txtTVDBApiKey.Text = _setup.txtTVDBApiKey.Text
         RaiseEvent ModuleSettingsChanged()
     End Sub
 
     Private Sub Handle_PostModuleSettingsChanged()
+        _APIKey = _setupPost.txtTVDBApiKey.Text
+        _setup.txtTVDBApiKey.Text = _setupPost.txtTVDBApiKey.Text
         RaiseEvent ModuleSettingsChanged()
     End Sub
 
@@ -193,9 +208,29 @@ Public Class EmberNativeTVScraperModule
     End Function
 
     Public Sub SaveSetupPostScraper(ByVal DoDispose As Boolean) Implements Interfaces.EmberTVScraperModule.SaveSetupPostScraper
+        If Not String.IsNullOrEmpty(_APIKey) Then
+            AdvancedSettings.SetSetting("TVDBAPIKey", _APIKey)
+        Else
+            AdvancedSettings.SetSetting("TVDBAPIKey", Master.eLang.GetString(115, "Get your API Key from thetvdb.com"))
+        End If
+        If DoDispose Then
+            RemoveHandler _setup.SetupScraperChanged, AddressOf Handle_SetupScraperChanged
+            RemoveHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+            _setup.Dispose()
+        End If
     End Sub
 
     Public Sub SaveSetupScraper(ByVal DoDispose As Boolean) Implements Interfaces.EmberTVScraperModule.SaveSetupScraper
+        If Not String.IsNullOrEmpty(_APIKey) Then
+            AdvancedSettings.SetSetting("TVDBAPIKey", _APIKey)
+        Else
+            AdvancedSettings.SetSetting("TVDBAPIKey", Master.eLang.GetString(115, "Get your API Key from thetvdb.com"))
+        End If
+        If DoDispose Then
+            RemoveHandler _setup.SetupScraperChanged, AddressOf Handle_SetupScraperChanged
+            RemoveHandler _setup.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+            _setup.Dispose()
+        End If
     End Sub
 
     Public Function ScrapeEpisode(ByVal ShowID As Integer, ByVal ShowTitle As String, ByVal TVDBID As String, ByVal iEpisode As Integer, ByVal iSeason As Integer, ByVal Lang As String, ByVal Ordering As Enums.Ordering, ByVal Options As Structures.TVScrapeOptions) As Interfaces.ModuleResult Implements Interfaces.EmberTVScraperModule.ScrapeEpisode

@@ -148,7 +148,7 @@ Public Class ModulesManager
                                 'Add the activated module to the arraylist
                                 Dim _externalProcessorModule As New _externalGenericModuleClass
                                 Dim filename As String = file
-                                Debug.Print("Module loaded :" & filename)
+                                'Debug.Print("Module loaded :" & filename)
                                 If String.IsNullOrEmpty(AssemblyList.FirstOrDefault(Function(x) x.AssemblyName = Path.GetFileNameWithoutExtension(filename)).AssemblyName) Then
                                     AssemblyList.Add(New AssemblyListItem With {.AssemblyName = Path.GetFileNameWithoutExtension(filename), .Assembly = assembly})
                                 End If
@@ -202,14 +202,14 @@ Public Class ModulesManager
             For Each file As String In System.IO.Directory.GetFiles(moduleLocation, modulefile)
                 Try
                     assembly = System.Reflection.Assembly.LoadFile(file)
-                    Debug.Print("check :" & file)
+                    'Debug.Print("check :" & file)
                     'Loop through each of the assemeblies type
                     For Each fileType As Type In assembly.GetTypes
 
                         'Activate the located module
                         Dim t1 As Type = fileType.GetInterface("EmberMovieScraperModule_Data")
                         If Not t1 Is Nothing Then
-                            Debug.Print("Loading - data :" & file)
+                            'Debug.Print("Loading - data :" & file)
                             Dim ProcessorModule As Interfaces.EmberMovieScraperModule_Data
                             ProcessorModule = CType(Activator.CreateInstance(fileType), Interfaces.EmberMovieScraperModule_Data)
                             'Add the activated module to the arraylist
@@ -236,7 +236,7 @@ Public Class ModulesManager
                         Else
                             Dim t2 As Type = fileType.GetInterface("EmberMovieScraperModule_Poster")
                             If Not t2 Is Nothing Then
-                                Debug.Print("Loading - poster :" & file)
+                                'Debug.Print("Loading - poster :" & file)
                                 Dim ProcessorModule As Interfaces.EmberMovieScraperModule_Poster
                                 ProcessorModule = CType(Activator.CreateInstance(fileType), Interfaces.EmberMovieScraperModule_Poster)
                                 'Add the activated module to the arraylist
@@ -423,7 +423,7 @@ Public Class ModulesManager
         For Each _externalScraperModule As _externalScraperModuleClass_Data In externalDataScrapersModules.Where(Function(e) e.ProcessorModule.ScraperEnabled).OrderBy(Function(e) e.ScraperOrder)
             AddHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
             Try
-                Debug.Print("MovieScrapeOnly" & vbTab & DBMovie.ID & vbTab & ScrapeType)
+                'Debug.Print("MovieScrapeOnly" & vbTab & DBMovie.ID & vbTab & ScrapeType)
                 ret = _externalScraperModule.ProcessorModule.Scraper(DBMovie, ScrapeType, Options)
             Catch ex As Exception
             End Try
@@ -440,7 +440,7 @@ Public Class ModulesManager
             If _externalScraperModule.ProcessorModule.QueryScraperCapabilities(Type) Then
                 AddHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
                 Try
-                    Debug.Print("MovieScrapeImages" & vbTab & _externalScraperModule.ProcessorModule.ModuleName)
+                    'Debug.Print("MovieScrapeImages" & vbTab & _externalScraperModule.ProcessorModule.ModuleName)
                     aList = New List(Of MediaContainers.Image)
                     ret = _externalScraperModule.ProcessorModule.Scraper(DBMovie, Type, aList)
                     If Not IsNothing(aList) AndAlso aList.Count > 0 Then
@@ -463,7 +463,7 @@ Public Class ModulesManager
         For Each _externalScraperModule As _externalScraperModuleClass_Trailer In externalTrailerScrapersModules.Where(Function(e) e.ProcessorModule.ScraperEnabled).OrderBy(Function(e) e.ScraperOrder)
             AddHandler _externalScraperModule.ProcessorModule.MovieScraperEvent, AddressOf Handler_MovieScraperEvent
             Try
-                Debug.Print("MovieScrapeTrailer" & vbTab & _externalScraperModule.ProcessorModule.ModuleName)
+                'Debug.Print("MovieScrapeTrailer" & vbTab & _externalScraperModule.ProcessorModule.ModuleName)
                 aList = New List(Of String)
                 ret = _externalScraperModule.ProcessorModule.Scraper(DBMovie, Type, aList)
                 If Not IsNothing(aList) AndAlso aList.Count > 0 Then
@@ -484,7 +484,7 @@ Public Class ModulesManager
         Try
             For Each _externalGenericModule As _externalGenericModuleClass In externalProcessorModules.Where(Function(e) e.ProcessorModule.ModuleType.Contains(mType) AndAlso e.ProcessorModule.Enabled)
                 Try
-                    Debug.Print("RunGeneric" & vbTab & mType & vbTab & _externalGenericModule.AssemblyName)
+                    'Debug.Print("RunGeneric" & vbTab & mType & vbTab & _externalGenericModule.AssemblyName)
                     ret = _externalGenericModule.ProcessorModule.RunGeneric(mType, _params, _refparam)
                 Catch ex As Exception
                 End Try
