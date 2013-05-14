@@ -43,7 +43,24 @@ Public Class dlgTrailerFormat
     End Function
 
     Private Sub dlgTrailerFormat_Shown(sender As Object, e As System.EventArgs) Handles Me.Shown
+        pbStatus.Style = ProgressBarStyle.Marquee
+        Application.DoEvents()
         YouTube.GetVideoLinks(Me._yturl)
+        If YouTube.VideoLinks.Count > 0 Then
+            Me.pnlStatus.Visible = False
+
+            lstFormats.DataSource = YouTube.VideoLinks.Values.ToList
+            lstFormats.DisplayMember = "Description"
+            lstFormats.ValueMember = "URL"
+
+            If YouTube.VideoLinks.ContainsKey(Master.eSettings.PreferredTrailerQuality) Then
+                Me.lstFormats.SelectedIndex = YouTube.VideoLinks.IndexOfKey(Master.eSettings.PreferredTrailerQuality)
+            ElseIf Me.lstFormats.Items.Count = 1 Then
+                Me.lstFormats.SelectedIndex = 0
+            End If
+            Me.lstFormats.Enabled = True
+        End If
+
     End Sub
 
     Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
@@ -90,27 +107,6 @@ Public Class dlgTrailerFormat
         Me.Cancel_Button.Text = Master.eLang.GetString(167, "Cancel", True)
     End Sub
 
-    Private Sub YouTube_VideoLinksRetrieved(ByVal bSuccess As Boolean) Handles YouTube.VideoLinksRetrieved
-        Try
-
-            If bSuccess Then
-                lstFormats.DataSource = YouTube.VideoLinks.Values.ToList
-                lstFormats.DisplayMember = "Description"
-                lstFormats.ValueMember = "URL"
-
-                If YouTube.VideoLinks.ContainsKey(Master.eSettings.PreferredTrailerQuality) Then
-                    Me.lstFormats.SelectedIndex = YouTube.VideoLinks.IndexOfKey(Master.eSettings.PreferredTrailerQuality)
-                ElseIf Me.lstFormats.Items.Count = 1 Then
-                    Me.lstFormats.SelectedIndex = 0
-                End If
-            End If
-        Catch ex As Exception
-            Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-        Finally
-            Me.pnlStatus.Visible = False
-            Me.lstFormats.Enabled = True
-        End Try
-    End Sub
 
 #End Region 'Methods
 

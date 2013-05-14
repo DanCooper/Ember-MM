@@ -38,14 +38,13 @@ Public Class Trailers
 
     Public Sub New()
         Me.Clear()
-        'AddHandler WebPage.ProgressUpdated, AddressOf DownloadProgressUpdated
     End Sub
 
 #End Region 'Constructors
 
 #Region "Events"
 
-    'Public Event ProgressUpdated(ByVal iPercent As Integer)
+    Public Shared Event ProgressUpdated(ByVal iPercent As Integer)
 
 #End Region 'Events
 
@@ -78,8 +77,8 @@ Public Class Trailers
         Next
     End Sub
 
-    Public Sub DownloadProgressUpdated(ByVal iPercent As Integer)
-        'RaiseEvent ProgressUpdated(iPercent)
+    Public Shared Sub DownloadProgressUpdated(ByVal iPercent As Integer)
+        RaiseEvent ProgressUpdated(iPercent)
     End Sub
 
     Public Shared Function PreferredTrailer(ByRef tUrl As String, ByRef UrlList As List(Of String), ByVal sPath As String, ByVal isSingle As Boolean) As Boolean
@@ -164,6 +163,7 @@ Public Class Trailers
     Public Shared Function DownloadTrailer(ByVal sPath As String, ByVal sURL As String) As String
         Dim WebPage As New HTTP
         Dim tURL As String = String.Empty
+        AddHandler WebPage.ProgressUpdated, AddressOf DownloadProgressUpdated
         If Master.eSettings.VideoTSParentXBMC AndAlso FileUtils.Common.isBDRip(sPath) Then
             tURL = String.Concat(Directory.GetParent(Directory.GetParent(sPath).FullName).FullName, "\", "index", If(Master.eSettings.DashTrailer, "-trailer", "[trailer]"), Path.GetExtension(sURL))
         ElseIf Master.eSettings.MovieNameNFOStack Then
@@ -182,6 +182,7 @@ Public Class Trailers
                 End If
             End If
         End If
+        RemoveHandler WebPage.ProgressUpdated, AddressOf DownloadProgressUpdated
         Return tURL
     End Function
 

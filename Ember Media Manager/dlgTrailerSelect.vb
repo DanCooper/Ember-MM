@@ -41,10 +41,15 @@ Public Class dlgTrailerSelect
 #End Region 'Fields
 
 #Region "Methods"
+
+    Private Sub dlgTrailerSelect_Leave(sender As Object, e As System.EventArgs) Handles Me.Leave
+        RemoveHandler Trailers.ProgressUpdated, AddressOf DownloadProgressUpdated
+    End Sub
+
     Private Sub dlgTrailer_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Me.SetUp()
         'cTrailer.IMDBURL = IMDBURL
-        'AddHandler cTrailer.ProgressUpdated, AddressOf DownloadProgressUpdated
+        AddHandler Trailers.ProgressUpdated, AddressOf DownloadProgressUpdated
     End Sub
 
     Private Sub dlgTrailer_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
@@ -64,7 +69,9 @@ Public Class dlgTrailerSelect
         Me.txtManual.Enabled = True
         Me.btnBrowse.Enabled = True
         Me.SetEnabled(False)
-
+        If _UrlList.Count = 1 Then
+            Me.lbTrailers.SetSelected(0, True)
+        End If
         If MyBase.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
             If AdvancedSettings.GetBooleanSetting("UseTMDBTrailerXBMC", False) Then
                 Return Replace(Me.tURL, "http://www.youtube.com/watch?v=", "plugin://plugin.video.youtube/?action=play_video&videoid=")
@@ -351,7 +358,7 @@ Public Class dlgTrailerSelect
     End Sub
 
     Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
-        'Me.cTrailer.Cancel()
+        'Trailer.Cancel()
 
         If Me.bwDownloadTrailer.IsBusy Then Me.bwDownloadTrailer.CancelAsync()
 
@@ -417,7 +424,7 @@ Public Class dlgTrailerSelect
         Me.Label1.Text = Master.eLang.GetString(917, "Direct Link or YouTube URL:")
         Me.lblStatus.Text = Master.eLang.GetString(918, "Compiling trailer list...")
         Me.btnPlayTrailer.Text = Master.eLang.GetString(919, "Preview Trailer")
-        Me.btnPlayBrowser.Text = Master.eLang.GetString(114, "Open In Browser")
+        Me.btnPlayBrowser.Text = Master.eLang.GetString(931, "Open In Browser")
         Me.btnSetNfo.Text = Master.eLang.GetString(913, "Set To Nfo")
         Me.Label2.Text = Master.eLang.GetString(920, "Local Trailer:")
     End Sub
