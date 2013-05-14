@@ -30,7 +30,6 @@ Partial Class dlgTrailerSelect
         Me.pnlStatus = New System.Windows.Forms.Panel()
         Me.lblStatus = New System.Windows.Forms.Label()
         Me.pbStatus = New System.Windows.Forms.ProgressBar()
-        Me.btnGetTrailers = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.btnBrowse = New System.Windows.Forms.Button()
         Me.txtManual = New System.Windows.Forms.TextBox()
@@ -80,7 +79,6 @@ Partial Class dlgTrailerSelect
         'GroupBox1
         '
         Me.GroupBox1.Controls.Add(Me.pnlStatus)
-        Me.GroupBox1.Controls.Add(Me.btnGetTrailers)
         Me.GroupBox1.Controls.Add(Me.GroupBox2)
         Me.GroupBox1.Controls.Add(Me.lbTrailers)
         Me.GroupBox1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -122,19 +120,6 @@ Partial Class dlgTrailerSelect
         Me.pbStatus.Size = New System.Drawing.Size(192, 17)
         Me.pbStatus.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.pbStatus.TabIndex = 1
-        '
-        'btnGetTrailers
-        '
-        Me.btnGetTrailers.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnGetTrailers.Image = CType(resources.GetObject("btnGetTrailers.Image"), System.Drawing.Image)
-        Me.btnGetTrailers.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnGetTrailers.Location = New System.Drawing.Point(130, 82)
-        Me.btnGetTrailers.Name = "btnGetTrailers"
-        Me.btnGetTrailers.Size = New System.Drawing.Size(184, 23)
-        Me.btnGetTrailers.TabIndex = 2
-        Me.btnGetTrailers.Text = "Download Trailer List"
-        Me.btnGetTrailers.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnGetTrailers.UseVisualStyleBackColor = True
         '
         'GroupBox2
         '
@@ -238,7 +223,7 @@ Partial Class dlgTrailerSelect
         Me.btnPlayBrowser.Text = "Open In Browser"
         Me.btnPlayBrowser.UseVisualStyleBackColor = True
         '
-        'dlgTrailer
+        'dlgTrailerSelect
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -256,7 +241,7 @@ Partial Class dlgTrailerSelect
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "dlgTrailer"
+        Me.Name = "dlgTrailerSelect"
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Select Trailer"
@@ -285,7 +270,6 @@ Partial Class dlgTrailerSelect
     Friend WithEvents txtManual As System.Windows.Forms.TextBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents ofdTrailer As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents btnGetTrailers As System.Windows.Forms.Button
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents btnPlayBrowser As System.Windows.Forms.Button
 

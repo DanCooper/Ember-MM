@@ -96,7 +96,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Scraper\clsScrapeTMDBTrailer.vb" />
-    <Compile Include="Scraper\clsScrapeYouTube.vb" />
     <Compile Include="frmTMDBTrailerSettingsHolder.Designer.vb">
       <DependentUpon>frmTMDBTrailerSettingsHolder.vb</DependentUpon>
     </Compile>

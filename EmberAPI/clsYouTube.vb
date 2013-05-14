@@ -27,8 +27,6 @@ Namespace YouTube
 
 #Region "Fields"
 
-        Friend WithEvents bwYT As New System.ComponentModel.BackgroundWorker
-
         Private _VideoLinks As VideoLinkItemCollection
 
 #End Region 'Fields
@@ -56,63 +54,10 @@ Namespace YouTube
 
 #Region "Methods"
 
-        Public Sub CancelAsync()
-            If bwYT.IsBusy Then bwYT.CancelAsync()
-
-            While bwYT.IsBusy
-                Application.DoEvents()
-                Threading.Thread.Sleep(50)
-            End While
-        End Sub
-
         Public Sub GetVideoLinks(ByVal url As String)
             Try
                 _VideoLinks = ParseYTFormats(url, False)
 
-            Catch ex As Exception
-                Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-            End Try
-        End Sub
-
-        Public Sub GetVideoLinksAsync(ByVal url As String)
-            Try
-                If Not bwYT.IsBusy Then
-                    _VideoLinks = Nothing
-                    bwYT.WorkerSupportsCancellation = True
-                    bwYT.RunWorkerAsync(url)
-                End If
-            Catch ex As Exception
-                Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-            End Try
-        End Sub
-
-        Private Sub bwYT_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bwYT.DoWork
-            Dim Url As String = DirectCast(e.Argument, String)
-
-            Try
-                e.Result = ParseYTFormats(Url, True)
-            Catch ex As Exception
-                Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
-            End Try
-        End Sub
-
-        Private Sub bwYT_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bwYT.RunWorkerCompleted
-            Try
-                If e.Cancelled Then
-                    'user cancelled
-                    RaiseEvent VideoLinksRetrieved(False)
-                ElseIf e.Error IsNot Nothing Then
-                    'exception occurred
-                    RaiseEvent Exception(e.Error)
-                Else
-                    'all good
-                    If e.Result IsNot Nothing Then
-                        _VideoLinks = DirectCast(e.Result, VideoLinkItemCollection)
-                        RaiseEvent VideoLinksRetrieved(True)
-                    Else
-                        RaiseEvent VideoLinksRetrieved(False)
-                    End If
-                End If
             Catch ex As Exception
                 Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
             End Try
@@ -135,15 +80,12 @@ Namespace YouTube
             Dim sHTTP As New HTTP
 
             Try
-                If bwYT.CancellationPending Then Return DownloadLinks
-
                 Dim Html As String = sHTTP.DownloadData(url)
                 If Html.ToLower.Contains("page not found") Then
                     Html = String.Empty
                 End If
 
                 If String.IsNullOrEmpty(Html.Trim) Then Return DownloadLinks
-                If bwYT.CancellationPending Then Return DownloadLinks
 
                 Dim VideoTitle As String = GetVideoTitle(Html)
                 VideoTitle = Regex.Replace(VideoTitle, "['?\\:*<>]*", "")
@@ -251,13 +193,9 @@ Namespace YouTube
                         Link.URL = Link.URL.Replace("sig=", "signature=") ' sig= returns HTTP 403 //oldstyle, keep it
                         'Console.WriteLine("Trailer Url decoded: {0}", Link.URL)
 
-                        If bwYT.CancellationPending Then Return DownloadLinks
-
                         If Not String.IsNullOrEmpty(Link.URL) AndAlso sHTTP.IsValidURL(Link.URL) Then
                             DownloadLinks.Add(Link)
                         End If
-
-                        If bwYT.CancellationPending Then Return DownloadLinks
 
                     Next
 

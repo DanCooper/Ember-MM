@@ -1258,7 +1258,7 @@ Public Class frmMain
                     aList.Clear()
                     If Poster.WebImage.IsAllowedToDownload(DBScrapeMovie, Enums.ImageType.Posters) Then
                         If Not ModulesManager.Instance.MovieScrapeImages(DBScrapeMovie, Enums.PostScraperCapabilities.Poster, aList) Then
-                            If Images.GetPreferredPoster(aList, Poster) Then
+                            If Not (Args.scrapeType = Enums.ScrapeType.SingleScrape) AndAlso Images.GetPreferredPoster(aList, Poster) Then
                                 If IsNothing(Poster.WebImage.Image) Then
                                     Poster.WebImage.FromWeb(Poster.URL)
                                 End If
@@ -1272,8 +1272,10 @@ Public Class frmMain
                                         'End If
                                     End If
                                 End If
-                            ElseIf Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
-                                MsgBox(Master.eLang.GetString(76, "A poster of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(77, "No Preferred Size"))
+                            ElseIf Args.scrapeType = Enums.ScrapeType.SingleScrape OrElse Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
+                                If Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
+                                    MsgBox(Master.eLang.GetString(928, "A poster of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(929, "No Preferred Size"))
+                                End If
                                 Using dImgSelect As New dlgImgSelect()
                                     Poster = dImgSelect.ShowDialog(DBScrapeMovie, Enums.ImageType.Posters, aList)
                                     If Not IsNothing(Poster) Then
@@ -1297,7 +1299,7 @@ Public Class frmMain
                     If Fanart.WebImage.IsAllowedToDownload(DBScrapeMovie, Enums.ImageType.Fanart) Then
                         Dim fResults = New Containers.ImgResult
                         If Not ModulesManager.Instance.MovieScrapeImages(DBScrapeMovie, Enums.PostScraperCapabilities.Fanart, aList) Then
-                            If Images.GetPreferredFanart(aList, Fanart) Then
+                            If Not (Args.scrapeType = Enums.ScrapeType.SingleScrape) AndAlso Images.GetPreferredFanart(aList, Fanart) Then
                                 If IsNothing(Fanart.WebImage.Image) Then
                                     Fanart.WebImage.FromWeb(Fanart.URL)
                                 End If
@@ -1310,8 +1312,10 @@ Public Class frmMain
                                         '    DBScrapeMovie.Movie.Fanart = fResults.Fanart
                                         'End If
                                     End If
-                                ElseIf Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
-                                    MsgBox(Master.eLang.GetString(78, "Fanart of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(77, "No Preferred Size:"))
+                                ElseIf Args.scrapeType = Enums.ScrapeType.SingleScrape OrElse Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
+                                    If Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
+                                        MsgBox(Master.eLang.GetString(927, "Fanart of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(929, "No Preferred Size:"))
+                                    End If
                                     Using dImgSelect As New dlgImgSelect()
                                         Fanart = dImgSelect.ShowDialog(DBScrapeMovie, Enums.ImageType.Posters, aList)
                                         If Not String.IsNullOrEmpty(fResults.ImagePath) Then
@@ -1329,51 +1333,30 @@ Public Class frmMain
                 End If
                 If Master.GlobalScrapeMod.Trailer Then
                     aUrlList.Clear()
-                    If Not ModulesManager.Instance.MovieScrapeTrailer(DBScrapeMovie, Enums.PostScraperCapabilities.Fanart, aUrlList) Then
-                        Using dTrailerSelect As New dlgTrailerSelect()
-                            tURL = dTrailerSelect.ShowDialog(DBScrapeMovie, aUrlList)
-                        End Using
-                        'If Images.GetPreferredFanart(aList, Fanart) Then
-                        '    If IsNothing(Fanart.WebImage.Image) Then
-                        '        Fanart.WebImage.FromWeb(Fanart.URL)
-                        '    End If
-                        '    If Not IsNothing(Fanart.WebImage.Image) Then
-                        '        fResults.ImagePath = Fanart.WebImage.SaveAsFanart(DBScrapeMovie)
-                        '        If Not String.IsNullOrEmpty(fResults.ImagePath) Then
-                        '            DBScrapeMovie.FanartPath = fResults.ImagePath
-                        '            MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True) '
-                        '            'If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
-                        '            '    DBScrapeMovie.Movie.Fanart = fResults.Fanart
-                        '            'End If
-                        '        End If
-                        '    ElseIf Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
-                        '        MsgBox(Master.eLang.GetString(78, "Fanart of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(77, "No Preferred Size:"))
-                        'Using dTrailerSelect As New dlgTrailerSelect()
-                        '    tURL = dTrailerSelect.ShowDialog(DBScrapeMovie, Enums.ImageType.Posters, aList)
-                        '    If Not String.IsNullOrEmpty(fResults.ImagePath) Then
-                        '        DBScrapeMovie.FanartPath = fResults.ImagePath
-                        '        MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True)
-                        '        'If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
-                        '        '    DBScrapeMovie.Movie.Fanart = fResults.Fanart
-                        '        'End If
-                        '    End If
-                        'End Using
+                    If Not ModulesManager.Instance.MovieScrapeTrailer(DBScrapeMovie, Enums.PostScraperCapabilities.Trailer, aUrlList) Then
+                        If aUrlList.Count > 0 Then
+                            If Not (Args.scrapeType = Enums.ScrapeType.SingleScrape) AndAlso Trailers.PreferredTrailer(tURL, aUrlList, DBScrapeMovie.Filename, (Args.scrapeType = Enums.ScrapeType.SingleScrape)) Then
+                                If Not String.IsNullOrEmpty(tURL) Then
+                                    tURL = Trailers.DownloadTrailer(tURL, DBScrapeMovie.Filename)
+                                    If Not String.IsNullOrEmpty(tURL) Then
+                                        DBScrapeMovie.TrailerPath = tURL
+                                        MovieScraperEvent(Enums.MovieScraperEventType.TrailerItem, True)
+                                    End If
+                                End If
+                            ElseIf Args.scrapeType = Enums.ScrapeType.SingleScrape OrElse Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
+                                If Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
+                                    MsgBox(Master.eLang.GetString(930, "Trailer of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(929, "No Preferred Size:"))
+                                End If
+                                Using dTrailerSelect As New dlgTrailerSelect()
+                                    tURL = dTrailerSelect.ShowDialog(DBScrapeMovie, aUrlList)
+                                    If Not String.IsNullOrEmpty(tURL) Then
+                                        DBScrapeMovie.TrailerPath = tURL
+                                        MovieScraperEvent(Enums.MovieScraperEventType.TrailerItem, True)
+                                    End If
+                                End Using
+                            End If
+                        End If
                     End If
-                    'tURL = Trailer.DownloadSingleTrailer(DBScrapeMovie.Filename, DBScrapeMovie.Movie.TMDBID, DBScrapeMovie.isSingle, DBScrapeMovie.Movie.Trailer)
-                    'If Not String.IsNullOrEmpty(tURL) Then
-                    '    If tURL.Substring(0, 22) = "http://www.youtube.com" Then
-                    '        If AdvancedSettings.GetBooleanSetting("UseTMDBTrailerXBMC", False) Then
-                    '            DBScrapeMovie.Movie.Trailer = Replace(tURL, "http://www.youtube.com/watch?v=", "plugin://plugin.video.youtube/?action=play_video&videoid=")
-                    '        Else
-                    '            DBScrapeMovie.Movie.Trailer = tURL
-                    '        End If
-                    '    ElseIf tURL.Substring(0, 7) = "http://" Then
-                    '        DBScrapeMovie.Movie.Trailer = tURL
-                    '    Else
-                    '        DBScrapeMovie.TrailerPath = tURL
-                    '        MovieScraperEvent(Enums.MovieScraperEventType.TrailerItem, True)
-                    '    End If
-                    'End If
                 End If
                 If Master.GlobalScrapeMod.Extra Then
                     If DBScrapeMovie.isSingle Then
