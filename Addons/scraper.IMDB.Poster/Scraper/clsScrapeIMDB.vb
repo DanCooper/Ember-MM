@@ -58,12 +58,12 @@ Namespace IMDBg
                 '      src = "http://ia.media-imdb.com/images/M/MV5BMTY1Mzk3MTg0M15BMl5BanBnXkFtZTcwOTQzODYyMQ@@._V1_SY317_CR3,0,214,317_.jpg"
                 Dim mcIMDB As MatchCollection = Regex.Matches(HTML, String.Concat("/media/[a-zA-Z0-9]{3,12}/tt", imdbID, "\?ref_=tt_ov_i"), RegexOptions.IgnoreCase)
                 If mcIMDB.Count > 0 Then
-                    Debug.Print("GetIMDBPoster 1 - {0}", mcIMDB(0).Value)
+                    'Debug.Print("GetIMDBPoster 1 - {0}", mcIMDB(0).Value)
                     'Dim sUrl1 As String = sHTTP.DownloadData(mcIMDB(0).Value)
                     mcIMDB = Regex.Matches(HTML, "http://ia.media-imdb.com/images/.{3,80}?.jpg")
                     If mcIMDB.Count > 0 Then
                         'just use the first one if more are found
-                        Debug.Print("GetIMDBPoster 2 - {0}", mcIMDB(0).Value)
+                        'Debug.Print("GetIMDBPoster 2 - {0}", mcIMDB(0).Value)
                         aStr = mcIMDB(0).Value.Substring(mcIMDB(0).Value.LastIndexOf("/") + 1, mcIMDB(0).Value.Length - (mcIMDB(0).Value.LastIndexOf("/") + 1))
                         aPar = Split(aStr, ",")
                         aPar2 = Split(aPar(0), ".")
@@ -73,7 +73,7 @@ Namespace IMDBg
                     End If
                     Dim aSP As String() = Regex.Split(mcIMDB(0).Value, "._V\d+?_SY\d+?_CR\d+?,\d+?,\d+?,\d+?_")
                     Dim sUrl1 = aSP(0) + aSP(1)
-                    Debug.Print("GetIMDBPoster 3 - {0}", sUrl1)
+                    'Debug.Print("GetIMDBPoster 3 - {0}", sUrl1)
                     alPoster.Add(New MediaContainers.Image With {.Description = Master.eSize.poster_names(5).description, .URL = sUrl1, .Width = "n/a", .Height = "n/a", .ParentID = aParentID})
                 End If
 

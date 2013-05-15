@@ -273,6 +273,7 @@ Public Class dlgSettings
             ModuleCounter += 1
             AddHandler s.ProcessorModule.ScraperSetupChanged, AddressOf Handle_ModuleSetupChanged
             AddHandler s.ProcessorModule.ModuleSettingsChanged, AddressOf Handle_ModuleSettingsChanged
+            AddHandler s.ProcessorModule.SetupNeedsRestart, AddressOf Handle_SetupNeedsRestart
             Me.AddHelpHandlers(tPanel.Panel, tPanel.Prefix)
         Next
         ModuleCounter = 1
@@ -1152,10 +1153,6 @@ Public Class dlgSettings
         Me.SetApplyButton(True)
     End Sub
 
-    Private Sub chkDeleteAllTrailers_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Me.SetApplyButton(True)
-    End Sub
-
     Private Sub chkDirector_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDirector.CheckedChanged
         Me.SetApplyButton(True)
     End Sub
@@ -1173,25 +1170,20 @@ Public Class dlgSettings
         Me.SetApplyButton(True)
     End Sub
 
-    Private Sub chkDownloadTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub chkDownloadTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDownloadTrailer.CheckedChanged
         Me.SetApplyButton(True)
-        Me.chkUpdaterTrailer.Enabled = Me.chkDownloadTrailer.Checked
 
-        Me.chkSingleScrapeTrailer.Enabled = Me.chkDownloadTrailer.Checked
         Me.chkOverwriteTrailer.Enabled = Me.chkDownloadTrailer.Checked
-        Me.chkNoDLTrailer.Enabled = Me.chkDownloadTrailer.Checked
         Me.chkDeleteAllTrailers.Enabled = Me.chkDownloadTrailer.Checked
 
         If Not Me.chkDownloadTrailer.Checked Then
-            Me.chkUpdaterTrailer.Checked = False
-            Me.chkSingleScrapeTrailer.Checked = False
-            Me.chkNoDLTrailer.Checked = False
             Me.chkOverwriteTrailer.Checked = False
             Me.chkDeleteAllTrailers.Checked = False
             Me.cbTrailerQuality.Enabled = False
-            Me.cbTrailerQuality.SelectedIndex = -1
+            'Me.cbTrailerQuality.SelectedIndex = -1
         Else
             Me.cbTrailerQuality.Enabled = True
+            'Me.cbTrailerQuality.SelectedValue = Master.eSettings.PreferredTrailerQuality
         End If
     End Sub
 
@@ -1603,10 +1595,6 @@ Public Class dlgSettings
     End Sub
 
     Private Sub chkOverwriteShowPoster_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkOverwriteShowPoster.CheckedChanged
-        Me.SetApplyButton(True)
-    End Sub
-
-    Private Sub chkOverwriteTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
     End Sub
 
@@ -2254,6 +2242,12 @@ Public Class dlgSettings
             Me.chkMovieTrailerCol.Checked = Master.eSettings.MovieTrailerCol
             Me.chkMovieSubCol.Checked = Master.eSettings.MovieSubCol
             Me.chkMovieExtraCol.Checked = Master.eSettings.MovieExtraCol
+            Me.chkDownloadTrailer.Checked = Master.eSettings.DownloadTrailers
+
+            Me.chkOverwriteTrailer.Checked = Master.eSettings.OverwriteTrailer
+            Me.chkDeleteAllTrailers.Checked = Master.eSettings.DeleteAllTrailers
+
+            Me.cbTrailerQuality.SelectedValue = Master.eSettings.PreferredTrailerQuality
 
             Me.cbPosterSize.SelectedIndex = Master.eSettings.PreferredPosterSize
             Me.cbFanartSize.SelectedIndex = Master.eSettings.PreferredFanartSize
@@ -2387,11 +2381,8 @@ Public Class dlgSettings
             Me.chkSkipStackedSizeCheck.Checked = Master.eSettings.SkipStackSizeCheck
             Me.txtTVSkipLessThan.Text = Master.eSettings.SkipLessThanEp.ToString
             Me.chkNoSaveImagesToNfo.Checked = Master.eSettings.NoSaveImagesToNfo
-            Me.chkDownloadTrailer.Checked = Master.eSettings.DownloadTrailers
-            Me.chkUpdaterTrailer.Checked = Master.eSettings.UpdaterTrailers
-            Me.chkNoDLTrailer.Checked = Master.eSettings.UpdaterTrailersNoDownload
-            Me.chkSingleScrapeTrailer.Checked = Master.eSettings.SingleScrapeTrailer
 
+            Me.chkDownloadTrailer.Checked = Master.eSettings.UpdaterTrailers
             Me.chkOverwriteTrailer.Checked = Master.eSettings.OverwriteTrailer
             Me.chkDeleteAllTrailers.Checked = Master.eSettings.DeleteAllTrailers
 
@@ -3451,11 +3442,7 @@ Public Class dlgSettings
                 Master.eSettings.PreferredTrailerQuality = DirectCast(Me.cbTrailerQuality.SelectedValue, Enums.TrailerQuality)
             End If
 
-            Master.eSettings.DownloadTrailers = Me.chkDownloadTrailer.Checked
-            Master.eSettings.UpdaterTrailers = Me.chkUpdaterTrailer.Checked
-
-            Master.eSettings.SingleScrapeTrailer = Me.chkSingleScrapeTrailer.Checked
-            Master.eSettings.UpdaterTrailersNoDownload = Me.chkNoDLTrailer.Checked
+            Master.eSettings.UpdaterTrailers = Me.chkDownloadTrailer.Checked
             Master.eSettings.OverwriteTrailer = Me.chkOverwriteTrailer.Checked
             Master.eSettings.DeleteAllTrailers = Me.chkDeleteAllTrailers.Checked
 
@@ -3711,6 +3698,14 @@ Public Class dlgSettings
         If Not NoUpdate Then Me.btnApply.Enabled = v
     End Sub
 
+    Private Sub chkOverwriteTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkOverwriteTrailer.CheckedChanged
+        Me.SetApplyButton(True)
+    End Sub
+
+    Private Sub chkDeleteAllTrailers_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkDeleteAllTrailers.CheckedChanged
+        Me.SetApplyButton(True)
+    End Sub
+
     Private Sub SetUp()
         Me.Label18.Text = Master.eLang.GetString(884, "IMDB Mirror:")
         Me.cbForce.Items.AddRange(Strings.Split(AdvancedSettings.GetSetting("ForceTitle", ""), "|"))
@@ -3827,10 +3822,6 @@ Public Class dlgSettings
 
         Me.chkDeleteAllTrailers.Text = Master.eLang.GetString(522, "Delete All Existing")
         Me.chkOverwriteTrailer.Text = Master.eLang.GetString(483, "Overwrite Existing")
-        Me.chkNoDLTrailer.Text = Master.eLang.GetString(524, "Only Get URLs When Scraping")
-        Me.chkSingleScrapeTrailer.Text = Master.eLang.GetString(525, "Get During Single Scrape")
-
-        Me.chkUpdaterTrailer.Text = Master.eLang.GetString(527, "Get During Automated Scrapers")
 
         Me.chkDownloadTrailer.Text = Master.eLang.GetString(529, "Enable Trailer Support")
         Me.GroupBox22.Text = Master.eLang.GetString(530, "No Stack Extensions")

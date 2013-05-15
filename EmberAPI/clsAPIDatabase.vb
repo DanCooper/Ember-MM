@@ -346,7 +346,7 @@ Public Class Database
                 doAddColumnWatched = True
                 Using SQLreader As SQLite.SQLiteDataReader = SQLpathcommand.ExecuteReader
                     While SQLreader.Read
-                        Debug.Print(SQLreader("name").ToString.ToLower())
+                        'Debug.Print(SQLreader("name").ToString.ToLower())
                         If SQLreader("name").ToString.ToLower = "playcount" Then
                             'Column does exist in current database of Ember --> asume: if one columns missing, all new mediainfo columns must be added
                             doAddColumns = False

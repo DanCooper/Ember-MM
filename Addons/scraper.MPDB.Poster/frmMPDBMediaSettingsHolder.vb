@@ -66,8 +66,13 @@ Public Class frmMPDBMediaSettingsHolder
 
     Sub orderChanged()
         Dim order As Integer = ModulesManager.Instance.externalPosterScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = MPDB_Poster._AssemblyName).ScraperOrder
-        btnDown.Enabled = (order < ModulesManager.Instance.externalPosterScrapersModules.Count - 1)
-        btnUp.Enabled = (order > 1)
+        If ModulesManager.Instance.externalPosterScrapersModules.Count > 0 Then
+            btnDown.Enabled = (order < ModulesManager.Instance.externalPosterScrapersModules.Count - 1)
+            btnUp.Enabled = (order > 1)
+        Else
+            btnDown.Enabled = False
+            btnUp.Enabled = False
+        End If
     End Sub
 
     Sub SetUp()

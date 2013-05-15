@@ -34,20 +34,20 @@ Public Class frmTVMediaSettingsHolder
 #Region "Methods"
 
     Private Sub btnDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDown.Click
-        Dim order As Integer = ModulesManager.Instance.externalScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberNativeScraperModule._AssemblyName).ScraperOrder
-        If order < ModulesManager.Instance.externalScrapersModules.Where(Function(y) y.ProcessorModule.IsScraper).Count - 1 Then
-            ModulesManager.Instance.externalScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order + 1).ScraperOrder = order
-            ModulesManager.Instance.externalScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberNativeScraperModule._AssemblyName).ScraperOrder = order + 1
+        Dim order As Integer = ModulesManager.Instance.externalTVScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TVDB_Data_Poster._AssemblyName).ScraperOrder
+        If order < ModulesManager.Instance.externalTVScrapersModules.Where(Function(y) y.ProcessorModule.IsScraper).Count - 1 Then
+            ModulesManager.Instance.externalTVScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order + 1).ScraperOrder = order
+            ModulesManager.Instance.externalTVScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TVDB_Data_Poster._AssemblyName).ScraperOrder = order + 1
             RaiseEvent SetupPostScraperChanged(cbEnabled.Checked, 1)
             orderChanged()
         End If
     End Sub
 
     Private Sub btnUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnUp.Click
-        Dim order As Integer = ModulesManager.Instance.externalScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberNativeScraperModule._AssemblyName).ScraperOrder
+        Dim order As Integer = ModulesManager.Instance.externalTVScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TVDB_Data_Poster._AssemblyName).ScraperOrder
         If order > 0 Then
-            ModulesManager.Instance.externalScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order - 1).ScraperOrder = order
-            ModulesManager.Instance.externalScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberNativeScraperModule._AssemblyName).ScraperOrder = order - 1
+            ModulesManager.Instance.externalTVScrapersModules.FirstOrDefault(Function(p) p.ScraperOrder = order - 1).ScraperOrder = order
+            ModulesManager.Instance.externalTVScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TVDB_Data_Poster._AssemblyName).ScraperOrder = order - 1
             RaiseEvent SetupPostScraperChanged(cbEnabled.Checked, -1)
             orderChanged()
         End If
@@ -64,15 +64,37 @@ Public Class frmTVMediaSettingsHolder
     End Sub
 
     Sub orderChanged()
-        Dim order As Integer = ModulesManager.Instance.externalScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = EmberNativeScraperModule._AssemblyName).ScraperOrder
-        btnDown.Enabled = (order < ModulesManager.Instance.externalScrapersModules.Where(Function(y) y.ProcessorModule.IsScraper).Count - 1)
-        btnUp.Enabled = (order > 1)
+        Dim order As Integer = ModulesManager.Instance.externalTVScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TVDB_Data_Poster._AssemblyName).ScraperOrder
+        If ModulesManager.Instance.externalTVScrapersModules.Count > 0 Then
+            btnDown.Enabled = (order < ModulesManager.Instance.externalTVScrapersModules.Where(Function(y) y.ProcessorModule.IsPostScraper).Count - 1)
+            btnUp.Enabled = (order > 1)
+        Else
+            btnDown.Enabled = False
+            btnUp.Enabled = False
+        End If
     End Sub
 
     Private Sub SetUp()
         Me.Label2.Text = Master.eLang.GetString(168, "Scrape Order", True)
         Me.cbEnabled.Text = Master.eLang.GetString(774, "Enabled", True)
-        'Me.Label1.Text = String.Format(Master.eLang.GetString(103, "These settings are specific to this module.{0}Please refer to the global settings for more options."), vbCrLf)
+        Me.Label18.Text = Master.eLang.GetString(932, "TVDB API Key", True)
+        Me.Label1.Text = String.Format(Master.eLang.GetString(103, "These settings are specific to this module.{0}Please refer to the global settings for more options."), vbCrLf)
+    End Sub
+
+    Private Sub txtTMDBApiKey_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTVDBApiKey.TextChanged
+        RaiseEvent ModuleSettingsChanged()
+    End Sub
+
+    Private Sub pbTVDB_Click(sender As System.Object, e As System.EventArgs) Handles pbTVDB.Click
+        If Master.isWindows Then
+            Process.Start("http://thetvdb.com/?tab=apiregister")
+        Else
+            Using Explorer As New Process
+                Explorer.StartInfo.FileName = "xdg-open"
+                Explorer.StartInfo.Arguments = "http://thetvdb.com/?tab=apiregister"
+                Explorer.Start()
+            End Using
+        End If
     End Sub
 
 #End Region 'Methods

@@ -33,7 +33,7 @@ Public Class frmMain
 
 #Region "Fields"
     Private fLoading As New frmSplash
-	'Private aaa As New V3.Tmdb("aa")
+    'Private aaa As New V3.Tmdb("aa")
     Friend WithEvents bwCleanDB As New System.ComponentModel.BackgroundWorker
     Friend WithEvents bwDownloadPic As New System.ComponentModel.BackgroundWorker
     Friend WithEvents bwLoadEpInfo As New System.ComponentModel.BackgroundWorker
@@ -76,7 +76,7 @@ Public Class frmMain
     Private ReportDownloadPercent As Boolean = False
     Private ScrapeList As New List(Of DataRow)
     Private ScraperDone As Boolean = False
-	Private sHTTP As New EmberAPI.HTTP
+    Private sHTTP As New EmberAPI.HTTP
     Private tmpLang As String = String.Empty
     Private tmpTitle As String = String.Empty
     Private tmpTVDB As String = String.Empty
@@ -874,9 +874,9 @@ Public Class frmMain
 
                 If Not IsNothing(Me.MainFanart.Image) Then
                     If String.IsNullOrEmpty(Master.currShow.Filename) Then
-						Me.MainFanart = ImageUtils.AddMissingStamp(Me.MainFanart)
+                        Me.MainFanart = ImageUtils.AddMissingStamp(Me.MainFanart)
                     ElseIf NeedsGS Then
-						Me.MainFanart = ImageUtils.GrayScale(Me.MainFanart)
+                        Me.MainFanart = ImageUtils.GrayScale(Me.MainFanart)
                     End If
                 End If
             End If
@@ -1002,7 +1002,7 @@ Public Class frmMain
                     Me.MainFanart.FromFile(Master.currShow.SeasonFanartPath)
                 Else
                     Me.MainFanart.FromFile(Master.currShow.ShowFanartPath)
-					If Not IsNothing(Me.MainFanart.Image) Then Me.MainFanart = ImageUtils.GrayScale(Me.MainFanart)
+                    If Not IsNothing(Me.MainFanart.Image) Then Me.MainFanart = ImageUtils.GrayScale(Me.MainFanart)
                 End If
             End If
 
@@ -1203,6 +1203,8 @@ Public Class frmMain
         Dim Fanart As New MediaContainers.Image
         Dim tURL As String = String.Empty
         Dim aList As New List(Of MediaContainers.Image)
+        Dim aUrlList As New List(Of String)
+        Dim DBScrapeMovie As New Structures.DBMovie
 
         AddHandler ModulesManager.Instance.MovieScraperEvent, AddressOf MovieScraperEvent
 
@@ -1214,7 +1216,7 @@ Public Class frmMain
 
                 dScrapeRow = dRow
 
-                Dim DBScrapeMovie As Structures.DBMovie = Master.DB.LoadMovieFromDB(Convert.ToInt64(dRow.Item(0)))
+                DBScrapeMovie = Master.DB.LoadMovieFromDB(Convert.ToInt64(dRow.Item(0)))
                 ModulesManager.Instance.RunGeneric(Enums.ModuleEventType.BeforeEditMovie, Nothing, DBScrapeMovie)
 
                 If Master.GlobalScrapeMod.NFO Then
@@ -1238,30 +1240,49 @@ Public Class frmMain
                 End If
                 If bwMovieScraper.CancellationPending Then Exit For
 
-                If Not Args.scrapeType = Enums.ScrapeType.SingleScrape Then
-                    MovieScraperEvent(Enums.MovieScraperEventType.NFOItem, True)
+                'If Not Args.scrapeType = Enums.ScrapeType.SingleScrape Then
+                MovieScraperEvent(Enums.MovieScraperEventType.NFOItem, True)
 
-                    NewTitle = DBScrapeMovie.ListTitle
+                NewTitle = DBScrapeMovie.ListTitle
 
-                    If Not NewTitle = OldTitle Then
-                        bwMovieScraper.ReportProgress(0, String.Format(Master.eLang.GetString(812, "Old Title: {0} | New Title: {1}"), OldTitle, NewTitle))
-                    End If
+                If Not NewTitle = OldTitle Then
+                    bwMovieScraper.ReportProgress(0, String.Format(Master.eLang.GetString(812, "Old Title: {0} | New Title: {1}"), OldTitle, NewTitle))
+                End If
 
-                    MovieScraperEvent(Enums.MovieScraperEventType.ListTitle, NewTitle)
-                    MovieScraperEvent(Enums.MovieScraperEventType.SortTitle, DBScrapeMovie.Movie.SortTitle)
+                MovieScraperEvent(Enums.MovieScraperEventType.ListTitle, NewTitle)
+                MovieScraperEvent(Enums.MovieScraperEventType.SortTitle, DBScrapeMovie.Movie.SortTitle)
 
-                    '-----
+                '-----
 
-                    If Master.GlobalScrapeMod.Poster Then
-                        Poster.Clear()
-                        aList.Clear()
-                        If Poster.WebImage.IsAllowedToDownload(DBScrapeMovie, Enums.ImageType.Posters) Then
-                            If Not ModulesManager.Instance.MovieScrapeImages(DBScrapeMovie, Enums.PostScraperCapabilities.Poster, aList) Then
-                                If Images.GetPreferredPoster(aList, Poster) Then
-                                    If IsNothing(Poster.WebImage.Image) Then
-                                        Poster.WebImage.FromWeb(Poster.URL)
+                If Master.GlobalScrapeMod.Poster Then
+                    Poster.Clear()
+                    aList.Clear()
+                    If Poster.WebImage.IsAllowedToDownload(DBScrapeMovie, Enums.ImageType.Posters) Then
+                        If Not ModulesManager.Instance.MovieScrapeImages(DBScrapeMovie, Enums.PostScraperCapabilities.Poster, aList) Then
+                            If Not (Args.scrapeType = Enums.ScrapeType.SingleScrape) AndAlso Images.GetPreferredPoster(aList, Poster) Then
+                                If IsNothing(Poster.WebImage.Image) Then
+                                    Poster.WebImage.FromWeb(Poster.URL)
+                                End If
+                                If Not IsNothing(Poster.WebImage.Image) Then
+                                    tURL = Poster.WebImage.SaveAsPoster(DBScrapeMovie)
+                                    If Not String.IsNullOrEmpty(tURL) Then
+                                        DBScrapeMovie.PosterPath = tURL
+                                        MovieScraperEvent(Enums.MovieScraperEventType.PosterItem, True)
+                                        'If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
+                                        '    DBScrapeMovie.Movie.Thumb = pResults.Posters
+                                        'End If
                                     End If
-                                    If Not IsNothing(Poster.WebImage.Image) Then
+                                End If
+                            ElseIf Args.scrapeType = Enums.ScrapeType.SingleScrape OrElse Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
+                                If Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
+                                    MsgBox(Master.eLang.GetString(928, "A poster of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(929, "No Preferred Size"))
+                                End If
+                                Using dImgSelect As New dlgImgSelect()
+                                    Poster = dImgSelect.ShowDialog(DBScrapeMovie, Enums.ImageType.Posters, aList)
+                                    If Not IsNothing(Poster) Then
+                                        If IsNothing(Poster.WebImage.Image) Then
+                                            Poster.WebImage.FromWeb(Poster.URL)
+                                        End If
                                         tURL = Poster.WebImage.SaveAsPoster(DBScrapeMovie)
                                         If Not String.IsNullOrEmpty(tURL) Then
                                             DBScrapeMovie.PosterPath = tURL
@@ -1271,131 +1292,135 @@ Public Class frmMain
                                             'End If
                                         End If
                                     End If
-                                ElseIf Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
-                                    MsgBox(Master.eLang.GetString(76, "A poster of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(77, "No Preferred Size"))
+                                End Using
+                            End If
+                        End If
+                    End If
+                End If
+                If Master.GlobalScrapeMod.Fanart Then
+                    Fanart.Clear()
+                    aList.Clear()
+                    If Fanart.WebImage.IsAllowedToDownload(DBScrapeMovie, Enums.ImageType.Fanart) Then
+                        If Not ModulesManager.Instance.MovieScrapeImages(DBScrapeMovie, Enums.PostScraperCapabilities.Fanart, aList) Then
+                            If Not (Args.scrapeType = Enums.ScrapeType.SingleScrape) AndAlso Images.GetPreferredFanart(aList, Fanart) Then
+                                If IsNothing(Fanart.WebImage.Image) Then
+                                    Fanart.WebImage.FromWeb(Fanart.URL)
+                                End If
+                                If Not IsNothing(Fanart.WebImage.Image) Then
+                                    tURL = Fanart.WebImage.SaveAsFanart(DBScrapeMovie)
+                                    If Not String.IsNullOrEmpty(tURL) Then
+                                        DBScrapeMovie.FanartPath = tURL
+                                        MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True) '
+                                        'If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
+                                        '    DBScrapeMovie.Movie.Fanart = fResults.Fanart
+                                        'End If
+                                    End If
+                                ElseIf Args.scrapeType = Enums.ScrapeType.SingleScrape OrElse Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
+                                    If Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
+                                        MsgBox(Master.eLang.GetString(927, "Fanart of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(929, "No Preferred Size:"))
+                                    End If
                                     Using dImgSelect As New dlgImgSelect()
-                                        Poster = dImgSelect.ShowDialog(DBScrapeMovie, Enums.ImageType.Posters, aList)
-                                        If Not IsNothing(Poster) Then
-                                            tURL = Poster.WebImage.SaveAsPoster(DBScrapeMovie)
+                                        Fanart = dImgSelect.ShowDialog(DBScrapeMovie, Enums.ImageType.Posters, aList)
+                                        If IsNothing(Fanart.WebImage.Image) Then
+                                            Fanart.WebImage.FromWeb(Fanart.URL)
+                                        End If
+                                        If Not IsNothing(Fanart.WebImage.Image) Then
+                                            tURL = Fanart.WebImage.SaveAsFanart(DBScrapeMovie)
                                             If Not String.IsNullOrEmpty(tURL) Then
-                                                DBScrapeMovie.PosterPath = tURL
-                                                MovieScraperEvent(Enums.MovieScraperEventType.PosterItem, True)
+                                                DBScrapeMovie.FanartPath = tURL
+                                                MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True) '
                                                 'If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
-                                                '    DBScrapeMovie.Movie.Thumb = pResults.Posters
+                                                '    DBScrapeMovie.Movie.Fanart = fResults.Fanart
                                                 'End If
                                             End If
                                         End If
+
                                     End Using
                                 End If
                             End If
                         End If
                     End If
-                    If Master.GlobalScrapeMod.Fanart Then
-                        Fanart.Clear()
-                        aList.Clear()
-                        If Fanart.WebImage.IsAllowedToDownload(DBScrapeMovie, Enums.ImageType.Fanart) Then
-                            Dim fResults = New Containers.ImgResult
-                            If Not ModulesManager.Instance.MovieScrapeImages(DBScrapeMovie, Enums.PostScraperCapabilities.Fanart, aList) Then
-                                If Images.GetPreferredFanart(aList, Fanart) Then
-                                    If IsNothing(Fanart.WebImage.Image) Then
-                                        Fanart.WebImage.FromWeb(Fanart.URL)
-                                    End If
-                                    If Not IsNothing(Fanart.WebImage.Image) Then
-                                        fResults.ImagePath = Fanart.WebImage.SaveAsFanart(DBScrapeMovie)
-                                        If Not String.IsNullOrEmpty(fResults.ImagePath) Then
-                                            DBScrapeMovie.FanartPath = fResults.ImagePath
-                                            MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True) '
-                                            'If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
-                                            '    DBScrapeMovie.Movie.Fanart = fResults.Fanart
-                                            'End If
-                                        End If
-                                    ElseIf Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
-                                        MsgBox(Master.eLang.GetString(78, "Fanart of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(77, "No Preferred Size:"))
-                                        Using dImgSelect As New dlgImgSelect()
-                                            Fanart = dImgSelect.ShowDialog(DBScrapeMovie, Enums.ImageType.Posters, aList)
-                                            If Not String.IsNullOrEmpty(fResults.ImagePath) Then
-                                                DBScrapeMovie.FanartPath = fResults.ImagePath
-                                                MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True)
-                                                'If Master.GlobalScrapeMod.NFO AndAlso Not Master.eSettings.NoSaveImagesToNfo Then
-                                                '    DBScrapeMovie.Movie.Fanart = fResults.Fanart
-                                                'End If
-                                            End If
-                                        End Using
-                                    End If
-                                End If
-                            End If
-                        End If
-                    End If
-                    'If Master.GlobalScrapeMod.Trailer AndAlso _MySettings.DownloadTrailers Then
-                    '    tURL = Trailer.DownloadSingleTrailer(DBScrapeMovie.Filename, DBScrapeMovie.Movie.TMDBID, DBScrapeMovie.isSingle, DBScrapeMovie.Movie.Trailer)
-                    '    If Not String.IsNullOrEmpty(tURL) Then
-                    '        If tURL.Substring(0, 22) = "http://www.youtube.com" Then
-                    '            If AdvancedSettings.GetBooleanSetting("UseTMDBTrailerXBMC", False) Then
-                    '                DBScrapeMovie.Movie.Trailer = Replace(tURL, "http://www.youtube.com/watch?v=", "plugin://plugin.video.youtube/?action=play_video&videoid=")
-                    '            Else
-                    '                DBScrapeMovie.Movie.Trailer = tURL
-                    '            End If
-                    '        ElseIf tURL.Substring(0, 7) = "http://" Then
-                    '            DBScrapeMovie.Movie.Trailer = tURL
-                    '        Else
-                    '            DBScrapeMovie.TrailerPath = tURL
-                    '            MovieScraperEvent(Enums.MovieScraperEventType.TrailerItem, True)
-                    '        End If
-                    '    End If
-                    'End If
-                    If Master.GlobalScrapeMod.Extra Then
-                        If DBScrapeMovie.isSingle Then
-                            Try
-                                'aScrapeImages.GetPreferredFAasET(DBScrapeMovie.Movie.TMDBID, DBScrapeMovie.Filename)
-                                MovieScraperEvent(Enums.MovieScraperEventType.ThumbsItem, True)
-                            Catch ex As Exception
-                            End Try
-                        End If
-                    End If
-                    If Master.GlobalScrapeMod.Actors AndAlso Master.eSettings.ScraperActorThumbs Then
-                        For Each act As MediaContainers.Person In DBScrapeMovie.Movie.Actors
-                            Dim img As New Images
-                            img.FromWeb(act.Thumb)
-                            If Not IsNothing(img.Image) Then
-                                img.SaveAsActorThumb(act, Directory.GetParent(DBScrapeMovie.Filename).FullName, DBScrapeMovie)
-                            End If
-                        Next
-                    End If
-
-                    '-----
-
-                    If bwMovieScraper.CancellationPending Then Exit For
-
-                    ModulesManager.Instance.RunGeneric(Enums.ModuleEventType.MovieScraperRDYtoSave, Nothing, DBScrapeMovie)
-
-                    Dim currentDB As Structures.DBMovie = Master.DB.LoadMovieFromDB(Convert.ToInt64(dRow.Item(0)))
-                    If Not DBScrapeMovie.Filename = currentDB.Filename Then
-                        DBScrapeMovie = Master.DB.LoadMovieFromDB(Convert.ToInt64(dRow.Item(0))) ' reload the DB if a module has changed the entries (renamer e.g.)
-                    End If
-
-                    If Master.GlobalScrapeMod.Extra Then
-                        If DBScrapeMovie.isSingle Then
-                            Dim params As New List(Of Object)(New Object() {DBScrapeMovie, 0, False, ""})
-                            ModulesManager.Instance.RunGeneric(Enums.ModuleEventType.RandomFrameExtrator, params, Nothing, True)
-                            MovieScraperEvent(Enums.MovieScraperEventType.ThumbsItem, True)
-                            Dim ETasFA As String = DirectCast(params(3), String)
-                            If Not String.IsNullOrEmpty(ETasFA) Then
-                                DBScrapeMovie.ExtraPath = "TRUE"
-                                If Not ETasFA = "TRUE" Then
-                                    MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True)
-                                    DBScrapeMovie.FanartPath = ETasFA
-                                End If
-                            End If
-                        End If
-                    End If
-
-                    Master.DB.SaveMovieToDB(DBScrapeMovie, False, False, Not String.IsNullOrEmpty(DBScrapeMovie.Movie.IMDBID))
-                    ModulesManager.Instance.RunGeneric(Enums.ModuleEventType.MovieSync, Nothing, DBScrapeMovie)
-                    bwMovieScraper.ReportProgress(-1, If(Not OldTitle = NewTitle, String.Format(Master.eLang.GetString(812, "Old Title: {0} | New Title: {1}"), OldTitle, NewTitle), NewTitle))
-                    bwMovieScraper.ReportProgress(-2, dScrapeRow.Item(0).ToString)
-                Else
-                    Master.tmpMovie = DBScrapeMovie.Movie
                 End If
+                If Master.GlobalScrapeMod.Trailer Then
+                    aUrlList.Clear()
+                    If Not ModulesManager.Instance.MovieScrapeTrailer(DBScrapeMovie, Enums.PostScraperCapabilities.Trailer, aUrlList) Then
+                        If aUrlList.Count > 0 Then
+                            If Not (Args.scrapeType = Enums.ScrapeType.SingleScrape) AndAlso Trailers.PreferredTrailer(tURL, aUrlList, DBScrapeMovie.Filename, (Args.scrapeType = Enums.ScrapeType.SingleScrape)) Then
+                                If Not String.IsNullOrEmpty(tURL) Then
+                                    tURL = Trailers.DownloadTrailer(tURL, DBScrapeMovie.Filename) ', DBScrapeMovie.Filename)
+                                    If Not String.IsNullOrEmpty(tURL) Then
+                                        DBScrapeMovie.TrailerPath = tURL
+                                        MovieScraperEvent(Enums.MovieScraperEventType.TrailerItem, True)
+                                    End If
+                                End If
+                            ElseIf Args.scrapeType = Enums.ScrapeType.SingleScrape OrElse Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
+                                If Args.scrapeType = Enums.ScrapeType.FullAsk OrElse Args.scrapeType = Enums.ScrapeType.NewAsk OrElse Args.scrapeType = Enums.ScrapeType.MarkAsk OrElse Args.scrapeType = Enums.ScrapeType.UpdateAsk Then
+                                    MsgBox(Master.eLang.GetString(930, "Trailer of your preferred size could not be found. Please choose another."), MsgBoxStyle.Information, Master.eLang.GetString(929, "No Preferred Size:"))
+                                End If
+                                Using dTrailerSelect As New dlgTrailerSelect()
+                                    tURL = dTrailerSelect.ShowDialog(DBScrapeMovie, aUrlList)
+                                    If Not String.IsNullOrEmpty(tURL) Then
+                                        DBScrapeMovie.TrailerPath = tURL
+                                        MovieScraperEvent(Enums.MovieScraperEventType.TrailerItem, True)
+                                    End If
+                                End Using
+                            End If
+                        End If
+                    End If
+                End If
+                If Master.GlobalScrapeMod.Extra Then
+                    If DBScrapeMovie.isSingle Then
+                        Try
+                            'aScrapeImages.GetPreferredFAasET(DBScrapeMovie.Movie.TMDBID, DBScrapeMovie.Filename)
+                            MovieScraperEvent(Enums.MovieScraperEventType.ThumbsItem, True)
+                        Catch ex As Exception
+                        End Try
+                    End If
+                End If
+                If Master.GlobalScrapeMod.Actors AndAlso Master.eSettings.ScraperActorThumbs Then
+                    For Each act As MediaContainers.Person In DBScrapeMovie.Movie.Actors
+                        Dim img As New Images
+                        img.FromWeb(act.Thumb)
+                        If Not IsNothing(img.Image) Then
+                            img.SaveAsActorThumb(act, Directory.GetParent(DBScrapeMovie.Filename).FullName, DBScrapeMovie)
+                        End If
+                    Next
+                End If
+
+                '-----
+
+                If bwMovieScraper.CancellationPending Then Exit For
+
+                ModulesManager.Instance.RunGeneric(Enums.ModuleEventType.MovieScraperRDYtoSave, Nothing, DBScrapeMovie)
+
+                Dim currentDB As Structures.DBMovie = Master.DB.LoadMovieFromDB(Convert.ToInt64(dRow.Item(0)))
+                If Not DBScrapeMovie.Filename = currentDB.Filename Then
+                    DBScrapeMovie = Master.DB.LoadMovieFromDB(Convert.ToInt64(dRow.Item(0))) ' reload the DB if a module has changed the entries (renamer e.g.)
+                End If
+
+                If Master.GlobalScrapeMod.Extra Then
+                    If DBScrapeMovie.isSingle Then
+                        Dim params As New List(Of Object)(New Object() {DBScrapeMovie, 0, False, ""})
+                        ModulesManager.Instance.RunGeneric(Enums.ModuleEventType.RandomFrameExtrator, params, Nothing, True)
+                        MovieScraperEvent(Enums.MovieScraperEventType.ThumbsItem, True)
+                        Dim ETasFA As String = DirectCast(params(3), String)
+                        If Not String.IsNullOrEmpty(ETasFA) Then
+                            DBScrapeMovie.ExtraPath = "TRUE"
+                            If Not ETasFA = "TRUE" Then
+                                MovieScraperEvent(Enums.MovieScraperEventType.FanartItem, True)
+                                DBScrapeMovie.FanartPath = ETasFA
+                            End If
+                        End If
+                    End If
+                End If
+
+                Master.DB.SaveMovieToDB(DBScrapeMovie, False, False, Not String.IsNullOrEmpty(DBScrapeMovie.Movie.IMDBID))
+                ModulesManager.Instance.RunGeneric(Enums.ModuleEventType.MovieSync, Nothing, DBScrapeMovie)
+                bwMovieScraper.ReportProgress(-1, If(Not OldTitle = NewTitle, String.Format(Master.eLang.GetString(812, "Old Title: {0} | New Title: {1}"), OldTitle, NewTitle), NewTitle))
+                bwMovieScraper.ReportProgress(-2, dScrapeRow.Item(0).ToString)
+                'Else
+                '    Master.tmpMovie = DBScrapeMovie.Movie
+                'End If
                 'Else
                 'Master.tmpMovie = DBScrapeMovie.Movie
                 'Args.scrapeType = Enums.ScrapeType.None
@@ -1404,7 +1429,9 @@ Public Class frmMain
                 Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error", False)
             End Try
         Next
-
+        If Args.scrapeType = Enums.ScrapeType.SingleScrape Then
+            Master.currMovie = DBScrapeMovie
+        End If
         RemoveHandler ModulesManager.Instance.MovieScraperEvent, AddressOf MovieScraperEvent
         e.Result = New Results With {.scrapeType = Args.scrapeType}
     End Sub
@@ -4357,8 +4384,8 @@ doCancel:
 
     Private Sub ExitToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExitToolStripMenuItem.Click, cmnuTrayIconExit.Click
         If isCL Then
-			'fLoading.SetLoadingMesg("Canceling ...")
-			fLoading.SetLoadingMesg(Master.eLang.GetString(370, "Canceling Load..."))
+            'fLoading.SetLoadingMesg("Canceling ...")
+            fLoading.SetLoadingMesg(Master.eLang.GetString(370, "Canceling Load..."))
             If Me.bwMovieScraper.IsBusy Then Me.bwMovieScraper.CancelAsync()
             If Me.bwRefreshMovies.IsBusy Then Me.bwRefreshMovies.CancelAsync()
             While Me.bwMovieScraper.IsBusy OrElse Me.bwRefreshMovies.IsBusy OrElse Me.bwMovieScraper.IsBusy
@@ -5430,24 +5457,24 @@ doCancel:
             End If
             fLoading.Show(Me)
             Application.DoEvents()
-			' Run InstallTask to see if any pending file needs to install
+            ' Run InstallTask to see if any pending file needs to install
             ' Do this before loading modules/themes/etc
             If File.Exists(Path.Combine(Functions.AppPath, "InstallTasks.xml")) Then
                 InstallNewFiles("InstallTasks.xml")
             End If
 
-			'fLoading.SetLoadingMesg("Loading settings...")
-			fLoading.SetLoadingMesg(Master.eLang.GetString(484, "Loading settings..."))
+            'fLoading.SetLoadingMesg("Loading settings...")
+            fLoading.SetLoadingMesg(Master.eLang.GetString(484, "Loading settings..."))
 
-			Master.eSettings.Load()
+            Master.eSettings.Load()
 
-			' Force initialization of languages for main
-			Master.eLang.LoadAllLanguage(Master.eSettings.Language)
-			Master.eLang.LoadLanguage(Master.eSettings.Language, "")
-			fLoading.SetVersionMesg(Master.eLang.GetString(865, "Version {0}.{1}.{2}.{3}"))
+            ' Force initialization of languages for main
+            Master.eLang.LoadAllLanguage(Master.eSettings.Language)
+            Master.eLang.LoadLanguage(Master.eSettings.Language, "")
+            fLoading.SetVersionMesg(Master.eLang.GetString(865, "Version {0}.{1}.{2}.{3}"))
 
-			'fLoading.SetLoadingMesg("Basic setup...")
-			fLoading.SetLoadingMesg(Master.eLang.GetString(854, "Basic setup"))
+            'fLoading.SetLoadingMesg("Basic setup...")
+            fLoading.SetLoadingMesg(Master.eLang.GetString(854, "Basic setup"))
 
             Dim currentDomain As AppDomain = AppDomain.CurrentDomain
             ModulesManager.AssemblyList.Add(New ModulesManager.AssemblyListItem With {.AssemblyName = "EmberAPI", _
@@ -5471,15 +5498,15 @@ doCancel:
                 Directory.CreateDirectory(sPath)
             End If
 
-			'fLoading.SetLoadingMesg("Creating default options...")
-			fLoading.SetLoadingMesg(Master.eLang.GetString(855, "Creating default options..."))
-			Functions.CreateDefaultOptions()
+            'fLoading.SetLoadingMesg("Creating default options...")
+            fLoading.SetLoadingMesg(Master.eLang.GetString(855, "Creating default options..."))
+            Functions.CreateDefaultOptions()
             '//
             ' Add our handlers, load settings, set form colors, and try to load movies at startup
             '\\
-			'fLoading.SetLoadingMesg("Loading modules...")
-			fLoading.SetLoadingMesg(Master.eLang.GetString(856, "Loading modules..."))
-			'Setup/Load Modules Manager and set runtime objects (ember application) so they can be exposed to modules
+            'fLoading.SetLoadingMesg("Loading modules...")
+            fLoading.SetLoadingMesg(Master.eLang.GetString(856, "Loading modules..."))
+            'Setup/Load Modules Manager and set runtime objects (ember application) so they can be exposed to modules
             'ExternalModulesManager = New ModulesManager
             ModulesManager.Instance.RuntimeObjects.MenuMediaList = Me.mnuMediaList
             ModulesManager.Instance.RuntimeObjects.MenuTVShowList = Me.mnuShows
@@ -5491,11 +5518,11 @@ doCancel:
             ModulesManager.Instance.RuntimeObjects.DelegateOpenImageViewer(AddressOf OpenImageViewer)
             ModulesManager.Instance.LoadAllModules()
 
-			If Not isCL Then
-				'fLoading.SetLoadingMesg("Creating GUI...")
-				fLoading.SetLoadingMesg(Master.eLang.GetString(857, "Creating GUI..."))
-			End If
-			'setup some dummies so we don't get exceptions when resizing form/info panel
+            If Not isCL Then
+                'fLoading.SetLoadingMesg("Creating GUI...")
+                fLoading.SetLoadingMesg(Master.eLang.GetString(857, "Creating GUI..."))
+            End If
+            'setup some dummies so we don't get exceptions when resizing form/info panel
             ReDim Preserve Me.pnlGenre(0)
             ReDim Preserve Me.pbGenre(0)
             Me.pnlGenre(0) = New Panel()
@@ -5636,17 +5663,17 @@ doCancel:
                     Next
                     If nowindow Then fLoading.Hide()
                     APIXML.CacheXMLs()
-					'fLoading.SetLoadingMesg("Loading database...")
-					fLoading.SetLoadingMesg(Master.eLang.GetString(858, "Loading database..."))
-					If Master.DB.ConnectMediaDB() Then
-						Me.LoadMedia(New Structures.Scans With {.Movies = True, .TV = True})
-					End If
+                    'fLoading.SetLoadingMesg("Loading database...")
+                    fLoading.SetLoadingMesg(Master.eLang.GetString(858, "Loading database..."))
+                    If Master.DB.ConnectMediaDB() Then
+                        Me.LoadMedia(New Structures.Scans With {.Movies = True, .TV = True})
+                    End If
                     Master.DB.LoadMovieSourcesFromDB()
                     Master.DB.LoadTVSourcesFromDB()
                     If RunModule Then
                         fLoading.SetProgressBarStyle(ProgressBarStyle.Marquee)
-						'fLoading.SetLoadingMesg("Running Module...")
-						fLoading.SetLoadingMesg(Master.eLang.GetString(859, "Running Module..."))
+                        'fLoading.SetLoadingMesg("Running Module...")
+                        fLoading.SetLoadingMesg(Master.eLang.GetString(859, "Running Module..."))
                         Dim gModule As ModulesManager._externalGenericModuleClass = ModulesManager.Instance.externalProcessorModules.FirstOrDefault(Function(y) y.ProcessorModule.ModuleName = ModuleName)
                         If Not IsNothing(gModule) Then
                             gModule.ProcessorModule.RunGeneric(Enums.ModuleEventType.CommandLine, Nothing, Nothing)
@@ -5663,16 +5690,16 @@ doCancel:
                         If Functions.HasModifier AndAlso Not clScrapeType = Enums.ScrapeType.SingleScrape Then
                             Try
                                 fLoading.SetProgressBarStyle(ProgressBarStyle.Marquee)
-								'fLoading.SetLoadingMesg("Loading Media...")
-								fLoading.SetLoadingMesg(Master.eLang.GetString(860, "Loading Media..."))
-								LoadMedia(New Structures.Scans With {.Movies = True})
+                                'fLoading.SetLoadingMesg("Loading Media...")
+                                fLoading.SetLoadingMesg(Master.eLang.GetString(860, "Loading Media..."))
+                                LoadMedia(New Structures.Scans With {.Movies = True})
                                 While Not Me.LoadingDone
                                     Application.DoEvents()
                                     Threading.Thread.Sleep(50)
                                 End While
                                 fLoading.SetProgressBarStyle(ProgressBarStyle.Marquee)
-								'fLoading.SetLoadingMesg("Command Line Scraping...")
-								fLoading.SetLoadingMesg(Master.eLang.GetString(861, "Command Line Scraping..."))
+                                'fLoading.SetLoadingMesg("Command Line Scraping...")
+                                fLoading.SetLoadingMesg(Master.eLang.GetString(861, "Command Line Scraping..."))
                                 MovieScrapeData(False, clScrapeType, Master.DefaultOptions)
                             Catch ex As Exception
                                 Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
@@ -5741,10 +5768,10 @@ doCancel:
                                         End If
                                         Master.tmpMovie = Master.currMovie.Movie
                                     End If
-									fLoading.SetProgressBarStyle(ProgressBarStyle.Marquee)
-									'fLoading.SetLoadingMesg("Command Line Scraping...")
-									fLoading.SetLoadingMesg(Master.eLang.GetString(861, "Command Line Scraping..."))
-									MovieScrapeData(False, Enums.ScrapeType.SingleScrape, Master.DefaultOptions)
+                                    fLoading.SetProgressBarStyle(ProgressBarStyle.Marquee)
+                                    'fLoading.SetLoadingMesg("Command Line Scraping...")
+                                    fLoading.SetLoadingMesg(Master.eLang.GetString(861, "Command Line Scraping..."))
+                                    MovieScrapeData(False, Enums.ScrapeType.SingleScrape, Master.DefaultOptions)
                                 Else
                                     Me.ScraperDone = True
                                 End If
@@ -5780,16 +5807,16 @@ doCancel:
 
                     'End If
                     If Not CloseApp Then
-						'fLoading.SetLoadingMesg("Loading translations...")
-						fLoading.SetLoadingMesg(Master.eLang.GetString(862, "Loading translations..."))
-						APIXML.CacheXMLs()
+                        'fLoading.SetLoadingMesg("Loading translations...")
+                        fLoading.SetLoadingMesg(Master.eLang.GetString(862, "Loading translations..."))
+                        APIXML.CacheXMLs()
 
                         Me.SetUp(True)
                         Me.cbSearch.SelectedIndex = 0
 
-						'fLoading.SetLoadingMesg("Positioning controls...")
-						fLoading.SetLoadingMesg(Master.eLang.GetString(863, "Positioning controls..."))
-						Me.Location = Master.eSettings.WindowLoc
+                        'fLoading.SetLoadingMesg("Positioning controls...")
+                        fLoading.SetLoadingMesg(Master.eLang.GetString(863, "Positioning controls..."))
+                        Me.Location = Master.eSettings.WindowLoc
                         Me.Size = Master.eSettings.WindowSize
                         Me.WindowState = Master.eSettings.WindowState
 
@@ -5835,33 +5862,33 @@ doCancel:
                         Me.ClearInfo()
 
                         Application.DoEvents()
-						'fLoading.SetLoadingMesg("Loading database...")
-						fLoading.SetLoadingMesg(Master.eLang.GetString(858, "Loading database..."))
-						If Master.eSettings.Version = String.Format("r{0}", My.Application.Info.Version.Revision) Then
-							If Master.DB.ConnectMediaDB() Then
-								Me.LoadMedia(New Structures.Scans With {.Movies = True, .TV = True})
-							End If
-							Me.FillList(0)
-							Me.Visible = True
-						Else
-							If Master.DB.ConnectMediaDB() Then
-								Me.LoadMedia(New Structures.Scans With {.Movies = True, .TV = True})
-							End If
-							If dlgWizard.ShowDialog = Windows.Forms.DialogResult.OK Then
-								Application.DoEvents()
-								Me.SetUp(False)	'just in case user changed languages
-								Me.Visible = True
-								Me.LoadMedia(New Structures.Scans With {.Movies = True, .TV = True})
-							Else
-								Me.FillList(0)
-								Me.Visible = True
-							End If
-						End If
+                        'fLoading.SetLoadingMesg("Loading database...")
+                        fLoading.SetLoadingMesg(Master.eLang.GetString(858, "Loading database..."))
+                        If Master.eSettings.Version = String.Format("r{0}", My.Application.Info.Version.Revision) Then
+                            If Master.DB.ConnectMediaDB() Then
+                                Me.LoadMedia(New Structures.Scans With {.Movies = True, .TV = True})
+                            End If
+                            Me.FillList(0)
+                            Me.Visible = True
+                        Else
+                            If Master.DB.ConnectMediaDB() Then
+                                Me.LoadMedia(New Structures.Scans With {.Movies = True, .TV = True})
+                            End If
+                            If dlgWizard.ShowDialog = Windows.Forms.DialogResult.OK Then
+                                Application.DoEvents()
+                                Me.SetUp(False) 'just in case user changed languages
+                                Me.Visible = True
+                                Me.LoadMedia(New Structures.Scans With {.Movies = True, .TV = True})
+                            Else
+                                Me.FillList(0)
+                                Me.Visible = True
+                            End If
+                        End If
 
                         Master.DB.LoadMovieSourcesFromDB()
                         Master.DB.LoadTVSourcesFromDB()
-						'fLoading.SetLoadingMesg("Setting menus...")
-						fLoading.SetLoadingMesg(Master.eLang.GetString(864, "Setting menus..."))
+                        'fLoading.SetLoadingMesg("Setting menus...")
+                        fLoading.SetLoadingMesg(Master.eLang.GetString(864, "Setting menus..."))
 
                         Me.SetMenus(True)
                         Functions.GetListOfSources()
@@ -6481,114 +6508,113 @@ doCancel:
     End Sub
 
     Private Sub MovieInfoDownloaded()
-        Dim dlgImgS As dlgImgSelect
-        Dim aList As New List(Of MediaContainers.Image)
+        'Dim dlgImgS As dlgImgSelect
+        'Dim aList As New List(Of MediaContainers.Image)
 
         Try
             If Not String.IsNullOrEmpty(Master.tmpMovie.Title) Then
-                Master.currMovie.Movie = Master.tmpMovie
-                If Master.eSettings.ScanMediaInfo Then
-                    Me.tslLoading.Text = Master.eLang.GetString(140, "Scanning Meta Data:")
-                    Me.tspbLoading.Value = Me.tspbLoading.Maximum
-                    Me.tspbLoading.Style = ProgressBarStyle.Marquee
-                    Application.DoEvents()
-                    MediaInfo.UpdateMediaInfo(Master.currMovie)
-                End If
-
-                If Master.eSettings.SingleScrapeImages Then
-                    Dim tmpImages As New Images
-                    Dim AllowFA As Boolean = ModulesManager.Instance.QueryPostScraperCapabilities(Enums.PostScraperCapabilities.Fanart) AndAlso tmpImages.IsAllowedToDownload(Master.currMovie, Enums.ImageType.Fanart, True)
-
-                    If ModulesManager.Instance.QueryPostScraperCapabilities(Enums.PostScraperCapabilities.Poster) AndAlso tmpImages.IsAllowedToDownload(Master.currMovie, Enums.ImageType.Posters, True) Then
-                        Me.tslLoading.Text = Master.eLang.GetString(572, "Scraping Posters:")
-                        Application.DoEvents()
-                        Dim pResults As New MediaContainers.Image
-                        'Public Function MovieScrapeImages(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.PostScraperCapabilities, ByRef ImageList As List(Of MediaContainers.Image)) As Boolean
-                        If Not ModulesManager.Instance.MovieScrapeImages(Master.currMovie, Enums.PostScraperCapabilities.Poster, aList) Then
-                            dlgImgS = New dlgImgSelect()
-                            pResults = dlgImgS.ShowDialog(Master.currMovie, Enums.ImageType.Posters, aList, True)
-                        End If
-                        If Not IsNothing(pResults) Then
-                            pResults.WebImage.FromWeb(pResults.URL)
-                            Master.currMovie.Movie.Thumb.Clear()
-                            Master.currMovie.PosterPath = pResults.WebImage.SaveAsPoster(Master.currMovie)
-                        End If
-                        'If Not String.IsNullOrEmpty(pResults.ImagePath) Then
-                        '    Master.currMovie.PosterPath = pResults.ImagePath
-                        '    If Not Master.eSettings.NoSaveImagesToNfo AndAlso pResults.Posters.Count > 0 Then
-                        '        Master.currMovie.Movie.Thumb = pResults.Posters
-                        '    End If
-
-                        'End If
-                        pResults = Nothing
-                    End If
-
-                    If AllowFA Then
-                        aList.Clear()
-                        Me.tslLoading.Text = Master.eLang.GetString(573, "Scraping Fanart:")
-                        Application.DoEvents()
-                        Dim pResults As New MediaContainers.Image
-                        'Public Function MovieScrapeImages(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.PostScraperCapabilities, ByRef ImageList As List(Of MediaContainers.Image)) As Boolean
-                        If Not ModulesManager.Instance.MovieScrapeImages(Master.currMovie, Enums.PostScraperCapabilities.Fanart, aList) Then
-                            dlgImgS = New dlgImgSelect()
-                            pResults = dlgImgS.ShowDialog(Master.currMovie, Enums.ImageType.Fanart, aList, True)
-                        End If
-                        If Not IsNothing(pResults) Then
-                            pResults.WebImage.FromWeb(pResults.URL)
-                            Master.currMovie.Movie.Fanart.Clear()
-                            Master.currMovie.FanartPath = pResults.WebImage.SaveAsFanart(Master.currMovie)
-                        End If
-                        'If Not String.IsNullOrEmpty(pResults.ImagePath) Then
-                        '    Master.currMovie.PosterPath = pResults.ImagePath
-                        '    If Not Master.eSettings.NoSaveImagesToNfo AndAlso pResults.Posters.Count > 0 Then
-                        '        Master.currMovie.Movie.Thumb = pResults.Posters
-                        '    End If
-
-                        'End If
-                        pResults = Nothing
-                    End If
-
-                    tmpImages.Dispose()
-                    tmpImages = Nothing
-                End If
-
-                'If Master.eSettings.SingleScrapeTrailer AndAlso ModulesManager.Instance.QueryPostScraperCapabilities(Enums.PostScraperCapabilities.Trailer) Then
-                '    Me.tslLoading.Text = Master.eLang.GetString(574, "Scraping Trailers:")
+                'If Master.eSettings.ScanMediaInfo Then
+                '    Me.tslLoading.Text = Master.eLang.GetString(140, "Scanning Meta Data:")
+                '    Me.tspbLoading.Value = Me.tspbLoading.Maximum
+                '    Me.tspbLoading.Style = ProgressBarStyle.Marquee
                 '    Application.DoEvents()
-                '    Dim tURL As String = ModulesManager.Instance.ScraperDownloadTrailer(Master.currMovie)
-                '    ' If Not String.IsNullOrEmpty(tURL) AndAlso tURL.Contains("://") Then
-                '    If Not String.IsNullOrEmpty(tURL) AndAlso tURL.Substring(0, 7) = "http://" Then
-                '        Master.currMovie.Movie.Trailer = tURL
-                '    ElseIf Not String.IsNullOrEmpty(tURL) AndAlso tURL.Substring(0, 9) = "plugin://" Then
-                '        Master.currMovie.Movie.Trailer = tURL
-                '    End If
+                '    MediaInfo.UpdateMediaInfo(Master.currMovie)
                 'End If
 
-                If Master.currMovie.isSingle Then
-                    Me.tslLoading.Text = Master.eLang.GetString(575, "Generating Extrathumbs:")
-                    Application.DoEvents()
-                    'ThumbGenerator.CreateRandomThumbs(Master.currMovie, Master.eSettings.AutoThumbs, True)
-                    Dim params As New List(Of Object)(New Object() {Master.currMovie, 0, True, ""})
-                    ModulesManager.Instance.RunGeneric(Enums.ModuleEventType.RandomFrameExtrator, params, Nothing, True)
-                    MovieScraperEvent(Enums.MovieScraperEventType.ThumbsItem, True)
-                    Dim ETasFA As String = DirectCast(params(3), String)
-                    If Not String.IsNullOrEmpty(ETasFA) Then
-                        Master.currMovie.ExtraPath = "TRUE"
-                        If Not ETasFA = "TRUE" Then
-                            Master.currMovie.FanartPath = ETasFA
-                        End If
-                    End If
-                End If
-                Me.tslLoading.Text = Master.eLang.GetString(568, "Generating Actors Cache:")
-                If Master.GlobalScrapeMod.Actors AndAlso Master.eSettings.ScraperActorThumbs Then
-                    For Each act As MediaContainers.Person In Master.currMovie.Movie.Actors
-                        Dim img As New Images
-                        img.FromWeb(act.Thumb)
-                        If Not IsNothing(img.Image) Then
-                            img.SaveAsActorThumb(act, Directory.GetParent(Master.currMovie.Filename).FullName, Master.currMovie)
-                        End If
-                    Next
-                End If
+                'If Master.eSettings.SingleScrapeImages Then
+                '    Dim tmpImages As New Images
+                '    Dim AllowFA As Boolean = ModulesManager.Instance.QueryPostScraperCapabilities(Enums.PostScraperCapabilities.Fanart) AndAlso tmpImages.IsAllowedToDownload(Master.currMovie, Enums.ImageType.Fanart, True)
+
+                '    If ModulesManager.Instance.QueryPostScraperCapabilities(Enums.PostScraperCapabilities.Poster) AndAlso tmpImages.IsAllowedToDownload(Master.currMovie, Enums.ImageType.Posters, True) Then
+                '        Me.tslLoading.Text = Master.eLang.GetString(572, "Scraping Posters:")
+                '        Application.DoEvents()
+                '        Dim pResults As New MediaContainers.Image
+                '        'Public Function MovieScrapeImages(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.PostScraperCapabilities, ByRef ImageList As List(Of MediaContainers.Image)) As Boolean
+                '        If Not ModulesManager.Instance.MovieScrapeImages(Master.currMovie, Enums.PostScraperCapabilities.Poster, aList) Then
+                '            dlgImgS = New dlgImgSelect()
+                '            pResults = dlgImgS.ShowDialog(Master.currMovie, Enums.ImageType.Posters, aList, True)
+                '        End If
+                '        If Not IsNothing(pResults) Then
+                '            pResults.WebImage.FromWeb(pResults.URL)
+                '            Master.currMovie.Movie.Thumb.Clear()
+                '            Master.currMovie.PosterPath = pResults.WebImage.SaveAsPoster(Master.currMovie)
+                '        End If
+                '        'If Not String.IsNullOrEmpty(pResults.ImagePath) Then
+                '        '    Master.currMovie.PosterPath = pResults.ImagePath
+                '        '    If Not Master.eSettings.NoSaveImagesToNfo AndAlso pResults.Posters.Count > 0 Then
+                '        '        Master.currMovie.Movie.Thumb = pResults.Posters
+                '        '    End If
+
+                '        'End If
+                '        pResults = Nothing
+                '    End If
+
+                '    If AllowFA Then
+                '        aList.Clear()
+                '        Me.tslLoading.Text = Master.eLang.GetString(573, "Scraping Fanart:")
+                '        Application.DoEvents()
+                '        Dim pResults As New MediaContainers.Image
+                '        'Public Function MovieScrapeImages(ByRef DBMovie As Structures.DBMovie, ByVal Type As Enums.PostScraperCapabilities, ByRef ImageList As List(Of MediaContainers.Image)) As Boolean
+                '        If Not ModulesManager.Instance.MovieScrapeImages(Master.currMovie, Enums.PostScraperCapabilities.Fanart, aList) Then
+                '            dlgImgS = New dlgImgSelect()
+                '            pResults = dlgImgS.ShowDialog(Master.currMovie, Enums.ImageType.Fanart, aList, True)
+                '        End If
+                '        If Not IsNothing(pResults) Then
+                '            pResults.WebImage.FromWeb(pResults.URL)
+                '            Master.currMovie.Movie.Fanart.Clear()
+                '            Master.currMovie.FanartPath = pResults.WebImage.SaveAsFanart(Master.currMovie)
+                '        End If
+                '        'If Not String.IsNullOrEmpty(pResults.ImagePath) Then
+                '        '    Master.currMovie.PosterPath = pResults.ImagePath
+                '        '    If Not Master.eSettings.NoSaveImagesToNfo AndAlso pResults.Posters.Count > 0 Then
+                '        '        Master.currMovie.Movie.Thumb = pResults.Posters
+                '        '    End If
+
+                '        'End If
+                '        pResults = Nothing
+                '    End If
+
+                '    tmpImages.Dispose()
+                '    tmpImages = Nothing
+                'End If
+
+                ''If Master.eSettings.SingleScrapeTrailer AndAlso ModulesManager.Instance.QueryPostScraperCapabilities(Enums.PostScraperCapabilities.Trailer) Then
+                ''    Me.tslLoading.Text = Master.eLang.GetString(574, "Scraping Trailers:")
+                ''    Application.DoEvents()
+                ''    Dim tURL As String = ModulesManager.Instance.ScraperDownloadTrailer(Master.currMovie)
+                ''    ' If Not String.IsNullOrEmpty(tURL) AndAlso tURL.Contains("://") Then
+                ''    If Not String.IsNullOrEmpty(tURL) AndAlso tURL.Substring(0, 7) = "http://" Then
+                ''        Master.currMovie.Movie.Trailer = tURL
+                ''    ElseIf Not String.IsNullOrEmpty(tURL) AndAlso tURL.Substring(0, 9) = "plugin://" Then
+                ''        Master.currMovie.Movie.Trailer = tURL
+                ''    End If
+                ''End If
+
+                'If Master.currMovie.isSingle Then
+                '    Me.tslLoading.Text = Master.eLang.GetString(575, "Generating Extrathumbs:")
+                '    Application.DoEvents()
+                '    'ThumbGenerator.CreateRandomThumbs(Master.currMovie, Master.eSettings.AutoThumbs, True)
+                '    Dim params As New List(Of Object)(New Object() {Master.currMovie, 0, True, ""})
+                '    ModulesManager.Instance.RunGeneric(Enums.ModuleEventType.RandomFrameExtrator, params, Nothing, True)
+                '    MovieScraperEvent(Enums.MovieScraperEventType.ThumbsItem, True)
+                '    Dim ETasFA As String = DirectCast(params(3), String)
+                '    If Not String.IsNullOrEmpty(ETasFA) Then
+                '        Master.currMovie.ExtraPath = "TRUE"
+                '        If Not ETasFA = "TRUE" Then
+                '            Master.currMovie.FanartPath = ETasFA
+                '        End If
+                '    End If
+                'End If
+                'Me.tslLoading.Text = Master.eLang.GetString(568, "Generating Actors Cache:")
+                'If Master.GlobalScrapeMod.Actors AndAlso Master.eSettings.ScraperActorThumbs Then
+                '    For Each act As MediaContainers.Person In Master.currMovie.Movie.Actors
+                '        Dim img As New Images
+                '        img.FromWeb(act.Thumb)
+                '        If Not IsNothing(img.Image) Then
+                '            img.SaveAsActorThumb(act, Directory.GetParent(Master.currMovie.Filename).FullName, Master.currMovie)
+                '        End If
+                '    Next
+                'End If
 
                 Dim indX As Integer = Me.dgvMediaList.SelectedRows(0).Index
                 Dim ID As Integer = Convert.ToInt32(Me.dgvMediaList.Item(0, indX).Value)
@@ -7966,7 +7992,7 @@ doCancel:
                 Using SQLNewcommand As SQLite.SQLiteCommand = Master.DB.MediaDBConn.CreateCommand()
                     SQLNewcommand.CommandText = String.Concat("SELECT COUNT(id) AS mcount FROM movies WHERE mark = 1;")
                     Using SQLcount As SQLite.SQLiteDataReader = SQLNewcommand.ExecuteReader()
-                        Debug.Print(SQLcount.HasRows.ToString())
+                        'Debug.Print(SQLcount.HasRows.ToString())
                         SQLcount.Read()
                         If SQLcount.HasRows AndAlso Convert.ToInt32(SQLcount("mcount")) > 0 Then
                             Me.btnMarkAll.Text = Master.eLang.GetString(105, "Unmark All")

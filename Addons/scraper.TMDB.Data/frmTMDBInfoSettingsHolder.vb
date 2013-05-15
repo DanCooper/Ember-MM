@@ -197,8 +197,13 @@ Public Class frmTMDBInfoSettingsHolder
 
     Sub orderChanged()
         Dim order As Integer = ModulesManager.Instance.externalDataScrapersModules.FirstOrDefault(Function(p) p.AssemblyName = TMDB_Data._AssemblyName).ScraperOrder
-        btnDown.Enabled = (order < ModulesManager.Instance.externalDataScrapersModules.Count - 1)
-        btnUp.Enabled = (order > 1)
+        If ModulesManager.Instance.externalDataScrapersModules.Count > 0 Then
+            btnDown.Enabled = (order < ModulesManager.Instance.externalDataScrapersModules.Count - 1)
+            btnUp.Enabled = (order > 1)
+        Else
+            btnDown.Enabled = False
+            btnUp.Enabled = False
+        End If
     End Sub
 
     Private Sub SetUp()

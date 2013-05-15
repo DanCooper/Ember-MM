@@ -404,7 +404,7 @@ Public Class Images
     End Sub
 
 	Public Sub FromFile(ByVal sPath As String)
-		Debug.Print("FromFile/t{0}", sPath)
+        'Debug.Print("FromFile/t{0}", sPath)
 		If Not String.IsNullOrEmpty(sPath) AndAlso File.Exists(sPath) Then
 			Try
 				If Not IsNothing(Me._ms) Then
@@ -432,7 +432,7 @@ Public Class Images
     Public Sub FromWeb(ByVal sURL As String)
         Try
             sHTTP.StartDownloadImage(sURL)
-			Debug.Print("FromWeb/t{0}", sURL)
+            'Debug.Print("FromWeb/t{0}", sURL)
             While sHTTP.IsDownloading
                 Application.DoEvents()
                 Threading.Thread.Sleep(50)
@@ -491,7 +491,7 @@ Public Class Images
 	End Function
 
     Public Sub ResizeExtraThumb(ByVal fromPath As String, ByVal toPath As String)
-        Debug.Print("---------- ResizeExtraThumb ----------")
+        'Debug.Print("---------- ResizeExtraThumb ----------")
         'Me.FromFile(fromPath)
         'If Not Master.eSettings.ETNative Then
         '	Dim iWidth As Integer = Master.eSettings.ETWidth

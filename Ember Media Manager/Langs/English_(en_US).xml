@@ -904,4 +904,31 @@
   <string id="903">Medium ({0}x{1})</string>
   <string id="904">Small ({0}x{1})</string>
   <string id="905">Large ({0}x{1})</string>
-</strings>
+  <string id="906">Downloading selected trailer...</string>
+  <string id="907">Copying specified file to trailer...</string>
+  <string id="908">The trailer could not be played. This could be due to an invalid URL or you do not have the proper player to play the trailer type.</string>
+  <string id="909">Error Playing Trailer</string>
+  <string id="910">Move</string>
+  <string id="911">Copy</string>
+  <string id="912">Moving specified file to trailer...</string>
+  <string id="913">Set To Nfo</string>
+  <string id="914">Select Trailer</string>
+  <string id="915">Select Trailer to Download</string>
+  <string id="916">Manual Trailer Entry</string>
+  <string id="917">Direct Link or YouTube URL:</string>
+  <string id="918">Compiling trailer list...</string>
+  <string id="919">Preview Trailer</string>
+  <string id="920">Local Trailer:</string>
+  <string id="921">The video format links could not be retrieved.</string>
+  <string id="922">Error Retrieving Video Format Links</string>
+  <string id="923">Select Format</string>
+  <string id="924">Getting available formats...</string>
+  <string id="925">Available Formats</string>
+  <string id="926">Downloading selected trailer...</string>
+  <string id="927">Fanart of your preferred size could not be found. Please choose another.</string>
+  <string id="928">A poster of your preferred size could not be found. Please choose another.</string>
+  <string id="929">No Preferred Size</string>
+  <string id="930">Trailer of your preferred size could not be found. Please choose another.</string>
+  <string id="931">Open In Browser</string>
+  <string id="932">TVDB API Key</string>
+  </strings>

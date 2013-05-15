@@ -76,7 +76,7 @@ Public Class dlgMovieSource
             Else
                 Using SQLcommand As SQLite.SQLiteCommand = Master.DB.MediaDBConn.CreateCommand()
                     SQLcommand.CommandText = String.Concat("SELECT ID FROM Sources WHERE Name LIKE """, Me.txtSourceName.Text.Trim, """ AND ID != ", Me._id, ";")
-                    Debug.Print(SQLcommand.CommandText)
+                    'Debug.Print(SQLcommand.CommandText)
                     Using SQLreader As SQLite.SQLiteDataReader = SQLcommand.ExecuteReader()
                         If SQLreader.HasRows Then
                             SQLreader.Read()

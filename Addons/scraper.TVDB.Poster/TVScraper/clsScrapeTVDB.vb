@@ -29,7 +29,7 @@ Public Class Scraper
 
 #Region "Fields"
 
-    Public Const APIKey As String = "7B090234F418D074"
+    Public Shared APIKey As String = String.Empty
 
     Public Shared WithEvents sObject As New ScraperObject
     Public Shared tEpisodes As New List(Of MediaContainers.EpisodeDetails)
@@ -40,8 +40,9 @@ Public Class Scraper
 
 #Region "Constructors"
 
-    Public Sub New()
+    Public Sub New(ByVal _Api As String)
         AddHandler sObject.ScraperEvent, AddressOf InnerEvent
+        APIKey = _Api
     End Sub
 
 #End Region 'Constructors

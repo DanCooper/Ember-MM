@@ -20,7 +20,6 @@
 
 Imports System.IO
 Imports EmberAPI
-Imports RestSharp
 Imports WatTmdb
 Imports EmberScraperModule.TMDBg
 

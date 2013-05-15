@@ -19,7 +19,6 @@
 ' ################################################################################
 
 Imports EmberAPI
-Imports RestSharp
 Imports WatTmdb
 
 
