@@ -80,6 +80,9 @@ Public Class dlgTVSource
                                 pbValid.Image = My.Resources.valid
                                 isValid = True
                             End If
+                        Else
+                            pbValid.Image = My.Resources.valid
+                            isValid = True
                         End If
                     End Using
                 End Using

@@ -3497,6 +3497,22 @@ Public Class Settings
         Me._tvdbmirror = "thetvdb.com"
         Me._tvdblanguage = "en"
         Me._tvdblanguages = New List(Of Containers.TVLanguage)
+        Dim xmlTVDB As XDocument
+        Dim cLang As Containers.TVLanguage
+        Try
+            xmlTVDB = XDocument.Parse(My.Resources.languages)
+            Dim xLangs = From xLanguages In xmlTVDB.Descendants("Language")
+
+            For Each xL As XElement In xLangs
+                cLang = New Containers.TVLanguage
+                cLang.LongLang = xL.Element("name").Value
+                cLang.ShortLang = xL.Element("abbreviation").Value
+                _tvdblanguages.Add(cLang)
+            Next
+        Catch
+
+        End Try
+
         Me._emberModules = New List(Of ModulesManager._XMLEmberModuleClass)
         Me._externaltvdbapikey = String.Empty
         Me._scanordermodify = False
@@ -3584,24 +3600,6 @@ Public Class Settings
     End Function
 
     Public Sub SetDefaultsForLists(ByVal Type As Enums.DefaultType, ByVal Force As Boolean)
-        If Type = Enums.DefaultType.All Then
-            Dim xmlTVDB As XDocument
-            Dim cLang As Containers.TVLanguage
-            Try
-                xmlTVDB = XDocument.Parse(My.Resources.languages)
-                Dim xLangs = From xLanguages In xmlTVDB.Descendants("Language")
-
-                For Each xL As XElement In xLangs
-                    cLang = New Containers.TVLanguage
-                    cLang.LongLang = xL.Element("name").Value
-                    cLang.ShortLang = xL.Element("abbreviation").Value
-                    _tvdblanguages.Add(cLang)
-                Next
-            Catch
-
-            End Try
-        End If
-
         If (Type = Enums.DefaultType.All OrElse Type = Enums.DefaultType.MovieFilters) AndAlso (Force OrElse (Master.eSettings.FilterCustom.Count <= 0 AndAlso Not Master.eSettings.NoFilters)) Then
             Master.eSettings.FilterCustom.Clear()
             Master.eSettings.FilterCustom.Add("[\W_]\(?\d{4}\)?.*")

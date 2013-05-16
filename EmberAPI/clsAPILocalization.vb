@@ -174,12 +174,16 @@ Public Class Localization
     Public Function GetString(ByVal ID As Integer, ByVal strDefault As String, Optional ByVal forceFromMain As Boolean = False) As String
         Dim tStr As String
 #If DEBUG Then
-        Dim _sPath = Path.Combine(Functions.AppPath, "Log")
-        If Not System.IO.Directory.Exists(_sPath) Then
-            System.IO.Directory.CreateDirectory(_sPath)
-        End If
+        Try
+            Dim _sPath = Path.Combine(Functions.AppPath, "Log")
+            If Not System.IO.Directory.Exists(_sPath) Then
+                System.IO.Directory.CreateDirectory(_sPath)
+            End If
 
-        Dim _LogFile = Path.Combine(_sPath, "language_strings.log")
+            Dim _LogFile = Path.Combine(_sPath, "language_strings.log")
+        Catch ex As Exception
+
+        End Try
 #End If
 
         Dim Assembly As String = Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetCallingAssembly().Location)
@@ -197,12 +201,16 @@ Public Class Localization
             End If
         End If
 #If DEBUG Then
-        Using fs1 As FileStream = New FileStream(_LogFile, FileMode.Append, FileAccess.Write)
-            Using s1 As StreamWriter = New StreamWriter(fs1)
-                s1.Write(String.Concat(Assembly, vbTab, ID, vbTab, tStr, vbNewLine))
-                s1.Flush()
+        Try
+            Using fs1 As FileStream = New FileStream(_LogFile, FileMode.Append, FileAccess.Write)
+                Using s1 As StreamWriter = New StreamWriter(fs1)
+                    s1.Write(String.Concat(Assembly, vbTab, ID, vbTab, tStr, vbNewLine))
+                    s1.Flush()
+                End Using
             End Using
-        End Using
+        Catch
+
+        End Try
 #End If
         Return tStr
     End Function
