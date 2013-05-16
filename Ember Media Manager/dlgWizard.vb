@@ -443,8 +443,8 @@ Public Class dlgWizard
 
 	Private Sub btnTVLanguageFetch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTVLanguageFetch.Click
 		Me.tLangList.Clear()
-		Me.tLangList.AddRange(ModulesManager.Instance.TVGetLangs(Master.eSettings.TVDBMirror))
-		Me.cbTVLanguage.Items.AddRange((From lLang In tLangList Select lLang.LongLang).ToArray)
+        Me.tLangList.AddRange(ModulesManager.Instance.TVGetLangs(Master.eSettings.TVDBMirror))
+        Me.cbTVLanguage.Items.AddRange((From lLang In tLangList Select lLang.LongLang).ToArray)
 
 		If Me.cbTVLanguage.Items.Count > 0 Then
 			Me.cbTVLanguage.Text = Me.tLangList.FirstOrDefault(Function(l) l.ShortLang = Master.eSettings.TVDBLanguage).LongLang

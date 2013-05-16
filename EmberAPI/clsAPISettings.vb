@@ -23,6 +23,7 @@ Imports System.Xml.Serialization
 Imports System.Net
 Imports System.Drawing
 Imports System.Windows.Forms
+Imports System.Xml.Linq
 
 <Serializable()> _
 Public Class Settings
@@ -3583,6 +3584,24 @@ Public Class Settings
     End Function
 
     Public Sub SetDefaultsForLists(ByVal Type As Enums.DefaultType, ByVal Force As Boolean)
+        If Type = Enums.DefaultType.All Then
+            Dim xmlTVDB As XDocument
+            Dim cLang As Containers.TVLanguage
+            Try
+                xmlTVDB = XDocument.Parse(My.Resources.languages)
+                Dim xLangs = From xLanguages In xmlTVDB.Descendants("Language")
+
+                For Each xL As XElement In xLangs
+                    cLang = New Containers.TVLanguage
+                    cLang.LongLang = xL.Element("name").Value
+                    cLang.ShortLang = xL.Element("abbreviation").Value
+                    _tvdblanguages.Add(cLang)
+                Next
+            Catch
+
+            End Try
+        End If
+
         If (Type = Enums.DefaultType.All OrElse Type = Enums.DefaultType.MovieFilters) AndAlso (Force OrElse (Master.eSettings.FilterCustom.Count <= 0 AndAlso Not Master.eSettings.NoFilters)) Then
             Master.eSettings.FilterCustom.Clear()
             Master.eSettings.FilterCustom.Add("[\W_]\(?\d{4}\)?.*")
