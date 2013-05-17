@@ -1508,7 +1508,7 @@ Public Class dlgSettings
 
     Private Sub chkNoDisplayFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkNoDisplayFanart.CheckedChanged
         Me.SetApplyButton(True)
-        If Me.chkNoDisplayFanart.Checked AndAlso Me.chkNoDisplayPoster.Checked Then
+        If Me.chkNoDisplayFanart.Checked AndAlso Me.chkNoDisplayPoster.Checked AndAlso Me.chkNoDisplayFanartSmall.Checked Then
             Me.chkShowDims.Enabled = False
             Me.chkShowDims.Checked = False
         Else
@@ -1518,12 +1518,26 @@ Public Class dlgSettings
 
     Private Sub chkNoDisplayPoster_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkNoDisplayPoster.CheckedChanged
         Me.SetApplyButton(True)
-        If Me.chkNoDisplayFanart.Checked AndAlso Me.chkNoDisplayPoster.Checked Then
+        If Me.chkNoDisplayFanart.Checked AndAlso Me.chkNoDisplayPoster.Checked AndAlso Me.chkNoDisplayFanartSmall.Checked Then
             Me.chkShowDims.Enabled = False
             Me.chkShowDims.Checked = False
         Else
             Me.chkShowDims.Enabled = True
         End If
+    End Sub
+
+    Private Sub chkNoDisplayFanartSmall_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkNoDisplayFanartSmall.CheckedChanged
+        Me.SetApplyButton(True)
+        If Me.chkNoDisplayFanart.Checked AndAlso Me.chkNoDisplayPoster.Checked AndAlso Me.chkNoDisplayFanartSmall.Checked Then
+            Me.chkShowDims.Enabled = False
+            Me.chkShowDims.Checked = False
+        Else
+            Me.chkShowDims.Enabled = True
+        End If
+    End Sub
+
+    Private Sub chkPosterGlassOverlay_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkPosterGlassOverlay.CheckedChanged
+        Me.SetApplyButton(True)
     End Sub
 
     Private Sub chkNoDLTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkNoDLTrailer.CheckedChanged
@@ -1577,6 +1591,26 @@ Public Class dlgSettings
         If Not Me.chkOutline.Checked Then Me.chkOutlineForPlot.Checked = False
     End Sub
 
+    Private Sub chkPlotForOutline_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkPlotForOutline.CheckedChanged
+        Me.SetApplyButton(True)
+
+        Me.txtOutlineLimit.Enabled = Me.chkPlotForOutline.Checked
+        If Not Me.chkPlotForOutline.Checked Then
+            Me.txtOutlineLimit.Enabled = False
+            Me.txtOutlineLimit.Text = "0"
+        End If
+    End Sub
+
+    Private Sub chkPlot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkPlot.CheckedChanged
+        Me.SetApplyButton(True)
+
+        Me.chkPlotForOutline.Enabled = Me.chkPlot.Checked
+        If Not Me.chkPlot.Checked Then
+            Me.chkPlotForOutline.Checked = False
+            Me.txtOutlineLimit.Enabled = False
+        End If
+    End Sub
+
     Private Sub chkOverwriteAllSPoster_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkOverwriteAllSPoster.CheckedChanged
         Me.SetApplyButton(True)
     End Sub
@@ -1618,10 +1652,6 @@ Public Class dlgSettings
     End Sub
 
     Private Sub chkPersistImgCache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkPersistImgCache.CheckedChanged
-        Me.SetApplyButton(True)
-    End Sub
-
-    Private Sub chkPlot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkPlot.CheckedChanged
         Me.SetApplyButton(True)
     End Sub
 
@@ -2106,6 +2136,11 @@ Public Class dlgSettings
         Me.SetApplyButton(True)
     End Sub
 
+    Private Sub chkUseEPDuration_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkUseEPDuration.CheckedChanged
+        Me.txtEPRuntimeFormat.Enabled = Me.chkUseEPDuration.Checked
+        Me.SetApplyButton(True)
+    End Sub
+
     Private Sub chkVideoTSParent_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Me.SetApplyButton(True)
         Me.sResult.NeedsUpdate = True
@@ -2413,6 +2448,9 @@ Public Class dlgSettings
             Me.chkUseMIDuration.Checked = Master.eSettings.UseMIDuration
             Me.txtRuntimeFormat.Enabled = Master.eSettings.UseMIDuration
             Me.txtRuntimeFormat.Text = Master.eSettings.RuntimeMask
+            Me.chkUseEPDuration.Checked = Master.eSettings.UseEPDuration
+            Me.txtEPRuntimeFormat.Enabled = Master.eSettings.UseEPDuration
+            Me.txtEPRuntimeFormat.Text = Master.eSettings.EPRuntimeMask
             Me.chkUseImgCache.Checked = Master.eSettings.UseImgCache
             Me.chkUseImgCacheUpdaters.Checked = Master.eSettings.UseImgCacheUpdaters
             Me.chkPersistImgCache.Checked = Master.eSettings.PersistImgCache
@@ -2435,7 +2473,10 @@ Public Class dlgSettings
             Me.chkShowDims.Checked = Master.eSettings.ShowDims
             Me.chkNoDisplayFanart.Checked = Master.eSettings.NoDisplayFanart
             Me.chkNoDisplayPoster.Checked = Master.eSettings.NoDisplayPoster
+            Me.chkNoDisplayFanartSmall.Checked = Master.eSettings.NoDisplayFanartSmall
+            Me.chkPosterGlassOverlay.Checked = Master.eSettings.PosterGlassOverlay
             Me.chkOutlineForPlot.Checked = Master.eSettings.OutlineForPlot
+            Me.chkPlotForOutline.Checked = Master.eSettings.PlotForOutline
 
             Me.chkShowGenresText.Checked = Master.eSettings.AllwaysDisplayGenresText
             Me.chkDisplayYear.Checked = Master.eSettings.DisplayYear
@@ -2489,6 +2530,7 @@ Public Class dlgSettings
             Me.chkCountry.Checked = Master.eSettings.FieldCountry
             Me.txtActorLimit.Text = Master.eSettings.ActorLimit.ToString
             Me.txtGenreLimit.Text = Master.eSettings.GenreLimit.ToString
+            Me.txtOutlineLimit.Text = Master.eSettings.OutlineLimit.ToString
 
             Me.chkMissingPoster.Checked = Master.eSettings.MissingFilterPoster
             Me.chkMissingFanart.Checked = Master.eSettings.MissingFilterFanart
@@ -3499,6 +3541,8 @@ Public Class dlgSettings
             End If
             Master.eSettings.UseMIDuration = Me.chkUseMIDuration.Checked
             Master.eSettings.RuntimeMask = Me.txtRuntimeFormat.Text
+            Master.eSettings.UseEPDuration = Me.chkUseEPDuration.Checked
+            Master.eSettings.EPRuntimeMask = Me.txtEPRuntimeFormat.Text
             Master.eSettings.UseImgCache = Me.chkUseImgCache.Checked
             Master.eSettings.UseImgCacheUpdaters = Me.chkUseImgCacheUpdaters.Checked
             Master.eSettings.PersistImgCache = Me.chkPersistImgCache.Checked
@@ -3534,7 +3578,10 @@ Public Class dlgSettings
             Master.eSettings.ShowDims = Me.chkShowDims.Checked
             Master.eSettings.NoDisplayFanart = Me.chkNoDisplayFanart.Checked
             Master.eSettings.NoDisplayPoster = Me.chkNoDisplayPoster.Checked
+            Master.eSettings.NoDisplayFanartSmall = Me.chkNoDisplayFanartSmall.Checked
+            Master.eSettings.PosterGlassOverlay = Me.chkPosterGlassOverlay.Checked
             Master.eSettings.OutlineForPlot = Me.chkOutlineForPlot.Checked
+            Master.eSettings.PlotForOutline = Me.chkPlotForOutline.Checked
 
             Master.eSettings.AllwaysDisplayGenresText = Me.chkShowGenresText.Checked
             Master.eSettings.DisplayYear = Me.chkDisplayYear.Checked
@@ -3592,6 +3639,13 @@ Public Class dlgSettings
             Else
                 Master.eSettings.ActorLimit = 0
             End If
+
+            If Not String.IsNullOrEmpty(Me.txtOutlineLimit.Text) Then
+                Master.eSettings.OutlineLimit = Convert.ToInt32(Me.txtOutlineLimit.Text)
+            Else
+                Master.eSettings.OutlineLimit = 0
+            End If
+
             If Not String.IsNullOrEmpty(Me.txtGenreLimit.Text) Then
                 Master.eSettings.GenreLimit = Convert.ToInt32(Me.txtGenreLimit.Text)
             Else
@@ -3775,7 +3829,7 @@ Public Class dlgSettings
         Me.cbForce.Items.AddRange(Strings.Split(AdvancedSettings.GetSetting("ForceTitle", ""), "|"))
         Me.btnAddShowRegex.Tag = String.Empty
         Me.Text = Master.eLang.GetString(420, "Settings")
-        Me.GroupBox4.Text = Master.eLang.GetString(429, "Miscellaneous")
+        Me.gbGeneralMiscellaneous.Text = Master.eLang.GetString(429, "Miscellaneous")
         Me.Label32.Text = Master.eLang.GetString(430, "Interface Language:")
         Me.chkInfoPanelAnim.Text = Master.eLang.GetString(431, "Enable Panel Animation")
         Me.chkUpdates.Text = Master.eLang.GetString(432, "Check for Updates")
@@ -3793,21 +3847,23 @@ Public Class dlgSettings
         Me.chkWhitelistVideo.Text = Master.eLang.GetString(440, "Whitelist Video Extensions")
         Me.Label27.Text = Master.eLang.GetString(441, "Whitelisted Extensions:")
         Me.Label25.Text = Master.eLang.GetString(442, "WARNING: Using the Expert Mode Cleaner could potentially delete wanted files. Take care when using this tool.")
-        Me.gbFilters.Text = Master.eLang.GetString(451, "Folder/File Name Filters")
+        Me.gbMoviesFilters.Text = Master.eLang.GetString(451, "Folder/File Name Filters")
         Me.chkProperCase.Text = Master.eLang.GetString(452, "Convert Names to Proper Case")
         Me.chkShowProperCase.Text = Me.chkProperCase.Text
         Me.chkEpProperCase.Text = Me.chkProperCase.Text
-        Me.GroupBox12.Text = Me.GroupBox4.Text
+        Me.gbMoviesMiscellaneous.Text = Me.gbGeneralMiscellaneous.Text
         Me.chkShowGenresText.Text = Master.eLang.GetString(453, "Always Display Genre Text")
-        Me.gbGenreFilter.Text = Master.eLang.GetString(454, "Genre Language Filter")
+        Me.gbMoviesGenreFilter.Text = Master.eLang.GetString(454, "Genre Language Filter")
         Me.chkNoDisplayFanart.Text = Master.eLang.GetString(455, "Do Not Display Fanart")
         Me.chkNoDisplayPoster.Text = Master.eLang.GetString(456, "Do Not Display Poster")
+        Me.chkNoDisplayFanartSmall.Text = Master.eLang.GetString(893, "Do Not Display Small Fanart")
+        Me.chkPosterGlassOverlay.Text = Master.eLang.GetString(892, "Enable Poster Glass Overlay")
         Me.chkShowDims.Text = Master.eLang.GetString(457, "Display Image Dimensions")
         Me.chkMarkNew.Text = Master.eLang.GetString(459, "Mark New Movies")
-        Me.GroupBox2.Text = Master.eLang.GetString(460, "Media List Options")
+        Me.gbMoviesMediaList.Text = Master.eLang.GetString(460, "Media List Options")
         Me.Label30.Text = Master.eLang.GetString(461, "Mismatch Tolerance:")
         Me.chkCheckTitles.Text = Master.eLang.GetString(462, "Check Title Match Confidence")
-        Me.GroupBox25.Text = Master.eLang.GetString(463, "Sort Tokens to Ignore")
+        Me.gbMoviesSortToken.Text = Master.eLang.GetString(463, "Sort Tokens to Ignore")
         Me.chkDisplayYear.Text = Master.eLang.GetString(464, "Display Year in List Title")
         Me.chkMovieExtraCol.Text = Master.eLang.GetString(465, "Hide Extrathumb Column")
         Me.chkMovieSubCol.Text = Master.eLang.GetString(466, "Hide Sub Column")
@@ -3816,8 +3872,8 @@ Public Class dlgSettings
         Me.chkMovieInfoCol.Text = Master.eLang.GetString(468, "Hide Info Column")
         Me.chkMovieFanartCol.Text = Master.eLang.GetString(469, "Hide Fanart Column")
         Me.chkMoviePosterCol.Text = Master.eLang.GetString(470, "Hide Poster Column")
-        Me.GroupBox8.Text = Master.eLang.GetString(471, "File Naming")
-        Me.gbTVNaming.Text = Me.GroupBox8.Text
+        Me.gbSourcesFileNaming.Text = Master.eLang.GetString(471, "File Naming")
+        Me.gbTVNaming.Text = Me.gbSourcesFileNaming.Text
         Me.chkMovieNameMultiOnly.Text = Master.eLang.GetString(472, "Use <movie> Only for Folders with Multiple Movies")
         Me.GroupBox21.Text = Master.eLang.GetString(151, "Trailer")
         'Me.chkVideoTSParent.Text = Master.eLang.GetString(473, "YAMJ Compatible VIDEO_TS File Placement/Naming")
@@ -3832,14 +3888,14 @@ Public Class dlgSettings
         Me.btnRemTVSource.Text = Master.eLang.GetString(30, "Remove")
         Me.btnMovieAddFolder.Text = Master.eLang.GetString(407, "Add Source")
         Me.btnAddTVSource.Text = Me.btnMovieAddFolder.Text
-        Me.GroupBox14.Text = Me.GroupBox5.Text
+        Me.gbImagesPoster.Text = Me.GroupBox5.Text
         Me.Label24.Text = Master.eLang.GetString(478, "Quality:")
         Me.Label11.Text = Master.eLang.GetString(479, "Max Width:")
         Me.Label12.Text = Master.eLang.GetString(480, "Max Height:")
         Me.chkResizePoster.Text = Master.eLang.GetString(481, "Automatically Resize:")
         Me.lblPosterSize.Text = Master.eLang.GetString(482, "Preferred Size:")
         Me.chkOverwritePoster.Text = Master.eLang.GetString(483, "Overwrite Existing")
-        Me.GroupBox13.Text = Me.GroupBox6.Text
+        Me.gbImagesFanart.Text = Me.GroupBox6.Text
         Me.chkFanartOnly.Text = Master.eLang.GetString(145, "Only")
         Me.chkPosterOnly.Text = Master.eLang.GetString(145, "Only")
         Me.Label26.Text = Me.Label24.Text
@@ -3848,7 +3904,7 @@ Public Class dlgSettings
         Me.chkResizeFanart.Text = Me.chkResizePoster.Text
         Me.lblFanartSize.Text = Me.lblPosterSize.Text
         Me.chkOverwriteFanart.Text = Me.chkOverwritePoster.Text
-        Me.GroupBox10.Text = Master.eLang.GetString(488, "Global Locks")
+        Me.gbScraperGlobalLocks.Text = Master.eLang.GetString(488, "Global Locks")
         Me.chkLockTrailer.Text = Master.eLang.GetString(489, "Lock Trailer")
         Me.chkLockGenre.Text = Master.eLang.GetString(490, "Lock Genre")
         Me.chkLockRealStudio.Text = Master.eLang.GetString(491, "Lock Studio")
@@ -3857,7 +3913,7 @@ Public Class dlgSettings
         Me.chkLockTitle.Text = Master.eLang.GetString(494, "Lock Title")
         Me.chkLockOutline.Text = Master.eLang.GetString(495, "Lock Outline")
         Me.chkLockPlot.Text = Master.eLang.GetString(496, "Lock Plot")
-        Me.GroupBox9.Text = Master.eLang.GetString(497, "Images")
+        Me.gbImagesImages.Text = Master.eLang.GetString(497, "Images")
         Me.chkNoSaveImagesToNfo.Text = Master.eLang.GetString(498, "Do Not Save URLs to Nfo")
         Me.chkSingleScrapeImages.Text = Master.eLang.GetString(499, "Get on Single Scrape")
         Me.chkLockLanguageV.Text = Master.eLang.GetString(879, "Lock Language (video)")
@@ -3870,14 +3926,17 @@ Public Class dlgSettings
         Me.Label15.Text = Master.eLang.GetString(506, "Number To Create:")
         Me.chkAutoThumbs.Text = Master.eLang.GetString(507, "Extract During Scrapers")
         Me.chkOutlineForPlot.Text = Master.eLang.GetString(508, "Use Outline for Plot if Plot is Empty")
+        Me.chkPlotForOutline.Text = Master.eLang.GetString(891, "Use Plot for Outline if Outline is Empty")
 
         Me.chkCastWithImg.Text = Master.eLang.GetString(510, "Scrape Only Actors With Images")
         Me.chkUseCertForMPAA.Text = Master.eLang.GetString(511, "Use Certification for MPAA")
         Me.chkFullCast.Text = Master.eLang.GetString(512, "Scrape Full Cast")
         Me.chkFullCrew.Text = Master.eLang.GetString(513, "Scrape Full Crew")
         Me.chkCert.Text = Master.eLang.GetString(514, "Use Certification Language:")
-        Me.gbRTFormat.Text = Master.eLang.GetString(515, "Duration Format")
+        Me.gbScraperDurationFormat.Text = Master.eLang.GetString(515, "Duration Format")
         Me.chkUseMIDuration.Text = Master.eLang.GetString(516, "Use Duration for Runtime")
+        Me.gbTVScraperDuration.Text = Master.eLang.GetString(515, "Duration Format")
+        Me.chkUseEPDuration.Text = Master.eLang.GetString(516, "Use Duration for Runtime")
         Me.chkScanMediaInfo.Text = Master.eLang.GetString(517, "Scan Meta Data")
         Me.chkTVScanMetaData.Text = Me.chkScanMediaInfo.Text
         Me.btnOK.Text = Master.eLang.GetString(179, "OK")
@@ -3885,10 +3944,10 @@ Public Class dlgSettings
         Me.btnCancel.Text = Master.eLang.GetString(167, "Cancel")
         Me.Label2.Text = Master.eLang.GetString(518, "Configure Ember's appearance and operation.")
         Me.Label4.Text = Me.Text
-        Me.GroupBox16.Text = Master.eLang.GetString(520, "Backdrops Folder")
+        Me.gbSourcesBackdrops.Text = Master.eLang.GetString(520, "Backdrops Folder")
         Me.chkAutoBD.Text = Master.eLang.GetString(521, "Automatically Save Fanart To Backdrops Folder")
-        Me.GroupBox26.Text = Master.eLang.GetString(59, "Meta Data")
-        Me.GroupBox31.Text = Me.GroupBox26.Text
+        Me.gbScraperMetaData.Text = Master.eLang.GetString(59, "Meta Data")
+        Me.gbTVScraperMetaData.Text = Me.gbScraperMetaData.Text
 
         Me.chkDeleteAllTrailers.Text = Master.eLang.GetString(522, "Delete All Existing")
         Me.chkOverwriteTrailer.Text = Master.eLang.GetString(483, "Overwrite Existing")
@@ -3903,7 +3962,7 @@ Public Class dlgSettings
         Me.GroupBox18.Text = Master.eLang.GetString(534, "Valid Video Extensions")
         Me.btnEditSource.Text = Master.eLang.GetString(535, "Edit Source")
         Me.btnEditTVSource.Text = Master.eLang.GetString(535, "Edit Source")
-        Me.GroupBox19.Text = Master.eLang.GetString(536, "Miscellaneous Options")
+        Me.gbSourcesMiscellaneous.Text = Master.eLang.GetString(536, "Miscellaneous Options")
         Me.gbMiscTVSourceOpts.Text = Master.eLang.GetString(536, "Miscellaneous Options")
         Me.chkAutoDetectVTS.Text = Master.eLang.GetString(537, "Automatically Detect VIDEO_TS Folders Even if They Are Not Named ""VIDEO_TS""")
         Me.chkVideoTSParentXBMC.Text = Master.eLang.GetString(474, "Frodo Compatible VIDEO_TS File Placement/Naming")
@@ -3912,20 +3971,20 @@ Public Class dlgSettings
         Me.Label20.Text = Master.eLang.GetString(540, "Skip files smaller than:")
         Me.Label6.Text = Me.Label21.Text
         Me.Label7.Text = Me.Label20.Text
-        Me.GroupBox23.Text = Master.eLang.GetString(153, "Extrathumbs")
-        Me.GroupBox24.Text = Master.eLang.GetString(541, "Sizing (Extracted Frames)")
+        Me.gbImagesExtrathumbs.Text = Master.eLang.GetString(153, "Extrathumbs")
+        Me.gbImagesSizing.Text = Master.eLang.GetString(541, "Sizing (Extracted Frames)")
         Me.chkETPadding.Text = Master.eLang.GetString(542, "Padding")
         Me.Label28.Text = Master.eLang.GetString(543, "Width:")
         Me.Label29.Text = Master.eLang.GetString(544, "Height:")
         Me.rbETCustom.Text = Master.eLang.GetString(545, "Use Custom Size")
         Me.rbETNative.Text = Master.eLang.GetString(546, "Use Native Resolution")
-        Me.GroupBox17.Text = Master.eLang.GetString(547, "Caching")
+        Me.gbImagesCaching.Text = Master.eLang.GetString(547, "Caching")
         Me.chkUseImgCacheUpdaters.Text = Master.eLang.GetString(548, "Use During Automated Scrapers")
         Me.chkPersistImgCache.Text = Master.eLang.GetString(550, "Persistent Image Cache")
         Me.chkUseImgCache.Text = Master.eLang.GetString(551, "Use Image Cache")
         Me.fbdBrowse.Description = Master.eLang.GetString(552, "Select the folder where you wish to store your backdrops.")
-        Me.gbOptions.Text = Master.eLang.GetString(577, "Scraper Fields")
-        Me.GroupBox32.Text = Master.eLang.GetString(577, "Scraper Fields")
+        Me.gbScraperFields.Text = Master.eLang.GetString(577, "Scraper Fields")
+        Me.gbTVScraperFields.Text = Master.eLang.GetString(577, "Scraper Fields")
         Me.chkCrew.Text = Master.eLang.GetString(391, "Other Crew")
         Me.chkMusicBy.Text = Master.eLang.GetString(392, "Music By")
         Me.chkProducers.Text = Master.eLang.GetString(393, "Producers")
@@ -3964,10 +4023,10 @@ Public Class dlgSettings
         Me.chkScraperEpDirector.Text = Master.eLang.GetString(62, "Director")
         Me.chkScraperEpCredits.Text = Master.eLang.GetString(729, "Credits")
         Me.chkScraperEpActors.Text = Master.eLang.GetString(725, "Actors")
-        Me.GroupBox1.Text = Me.GroupBox4.Text
+        Me.gbScraperMiscellaneous.Text = Me.gbGeneralMiscellaneous.Text
         Me.lblLimit.Text = Master.eLang.GetString(578, "Limit:")
         Me.lblLimit2.Text = Me.lblLimit.Text
-        Me.GroupBox27.Text = Master.eLang.GetString(581, "Missing Items Filter")
+        Me.gbMoviesMissingFilter.Text = Master.eLang.GetString(581, "Missing Items Filter")
         Me.chkMissingPoster.Text = Master.eLang.GetString(582, "Check for Poster")
         Me.chkMissingFanart.Text = Master.eLang.GetString(583, "Check for Fanart")
         Me.chkMissingNFO.Text = Master.eLang.GetString(584, "Check for NFO")
@@ -3982,8 +4041,8 @@ Public Class dlgSettings
         Me.Label35.Text = String.Concat(Master.eLang.GetString(620, "Movie Theme"), ":")
         Me.Label1.Text = String.Concat(Master.eLang.GetString(666, "TV Show Theme"), ":")
         Me.Label3.Text = String.Concat(Master.eLang.GetString(667, "Episode Theme"), ":")
-        Me.GroupBox28.Text = Master.eLang.GetString(625, "Defaults by File Type")
-        Me.gbTVMIDefaults.Text = Me.gbTVMIDefaults.Text
+        Me.gbScraperFileType.Text = Master.eLang.GetString(625, "Defaults by File Type")
+        Me.gbTVScraperFileType.Text = Me.gbTVScraperFileType.Text
         Me.Label34.Text = Master.eLang.GetString(626, "File Type")
         Me.Label49.Text = Me.Label34.Text
         Me.chkIFOScan.Text = Master.eLang.GetString(628, "Enable IFO Parsing")
@@ -3994,7 +4053,7 @@ Public Class dlgSettings
         Me.chkIgnoreLastScan.Text = Master.eLang.GetString(669, "Ignore last scan time when updating library")
         Me.chkTVIgnoreLastScan.Text = Me.chkIgnoreLastScan.Text
         Me.gbShowFilter.Text = Master.eLang.GetString(670, "Show Folder/File Name Filters")
-        Me.gbEpFilter.Text = Master.eLang.GetString(671, "Episode Folder/File Name Filters")
+        Me.gbShowEpFilter.Text = Master.eLang.GetString(671, "Episode Folder/File Name Filters")
         Me.gbProxy.Text = Master.eLang.GetString(672, "Proxy")
         Me.chkEnableProxy.Text = Master.eLang.GetString(673, "Enable Proxy")
         Me.lblProxyURI.Text = Master.eLang.GetString(674, "Proxy URL:")
@@ -4004,9 +4063,9 @@ Public Class dlgSettings
         Me.lblProxyUN.Text = Master.eLang.GetString(425, "Username:")
         Me.lblProxyPW.Text = Master.eLang.GetString(426, "Password:")
         Me.lblProxyDomain.Text = Master.eLang.GetString(678, "Domain:")
-        Me.gbTVMisc.Text = Me.GroupBox4.Text
+        Me.gbShowsMiscellaneous.Text = Me.gbGeneralMiscellaneous.Text
         Me.lblRatingRegion.Text = Master.eLang.GetString(679, "TV Rating Region")
-        Me.gbTVListOptions.Text = Master.eLang.GetString(460, "Media List Options")
+        Me.gbShowMediaList.Text = Master.eLang.GetString(460, "Media List Options")
         Me.gbShowListOptions.Text = Master.eLang.GetString(680, "Shows")
         Me.gbSeasonListOptions.Text = Master.eLang.GetString(681, "Seasons")
         Me.gbEpisodeListOptions.Text = Master.eLang.GetString(682, "Episodes")
@@ -4085,23 +4144,23 @@ Public Class dlgSettings
         Me.chkGetEnglishImages.Text = Master.eLang.GetString(737, "Also Get English Images")
         Me.lblAPIKey.Text = Master.eLang.GetString(738, "API Key:")
         Me.lblTVUpdate.Text = Master.eLang.GetString(740, "Re-download Show Information Every:")
-        Me.gbLanguage.Text = Master.eLang.GetString(610, "Language")
+        Me.gbTVScraperLanguage.Text = Master.eLang.GetString(610, "Language")
         Me.lblTVLanguagePreferred.Text = Master.eLang.GetString(741, "Preferred Language:")
         Me.btnTVLanguageFetch.Text = Master.eLang.GetString(742, "Fetch Available Languages")
-        Me.GroupBox33.Text = Master.eLang.GetString(488, "Global Locks")
-        Me.gbShowLocks.Text = Master.eLang.GetString(743, "Show")
+        Me.gbTVScraperGlobalLocks.Text = Master.eLang.GetString(488, "Global Locks")
+        Me.gbTVScraperShowLocks.Text = Master.eLang.GetString(743, "Show")
         Me.chkShowLockTitle.Text = Master.eLang.GetString(494, "Lock Title")
         Me.chkShowLockPlot.Text = Master.eLang.GetString(496, "Lock Plot")
         Me.chkShowLockRating.Text = Master.eLang.GetString(492, "Lock Rating")
         Me.chkShowLockGenre.Text = Master.eLang.GetString(490, "Lock Genre")
         Me.chkShowLockStudio.Text = Master.eLang.GetString(491, "Lock Studio")
-        Me.gbEpLocks.Text = Master.eLang.GetString(727, "Episode")
+        Me.gbTVScraperEpLocks.Text = Master.eLang.GetString(727, "Episode")
         Me.chkEpLockTitle.Text = Master.eLang.GetString(494, "Lock Title")
         Me.chkEpLockPlot.Text = Master.eLang.GetString(496, "Lock Plot")
         Me.chkEpLockRating.Text = Master.eLang.GetString(492, "Lock Rating")
-        Me.GroupBox35.Text = Master.eLang.GetString(743, "Show")
-        Me.GroupBox34.Text = Master.eLang.GetString(727, "Episode")
-        Me.gbInterface.Text = Master.eLang.GetString(795, "Interface")
+        Me.gbTVScraperShow.Text = Master.eLang.GetString(743, "Show")
+        Me.gbTVScraperEpisode.Text = Master.eLang.GetString(727, "Episode")
+        Me.gbGeneralInterface.Text = Master.eLang.GetString(795, "Interface")
         Me.chkScanOrderModify.Text = Master.eLang.GetString(796, "Scan in order of last write time")
         Me.chkTVScanOrderModify.Text = Me.chkScanOrderModify.Text
         Me.lblPreferredQuality.Text = Master.eLang.GetString(800, "Preferred Quality:")
@@ -4409,6 +4468,14 @@ Public Class dlgSettings
         Me.SetApplyButton(True)
     End Sub
 
+    Private Sub txtOutlineLimit_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtOutlineLimit.KeyPress
+        e.Handled = StringUtils.NumericOnly(e.KeyChar)
+    End Sub
+
+    Private Sub txtOutlineLimit_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtOutlineLimit.TextChanged
+        Me.SetApplyButton(True)
+    End Sub
+
     Private Sub txtAllSPosterHeight_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtAllSPosterHeight.KeyPress
         e.Handled = StringUtils.NumericOnly(e.KeyChar)
     End Sub
@@ -4570,6 +4637,10 @@ Public Class dlgSettings
     End Sub
 
     Private Sub txtRuntimeFormat_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtRuntimeFormat.TextChanged
+        Me.SetApplyButton(True)
+    End Sub
+
+    Private Sub txtEPRuntimeFormat_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtEPRuntimeFormat.TextChanged
         Me.SetApplyButton(True)
     End Sub
 

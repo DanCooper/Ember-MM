@@ -189,6 +189,8 @@ Public Class Settings
     Private _moviewatchedCol As Boolean
     Private _nodisplayfanart As Boolean
     Private _nodisplayposter As Boolean
+    Private _nodisplayfanartsmall As Boolean
+    Private _posterglassoverlay As Boolean
     Private _noepfilters As Boolean
     Private _nofilterepisode As Boolean
     Private _nofilters As Boolean
@@ -199,6 +201,8 @@ Public Class Settings
     Private _onlytvimagesforselectedlangauge As Boolean
     Private _onlyvalueforcert As Boolean
     Private _outlineforplot As Boolean
+    Private _plotforoutline As Boolean
+    Private _outlinelimit As Integer
     Private _overwriteallsPoster As Boolean
     Private _overwriteEpFanart As Boolean
     Private _overwriteEpPoster As Boolean
@@ -232,6 +236,7 @@ Public Class Settings
     Private _resizeshowfanart As Boolean
     Private _resizeshowposter As Boolean
     Private _runtimemask As String
+    Private _epruntimemask As String
     Private _scanmediainfo As Boolean
     Private _scanordermodify As Boolean
     Private _scantvmediainfo As Boolean
@@ -345,6 +350,7 @@ Public Class Settings
     Private _useimgcache As Boolean
     Private _useimgcacheupdater As Boolean
     Private _usemiduration As Boolean
+    Private _useepduration As Boolean
     Private _validexts As List(Of String)
     Private _version As String
     Private _videotsparent As Boolean
@@ -1800,6 +1806,24 @@ Public Class Settings
         End Set
     End Property
 
+    Public Property NoDisplayFanartSmall() As Boolean
+        Get
+            Return Me._nodisplayfanartsmall
+        End Get
+        Set(ByVal value As Boolean)
+            Me._nodisplayfanartsmall = value
+        End Set
+    End Property
+
+    Public Property PosterGlassOverlay() As Boolean
+        Get
+            Return Me._posterglassoverlay
+        End Get
+        Set(ByVal value As Boolean)
+            Me._posterglassoverlay = value
+        End Set
+    End Property
+
     Public Property NoEpFilters() As Boolean
         Get
             Return Me._noepfilters
@@ -1887,6 +1911,24 @@ Public Class Settings
         End Get
         Set(ByVal value As Boolean)
             Me._outlineforplot = value
+        End Set
+    End Property
+
+    Public Property PlotForOutline() As Boolean
+        Get
+            Return Me._plotforoutline
+        End Get
+        Set(ByVal value As Boolean)
+            Me._plotforoutline = value
+        End Set
+    End Property
+
+    Public Property OutlineLimit() As Integer
+        Get
+            Return Me._outlinelimit
+        End Get
+        Set(ByVal value As Integer)
+            Me._outlinelimit = value
         End Set
     End Property
 
@@ -2274,6 +2316,15 @@ Public Class Settings
         End Get
         Set(ByVal value As String)
             Me._runtimemask = value
+        End Set
+    End Property
+
+    Public Property EPRuntimeMask() As String
+        Get
+            Return Me._epruntimemask
+        End Get
+        Set(ByVal value As String)
+            Me._epruntimemask = value
         End Set
     End Property
 
@@ -3231,6 +3282,15 @@ Public Class Settings
         End Set
     End Property
 
+    Public Property UseEPDuration() As Boolean
+        Get
+            Return Me._useepduration
+        End Get
+        Set(ByVal value As Boolean)
+            Me._useepduration = value
+        End Set
+    End Property
+
     Public Property ValidExts() As List(Of String)
         Get
             Return Me._validexts
@@ -3521,7 +3581,9 @@ Public Class Settings
         Me._bdpath = String.Empty
         Me._autobd = False
         Me._usemiduration = False
+        Me._useepduration = False
         Me._runtimemask = "<m>"     'emm-r
+        Me._epruntimemask = "<m>"
         Me._genrefilter = "English"
         Me._useetasfa = False
         Me._useimgcache = False
@@ -3542,8 +3604,12 @@ Public Class Settings
         Me._nosaveimagestonfo = False
         Me._showdims = False
         Me._nodisplayposter = False
+        Me._nodisplayfanartsmall = False
         Me._nodisplayfanart = False
+        Me._posterglassoverlay = False
         Me._outlineforplot = False
+        Me._plotforoutline = False
+        Me._outlinelimit = 400
         Me._sortpath = String.Empty
         Me._allwaysdisplaygenrestext = False
         Me._displayyear = False
@@ -3653,7 +3719,7 @@ Public Class Settings
         Me._externaltvdbapikey = String.Empty
         Me._scanordermodify = False
         Me._tvscanordermodify = False
-        Me._tvupdatetime = Enums.TVUpdateTime.Week
+        Me._tvupdatetime = Enums.TVUpdateTime.Always
         Me._nofilterepisode = True
         Me._onlytvimagesforselectedlangauge = True
         Me._alwaysgetenglishtvimages = True

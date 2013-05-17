@@ -127,17 +127,7 @@ Public Class MediaInfo
 
                     If Master.eSettings.LockSubtitle Then
                         Try
-                            'sets old subinfo setting if setting is enabled (lock subs)
-                            'First make sure that there is no completely new source scanned of the movie --> if so (i.e. more streams) then update!
-                            If tinfo.StreamDetails.Subtitle.Count = miMovie.Movie.FileInfo.StreamDetails.Subtitle.Count Then
-                                For i = 0 To tinfo.StreamDetails.Subtitle.Count - 1
-                                    'only preserve if tag is filled --> else update!
-                                    If Not String.IsNullOrEmpty(miMovie.Movie.FileInfo.StreamDetails.Subtitle.Item(i).LongLanguage) Then
-                                        tinfo.StreamDetails.Subtitle.Item(i) = miMovie.Movie.FileInfo.StreamDetails.Subtitle.Item(i)
-                                    End If
-                                Next
-                            End If
-
+                            tinfo.StreamDetails.Subtitle = miMovie.Movie.FileInfo.StreamDetails.Subtitle
                         Catch ex As Exception
 
                         End Try
@@ -148,7 +138,7 @@ Public Class MediaInfo
                 If miMovie.Movie.FileInfo.StreamDetails.Video.Count > 0 AndAlso Master.eSettings.UseMIDuration Then
                     Dim tVid As MediaInfo.Video = NFO.GetBestVideo(miMovie.Movie.FileInfo)
                     If Not String.IsNullOrEmpty(tVid.Duration) Then
-                        miMovie.Movie.Runtime = MediaInfo.FormatDuration(MediaInfo.DurationToSeconds(tVid.Duration, True))
+                        miMovie.Movie.Runtime = MediaInfo.FormatDuration(MediaInfo.DurationToSeconds(tVid.Duration, True), Master.eSettings.RuntimeMask)
                     End If
                 End If
                 MI = Nothing
@@ -453,7 +443,7 @@ Public Class MediaInfo
         End If
     End Function
 
-    Private Shared Function DurationToSeconds(ByVal Duration As String, ByVal Reverse As Boolean) As String
+    Public Shared Function DurationToSeconds(ByVal Duration As String, ByVal Reverse As Boolean) As String
         If Not String.IsNullOrEmpty(Duration) Then
             If Reverse Then
                 Dim ts As New TimeSpan(0, 0, Convert.ToInt32(Duration))
@@ -671,12 +661,12 @@ Public Class MediaInfo
         Return fiOut
     End Function
 
-    Private Shared Function FormatDuration(ByVal tDur As String) As String
+    Public Shared Function FormatDuration(ByVal tDur As String, ByVal sMask As String) As String
         Dim sDuration As Match = Regex.Match(tDur, "(([0-9]+)h)?\s?(([0-9]+)mn)?\s?(([0-9]+)s)?")
         Dim sHour As Integer = If(Not String.IsNullOrEmpty(sDuration.Groups(2).Value), (Convert.ToInt32(sDuration.Groups(2).Value)), 0)
         Dim sMin As Integer = If(Not String.IsNullOrEmpty(sDuration.Groups(4).Value), (Convert.ToInt32(sDuration.Groups(4).Value)), 0)
         Dim sSec As Integer = If(Not String.IsNullOrEmpty(sDuration.Groups(6).Value), (Convert.ToInt32(sDuration.Groups(6).Value)), 0)
-        Dim sMask As String = Master.eSettings.RuntimeMask
+        'Dim sMask As String = Master.eSettings.RuntimeMask
         'Dim sRuntime As String = String.Empty
 
         If sMask.Contains("<h>") Then

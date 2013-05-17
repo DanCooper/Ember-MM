@@ -111,7 +111,7 @@ Public Class dlgEditEpisode
     Private Sub btnSetFanartScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetFanartScrape.Click
         Dim tImage As Images = ModulesManager.Instance.TVSingleImageOnly(Master.currShow.TVShow.Title, Convert.ToInt32(Master.currShow.ShowID), Master.currShow.TVShow.ID, Enums.TVImageType.EpisodeFanart, 0, 0, Master.currShow.ShowLanguage, Master.currShow.Ordering, CType(Fanart, Images))
 
-        If Not IsNothing(tImage.Image) Then
+        If Not IsNothing(tImage) AndAlso Not IsNothing(tImage.Image) Then
             Me.Fanart = tImage
             Me.pbFanart.Image = tImage.Image
             Me.pbFanart.Tag = tImage
@@ -124,7 +124,7 @@ Public Class dlgEditEpisode
     Private Sub btnSetPosterScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSetPosterScrape.Click
         Dim tImage As Images = ModulesManager.Instance.TVSingleImageOnly(Master.currShow.TVShow.Title, Convert.ToInt32(Master.currShow.ShowID), Master.currShow.TVShow.ID, Enums.TVImageType.EpisodePoster, Master.currShow.TVEp.Season, Master.currShow.TVEp.Episode, Master.currShow.ShowLanguage, Master.currShow.Ordering, CType(Poster, Images))
 
-        If Not IsNothing(tImage.Image) Then
+        If Not IsNothing(tImage) AndAlso Not IsNothing(tImage.Image) Then
             Poster = tImage
             Me.pbPoster.Image = tImage.Image
             Me.pbPoster.Tag = tImage
@@ -724,6 +724,12 @@ Public Class dlgEditEpisode
         Catch ex As Exception
             Master.eLog.WriteToErrorLog(ex.Message, ex.StackTrace, "Error")
         End Try
+    End Sub
+
+    Private Sub txtPlot_KeyDown(ByVal sender As Object, e As KeyEventArgs) Handles txtPlot.KeyDown
+        If e.KeyData = (Keys.Control Or Keys.A) Then
+            Me.txtPlot.SelectAll()
+        End If
     End Sub
 
 #End Region 'Methods

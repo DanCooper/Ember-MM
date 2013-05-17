@@ -38,9 +38,11 @@ Partial Class frmInfoSettingsHolder
         Me.btnDown = New System.Windows.Forms.Button()
         Me.btnUp = New System.Windows.Forms.Button()
         Me.pnlSettings = New System.Windows.Forms.Panel()
+        Me.lblOFDBWarning = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.gbOptions = New System.Windows.Forms.GroupBox()
+        Me.chkCountryFull = New System.Windows.Forms.CheckBox()
         Me.chkCertification = New System.Windows.Forms.CheckBox()
         Me.chkCountry = New System.Windows.Forms.CheckBox()
         Me.chkTop250 = New System.Windows.Forms.CheckBox()
@@ -222,6 +224,7 @@ Partial Class frmInfoSettingsHolder
         '
         'pnlSettings
         '
+        Me.pnlSettings.Controls.Add(Me.lblOFDBWarning)
         Me.pnlSettings.Controls.Add(Me.Label1)
         Me.pnlSettings.Controls.Add(Me.PictureBox1)
         Me.pnlSettings.Controls.Add(Me.Panel1)
@@ -232,6 +235,16 @@ Partial Class frmInfoSettingsHolder
         Me.pnlSettings.Name = "pnlSettings"
         Me.pnlSettings.Size = New System.Drawing.Size(617, 369)
         Me.pnlSettings.TabIndex = 0
+        '
+        'lblOFDBWarning
+        '
+        Me.lblOFDBWarning.Location = New System.Drawing.Point(14, 229)
+        Me.lblOFDBWarning.Name = "lblOFDBWarning"
+        Me.lblOFDBWarning.Size = New System.Drawing.Size(600, 36)
+        Me.lblOFDBWarning.TabIndex = 97
+        Me.lblOFDBWarning.Text = "OFDB allows only 100 queries in a certain time-frame." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "After you exceed the usage" & _
+    " limits, your IP is blocked for a while and Ember uses IMDB data instead (Englis" & _
+    "h only)."
         '
         'Label1
         '
@@ -259,6 +272,7 @@ Partial Class frmInfoSettingsHolder
         '
         'gbOptions
         '
+        Me.gbOptions.Controls.Add(Me.chkCountryFull)
         Me.gbOptions.Controls.Add(Me.chkCertification)
         Me.gbOptions.Controls.Add(Me.chkCountry)
         Me.gbOptions.Controls.Add(Me.chkTop250)
@@ -286,10 +300,22 @@ Partial Class frmInfoSettingsHolder
         Me.gbOptions.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbOptions.Location = New System.Drawing.Point(227, 40)
         Me.gbOptions.Name = "gbOptions"
-        Me.gbOptions.Size = New System.Drawing.Size(387, 161)
+        Me.gbOptions.Size = New System.Drawing.Size(387, 177)
         Me.gbOptions.TabIndex = 3
         Me.gbOptions.TabStop = False
         Me.gbOptions.Text = "Scraper Fields"
+        '
+        'chkCountryFull
+        '
+        Me.chkCountryFull.AutoSize = True
+        Me.chkCountryFull.Enabled = False
+        Me.chkCountryFull.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkCountryFull.Location = New System.Drawing.Point(246, 70)
+        Me.chkCountryFull.Name = "chkCountryFull"
+        Me.chkCountryFull.Size = New System.Drawing.Size(104, 17)
+        Me.chkCountryFull.TabIndex = 24
+        Me.chkCountryFull.Text = "Use Full Names"
+        Me.chkCountryFull.UseVisualStyleBackColor = True
         '
         'chkCertification
         '
@@ -329,7 +355,7 @@ Partial Class frmInfoSettingsHolder
         Me.chkCrew.AutoSize = True
         Me.chkCrew.Enabled = False
         Me.chkCrew.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkCrew.Location = New System.Drawing.Point(246, 104)
+        Me.chkCrew.Location = New System.Drawing.Point(246, 121)
         Me.chkCrew.Name = "chkCrew"
         Me.chkCrew.Size = New System.Drawing.Size(85, 17)
         Me.chkCrew.TabIndex = 21
@@ -341,7 +367,7 @@ Partial Class frmInfoSettingsHolder
         Me.chkMusicBy.AutoSize = True
         Me.chkMusicBy.Enabled = False
         Me.chkMusicBy.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkMusicBy.Location = New System.Drawing.Point(246, 121)
+        Me.chkMusicBy.Location = New System.Drawing.Point(246, 138)
         Me.chkMusicBy.Name = "chkMusicBy"
         Me.chkMusicBy.Size = New System.Drawing.Size(71, 17)
         Me.chkMusicBy.TabIndex = 22
@@ -353,7 +379,7 @@ Partial Class frmInfoSettingsHolder
         Me.chkProducers.AutoSize = True
         Me.chkProducers.Enabled = False
         Me.chkProducers.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkProducers.Location = New System.Drawing.Point(246, 138)
+        Me.chkProducers.Location = New System.Drawing.Point(246, 155)
         Me.chkProducers.Name = "chkProducers"
         Me.chkProducers.Size = New System.Drawing.Size(77, 17)
         Me.chkProducers.TabIndex = 23
@@ -364,7 +390,7 @@ Partial Class frmInfoSettingsHolder
         '
         Me.chkFullCast.AutoSize = True
         Me.chkFullCast.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkFullCast.Location = New System.Drawing.Point(237, 70)
+        Me.chkFullCast.Location = New System.Drawing.Point(237, 87)
         Me.chkFullCast.Name = "chkFullCast"
         Me.chkFullCast.Size = New System.Drawing.Size(107, 17)
         Me.chkFullCast.TabIndex = 19
@@ -408,7 +434,7 @@ Partial Class frmInfoSettingsHolder
         '
         Me.chkFullCrew.AutoSize = True
         Me.chkFullCrew.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkFullCrew.Location = New System.Drawing.Point(237, 87)
+        Me.chkFullCrew.Location = New System.Drawing.Point(237, 104)
         Me.chkFullCrew.Name = "chkFullCrew"
         Me.chkFullCrew.Size = New System.Drawing.Size(111, 17)
         Me.chkFullCrew.TabIndex = 20
@@ -628,5 +654,7 @@ Partial Class frmInfoSettingsHolder
     Friend WithEvents chkMPAA As System.Windows.Forms.CheckBox
     Friend WithEvents chkYear As System.Windows.Forms.CheckBox
     Friend WithEvents chkTitle As System.Windows.Forms.CheckBox
+    Friend WithEvents lblOFDBWarning As System.Windows.Forms.Label
+    Friend WithEvents chkCountryFull As System.Windows.Forms.CheckBox
 
 End Class

@@ -66,7 +66,7 @@ Public Class StringUtils
     Public Shared Function CleanStackingMarkers(ByVal sPath As String, Optional ByVal Asterisk As Boolean = False) As String
         If AdvancedSettings.GetBooleanSetting("DisableMultiPartMedia", False) Then Return sPath
         If String.IsNullOrEmpty(sPath) Then Return String.Empty
-        Dim sReturn As String = Regex.Replace(sPath, AdvancedSettings.GetSetting("DeleteStackMarkers", "[\s_\-\.]?((cd|dvd|p(?:ar)?t|dis[ck])[\s_\-\.]*([0-9]+))"), If(Asterisk, "*", " "), RegexOptions.IgnoreCase).Trim
+        Dim sReturn As String = Regex.Replace(sPath, AdvancedSettings.GetSetting("DeleteStackMarkers", "[\s_\-\.]+\(?(cd|dvd|p(?:ar)?t|dis[ck])[\s_\-\.]*[0-9]+\)?"), If(Asterisk, "*", " "), RegexOptions.IgnoreCase).Trim
         If Not sReturn = sPath Then
             Return Regex.Replace(sReturn, "\s\s(\s+)?", " ").Trim
         Else
@@ -440,6 +440,30 @@ Public Class StringUtils
         End If
 
         Return fName
+    End Function
+
+    Public Shared Function ShortenOutline(ByVal fOutline As String, ByVal fLimit As Integer) As String
+        Dim MaxLength As Integer = fLimit - 2
+        Dim FullLenght As Integer = fOutline.Length
+        Dim sOutline As String = fOutline
+
+        If Not String.IsNullOrEmpty(sOutline) AndAlso MaxLength > 0 AndAlso FullLenght > MaxLength Then
+            sOutline = Strings.Left(sOutline, MaxLength)
+            sOutline = Strings.Left(sOutline, (sOutline.LastIndexOf(".") + 1))
+            If sOutline.Length > 0 Then
+                sOutline = String.Concat(sOutline, "..")
+            Else
+                sOutline = Strings.Left(fOutline, (fOutline.IndexOf(".") + 1))
+                sOutline = String.Concat(sOutline, "..")
+            End If
+            Return sOutline
+        Else
+            sOutline = Strings.Left(fOutline, (fOutline.IndexOf(".") + 1))
+            sOutline = String.Concat(sOutline, "..")
+            Return sOutline
+        End If
+
+        Return fOutline
     End Function
 
 #End Region 'Methods
